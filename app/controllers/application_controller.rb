@@ -17,12 +17,14 @@ class ApplicationController < ActionController::Base
 		return Base64.encode64(hmac).chomp
 	end
 
-	def http_request(url)
+	def http_request(url, auth_hash)
 		uri = URI(url)
-	    req = Net::HTTP::Get.new(uri)
-	    req['Authorization'] = 'INTEGRACION GRUPO7:'
-		ret = JSON.parse(req)
-		return ret
+		req = Net::HTTP::Get.new(uri)
+		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
+		http = Net::HTTP.new(uri.host, uri.port)
+		http.use_ssl = true
+		response = http.request(req)
+		return response.body
 	end
 
 end
