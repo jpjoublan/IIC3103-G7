@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 		return Base64.encode64(hmac).chomp
 	end
 
-	def http_request(url, auth_hash)
+	def http_get_request(url, auth_hash)
 		uri = URI(url)
 		req = Net::HTTP::Get.new(uri)
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
