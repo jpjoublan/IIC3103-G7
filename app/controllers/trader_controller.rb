@@ -13,13 +13,16 @@ class TraderController < ApplicationController
 		render json: ret
 	end
 
-
 	def orders
-		puts '************BODY*************'
-			puts JSON.parse(request.body)
-		puts '************HEADER*************'
+		puts JSON.parse(request.body.read)
 		puts request.headers
-		render json: {'Hola': 'Not Working'}
+		render json: {'Hola': 'Still not ready'}
+	end
+
+	def testear
+		# Reemplazar por funcion que se quiere testear.
+		# Para las funciones post de nuestra API (orders)
+		return orders()		
 	end
 
 end
