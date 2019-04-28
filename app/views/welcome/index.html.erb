@@ -1,0 +1,18 @@
+<h1>Hola Mundo</h1>
+
+
+<%= form_tag("/simularOrden", method: "get") do %>
+	<%= label_tag(:sku, "Producto") %>
+	<%= text_field_tag(:sku) %>
+	</br>
+	<%= label_tag(:cantidad, "Cantidad") %>
+	<%= text_field_tag(:cantidad, 0) %>	</br>
+	</br>
+	<%= label_tag(:almacenId, "Almacen") %>
+	<%= text_field_tag(:almacenId) %>
+	</br>
+	<%= label_tag(:url, "url") %>
+	<%= text_field_tag(:url) %>
+	</br>
+	<%= submit_tag("Simular Pedido") %>
+<% end %>
