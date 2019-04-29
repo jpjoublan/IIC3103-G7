@@ -9,6 +9,7 @@ class FactoryController < ApplicationController
 		auth_hash = getHash('PUT', sku + cantidad)
 		body = {"sku": sku, "cantidad": cantidad}		
 		resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
+		render json: resp
 		return resp		
 	end
 

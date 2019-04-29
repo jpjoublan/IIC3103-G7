@@ -9,4 +9,8 @@ Rails.application.routes.draw do
 	get 'factorytester', to: 'factory#testear'
 	get 'tradertester', to: 'trader#testear'
 	get 'showHash', to: 'welcome#showHash'
+	get '/moveStockBodega', to: 'trader#moveStockBodega'
+	get '/moveStock', to: 'storages#moveStock'
+	get '/stock', to: 'storages#obtener_productos'
+	post '/orders' to: 'trader#orders'
 end
