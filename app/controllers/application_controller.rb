@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 		uri = URI(url)
 		req = Net::HTTP::Get.new(uri)
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
+		req['Content-type'] = 'application/json'
 		http = Net::HTTP.new(uri.host, uri.port)
 		http.use_ssl = true
 		response = http.request(req)
@@ -31,9 +32,10 @@ class ApplicationController < ActionController::Base
 		uri = URI(url)
 		req = Net::HTTP::Post.new(uri)
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
+		req['Content-type'] = 'application/json'
 		http = Net::HTTP.new(uri.host, uri.port)
 		http.use_ssl = true
-		req.body = body
+		req.body = body.to_json
 		response = http.request(req)
 		return JSON.parse(response.body)
 	end
