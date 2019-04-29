@@ -6,7 +6,6 @@ class FactoryController < ApplicationController
 		render json: params		
 	end
 
-
 	def testear
 		return produce()
 	end

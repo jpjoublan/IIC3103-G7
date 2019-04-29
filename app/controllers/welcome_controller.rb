@@ -9,4 +9,12 @@ class WelcomeController < ApplicationController
 		response = http.request(request)
 		ret = httpPostRequest
 	end
+
+	def showHash
+		auth = params[:auth]
+		action = params[:action]
+		hashed = getHash(action ,auth)
+		render json: {'auth': auth, 'action': action, 'hash': hashed}
+	end
+
 end

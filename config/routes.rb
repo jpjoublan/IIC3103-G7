@@ -8,4 +8,5 @@ Rails.application.routes.draw do
 	get 'simularOrden', to: 'welcome#simular'
 	get 'factorytester', to: 'factory#testear'
 	get 'tradertester', to: 'trader#testear'
+	get 'showHash', to: 'welcome#showHash'
 end
