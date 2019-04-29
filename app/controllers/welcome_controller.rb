@@ -12,7 +12,7 @@ class WelcomeController < ApplicationController
 
 	def showHash
 		auth = params[:auth]
-		action = params[:action]
+		action = params[:accion]
 		hashed = getHash(action ,auth)
 		render json: {'auth': auth, 'action': action, 'hash': hashed}
 	end

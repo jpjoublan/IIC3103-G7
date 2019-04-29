@@ -7,6 +7,7 @@ require 'cgi'
 
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
+	BaseURL =  'https://integracion-2019-dev.herokuapp.com/bodega/'
 
 	def getHash(action, params)
 		key = "WyZsey$Opy37to"
@@ -26,22 +27,25 @@ class ApplicationController < ActionController::Base
 		return JSON.parse(response.body)
 	end
 
-	def httpPostRequest(url, auth_hash)
+	def httpPostRequest(url, auth_hash, body)
 		uri = URI(url)
 		req = Net::HTTP::Post.new(uri)
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
 		http = Net::HTTP.new(uri.host, uri.port)
 		http.use_ssl = true
+		req.body = body
 		response = http.request(req)
 		return JSON.parse(response.body)
 	end
 
-	def httpPutRequest(url, auth_hash)
+	def httpPutRequest(url, auth_hash, body)
 		uri = URI(url)
-		req = Net::HTTP::Get.new(uri)
+		req = Net::HTTP::Put.new(uri)
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
+		req['Content-type'] = 'application/json'
 		http = Net::HTTP.new(uri.host, uri.port)
 		http.use_ssl = true
+		req.body = body.to_json
 		response = http.request(req)
 		return JSON.parse(response.body)
 	end

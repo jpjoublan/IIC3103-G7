@@ -2,6 +2,7 @@ class TraderController < ApplicationController
 
 	def inventories
 		auth_hash = getHash('GET', '')
+		puts auth_hash
 		ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
 		ret.each do |almacen|
 			if almacen['despacho']
