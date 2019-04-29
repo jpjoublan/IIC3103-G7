@@ -13,4 +13,5 @@ Rails.application.routes.draw do
 	get '/moveStock', to: 'storages#moveStock'
 	get '/stock', to: 'storages#obtener_productos'
 	post '/orders', to: 'trader#orders'
+	get '/almacenes', to: 'storages#almacenes'
 end

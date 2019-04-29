@@ -12,6 +12,11 @@ class FactoryController < ApplicationController
 		render json: resp
 		return resp		
 	end
-
-
+	
+	def produce_funcion(sku, cantidad)
+		auth_hash = getHash('PUT', sku + cantidad)
+		body = {"sku": sku, "cantidad": cantidad}		
+		resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
+		return resp		
+	end
 end

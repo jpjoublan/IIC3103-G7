@@ -12,6 +12,13 @@ class StoragesController < ApplicationController
         render json: resp	
         return resp
     end
+
+    def moveStock_funcion(producto_id, almacen_id)
+        auth_hash = getHash('POST', producto_id + almacen_id)
+        body = {"productoId": producto_id, "almacenId": almacen_id}		
+        resp = httpPostRequest(BaseURL + 'moveStock' , auth_hash, body)
+        return resp
+    end
     
     def obtener_productos
         #
@@ -34,5 +41,17 @@ class StoragesController < ApplicationController
         
     end
 
+    def obtener_productos_funcion(almacen_id, sku, limit = 100)
+        auth_hash = getHash('GET', almacen_id + sku)
+        resp = httpGetRequest(BaseURL + 'stock?almacenId=%s&sku=%s&limit=%s' % [almacen_id, sku, limit] , auth_hash)
+        return resp
+    end
+
+    def almacenes
+		auth_hash = getHash('GET', '')
+        ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
+        render json: ret
+        return ret
+    end
     
 end

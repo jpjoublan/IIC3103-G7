@@ -18,14 +18,21 @@ class TraderController < ApplicationController
 		return resp
         
         
-    end
+	end
+	
+	def moveStockBodega_funcion(producto_id, almacen_id, oc, precio)
+		auth_hash = getHash('POST', producto_id + almacen_id)
+        body = {"productoId": producto_id, "almacenId": almacen_id, "oc": oc, "precio": precio}
+        resp = httpPostRequest(BaseURL + 'moveStockBodega'  , auth_hash, body)
+		return resp
+	end
 
 	def inventories
 		auth_hash = getHash('GET', '')
 		ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
 		ret.each do |almacen|
 			
-			if almacen['recepcion']
+			if almacen['despacho']
 				id = almacen['_id']
 				puts id
 				auth_hash = getHash('GET', id)
@@ -40,6 +47,7 @@ class TraderController < ApplicationController
 		puts request.headers
 		render json: {'Hola': 'Still not ready'}
 	end
+	
 
 	def testear
 		# Reemplazar por funcion que se quiere testear.

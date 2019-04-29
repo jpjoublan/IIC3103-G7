@@ -40,8 +40,7 @@ class ApplicationJob < ActiveJob::Base
 
 
 
-
-
+        
 
         self.class.set(:wait => 1.minutes).perform_later()
         puts("hola")
