@@ -1,7 +1,6 @@
 class ApplicationJob < ActiveJob::Base
 
     def perform()
-        feedstock = {}
         # manufactured = {1301 => {'time' => 50, 'qty' => }, 1201 => {'time' => 250, 'qty' =>},
         #             1209 => {'time' => 25.2, 'qty' =>}, 1109 => {'time' => 21.6, 'qty' =>},
         #             1309 => {'time' => 4.6, 'qty' =>}, 1106 => {'time' => 60, 'qty' =>},
@@ -26,7 +25,17 @@ class ApplicationJob < ActiveJob::Base
                     1112 => {'stock_min' => 130, 'manufacture' =>}, 1108 => {'stock_min' => 10, 'manufacture' =>},
                     1407 => {'stock_min' => 40, 'manufacture' =>}, 1207 => {'stock_min' => 20, 'manufacture' =>},
                     1107 => {'stock_min' => 50, 'manufacture' =>}, 1307 => {'stock_min' => 170, 'manufacture' =>},
-                    1211 => {'stock_min' => 60, 'manufacture' =>}}
+                    1211 => {'stock_min' => 60, 'manufacture' =>}, 1111 => {'stock_min' => , 'manufacture' =>},
+                    1101 => {'stock_min' => , 'manufacture' =>}}
+
+        feedstock = {1009 => {'stock_min' => , 'produce' => }, 1006 => {'stock_min' => , 'produce' => },
+                    1014 => {'stock_min' => , 'produce' => }, 1015 => {'stock_min' => , 'produce' => },
+                    1005 => {'stock_min' => , 'produce' => }, 1016 => {'stock_min' => , 'produce' => },
+                    1010 => {'stock_min' => , 'produce' => }, 1012 => {'stock_min' => , 'produce' => },
+                    1008 => {'stock_min' => , 'produce' => }, 1007 => {'stock_min' => , 'produce' => },
+                    1011 => {'stock_min' => , 'produce' => },  1001 => {'stock_min' => , 'produce' => },
+                    1002 => {'stock_min' => , 'produce' => }, 1003 => {'stock_min' => , 'produce' => },
+                    1004 => {'stock_min' => , 'produce' => }}
 
 
 
