@@ -25,7 +25,7 @@ class TraderController < ApplicationController
 		ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
 		ret.each do |almacen|
 			
-			if almacen['despacho']
+			if almacen['recepcion']
 				id = almacen['_id']
 				puts id
 				auth_hash = getHash('GET', id)
