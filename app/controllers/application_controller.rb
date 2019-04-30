@@ -8,6 +8,7 @@ require 'cgi'
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
 	BaseURL =  'https://integracion-2019-dev.herokuapp.com/bodega/'
+	groupsURL = 'tuerca%s.ing.puc.cl/'
 
 	def getHash(action, params)
 		key = "WyZsey$Opy37to"
@@ -87,5 +88,16 @@ class ApplicationController < ActionController::Base
         resp = httpPostRequest(BaseURL + 'moveStockBodega'  , auth_hash, body)
 		return resp
 	end
+
+	def pedirProductoGrupo(grupo, sku, cantidad, almacenId)
+		# sku: Producto a pedir
+		# grupo: Grupo al cual se le quiere pedir
+		# cantidad: Cantidad del producto a pedir
+		# almacenId: Almacen de destino (nuestro almacen de recepcion)
+		body = {'sku': sku, 'cantidad': cantidad, 'almacenId': almacenId}
+		ret = httpPostRequest(groupsURL % [grupo], '', body)
+		return ret 
+	end
+
 
 end

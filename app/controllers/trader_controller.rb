@@ -22,15 +22,27 @@ class TraderController < ApplicationController
 	def inventories
 		auth_hash = getHash('GET', '')
 		ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
-		ret.each do |almacen|
-			
-			if almacen['despacho']
-				id = almacen['_id']
-				auth_hash = getHash('GET', id)
-				ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/skusWithStock?almacenId=' + id, auth_hash)
+		stock = []
+		ret.each do |almacen|	
+			id = almacen['_id']
+			auth_hash = getHash('GET', id)
+			aux = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/skusWithStock?almacenId=' + id, auth_hash)
+			aux.each do |cantidad|
+				not_found = true
+				stock.each do |total|
+					if total[:sku] == cantidad['_id']
+						total[:total] += cantidad['total']
+						not_found = false
+					end
+					puts total
+					puts cantidad
+				end
+				if not_found
+					stock.push({'sku': cantidad['_id'], 'total': cantidad['total']})
+				end	
 			end
 		end
-		render json: ret
+		render json: stock
 	end
 
 	def orders
@@ -87,6 +99,4 @@ class TraderController < ApplicationController
 		# Para las funciones post de nuestra API (orders)
 		return orders()		
 	end
-
-
 end
