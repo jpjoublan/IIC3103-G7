@@ -39,14 +39,18 @@ class TraderController < ApplicationController
 		cantidad = body['cantidad']
 		almacenid = body['almacenId']
 		bodegas = almacenes()
-		productos = []
-		bodegas.each do |bodega|
-			if bodega['pulmon']
-				productos = skusWithStock_funcion(bodega["_id"])
-			end
+		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
+		bodega_despacho = bodegas.detect {|b| b['despacho']}
+		despacho = skusWithStock_funcion(bodega_despacho["_id"]).detect {|b| b['_id']==sku}
+		pulmon = skusWithStock_funcion(bodega_pulmon["_id"]).detect {|b| b['_id']==sku}
+		capacidad_pulmon = pulmon.nil? ? 0: pulmon['total']
+		capacidad_despacho = despacho.nil? ? 0: despacho['total']
+		can_send = capacidad_despacho + capacidad_pulmon - cantidad > 500 ? true : false
+		if can_send
+			puts "Puede enviar productos"
+			render :json => {:error => "not-found"}.to_json, :status => 404
 		end
-		puts productos
-		#puts productos
+
 		render :json => {:error => "not-found"}.to_json, :status => 404
 	end
 	
@@ -56,5 +60,6 @@ class TraderController < ApplicationController
 		# Para las funciones post de nuestra API (orders)
 		return orders()		
 	end
+
 
 end
