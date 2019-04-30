@@ -52,4 +52,42 @@ class ApplicationController < ActionController::Base
 		return JSON.parse(response.body)
 	end
 
+	def almacenes
+		auth_hash = getHash('GET', '')
+        ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
+        return ret
+    end
+
+    def obtener_productos_funcion(almacen_id, sku, limit = 100)
+        auth_hash = getHash('GET', almacen_id + sku)
+        resp = httpGetRequest(BaseURL + 'stock?almacenId=%s&sku=%s&limit=%s' % [almacen_id, sku, limit] , auth_hash)
+        return resp
+    end
+
+    def almacenes
+		auth_hash = getHash('GET', '')
+        ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
+        return ret
+    end
+
+    def skusWithStock_funcion(almacen_id)
+        auth_hash = getHash('GET', almacen_id)
+        ret = httpGetRequest(BaseURL + 'skusWithStock?almacenId=%s' % [almacen_id], auth_hash)
+        return ret
+    end
+
+    def moveStock_funcion(producto_id, almacen_id)
+        auth_hash = getHash('POST', producto_id + almacen_id)
+        body = {"productoId": producto_id, "almacenId": almacen_id}		
+        resp = httpPostRequest(BaseURL + 'moveStock' , auth_hash, body)
+        return resp
+    end
+
+    def moveStockBodega_funcion(producto_id, almacen_id, oc, precio)
+		auth_hash = getHash('POST', producto_id + almacen_id)
+        body = {"productoId": producto_id, "almacenId": almacen_id, "oc": oc, "precio": precio}
+        resp = httpPostRequest(BaseURL + 'moveStockBodega'  , auth_hash, body)
+		return resp
+	end
+
 end

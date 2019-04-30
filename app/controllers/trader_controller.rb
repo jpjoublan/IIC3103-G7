@@ -16,16 +16,8 @@ class TraderController < ApplicationController
 		
 		render json: resp
 		return resp
-        
-        
 	end
 	
-	def moveStockBodega_funcion(producto_id, almacen_id, oc, precio)
-		auth_hash = getHash('POST', producto_id + almacen_id)
-        body = {"productoId": producto_id, "almacenId": almacen_id, "oc": oc, "precio": precio}
-        resp = httpPostRequest(BaseURL + 'moveStockBodega'  , auth_hash, body)
-		return resp
-	end
 
 	def inventories
 		auth_hash = getHash('GET', '')
@@ -34,7 +26,6 @@ class TraderController < ApplicationController
 			
 			if almacen['despacho']
 				id = almacen['_id']
-				puts id
 				auth_hash = getHash('GET', id)
 				ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/skusWithStock?almacenId=' + id, auth_hash)
 			end
@@ -43,9 +34,20 @@ class TraderController < ApplicationController
 	end
 
 	def orders
-		puts JSON.parse(request.body.read)
-		puts request.headers
-		render json: {'Hola': 'Still not ready'}
+		body = JSON.parse(request.body.read)
+		sku = body['sku']
+		cantidad = body['cantidad']
+		almacenid = body['almacenId']
+		bodegas = almacenes()
+		productos = []
+		bodegas.each do |bodega|
+			if bodega['pulmon']
+				productos = skusWithStock_funcion(bodega["_id"])
+			end
+		end
+		puts productos
+		#puts productos
+		render :json => {:error => "not-found"}.to_json, :status => 404
 	end
 	
 
