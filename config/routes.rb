@@ -14,4 +14,5 @@ Rails.application.routes.draw do
 	get '/stock', to: 'storages#obtener_productos'
 	post '/orders', to: 'trader#orders'
 	get '/almacenes', to: 'storages#almacenes'
+	get '/skusWithStock', to: 'storages#skusWithStock'
 end

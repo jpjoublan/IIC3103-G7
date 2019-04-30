@@ -54,4 +54,17 @@ class StoragesController < ApplicationController
         return ret
     end
     
+    def skusWithStock
+        almacen_id = params[:almacenid]
+        auth_hash = getHash('GET', almacen_id)
+        ret = httpGetRequest(BaseURL + 'skusWithStock?almacenId=%s' % [almacen_id], auth_hash)
+        render json: ret
+        return ret
+    end
+    
+    def skusWithStock_funcion(almacen_id)
+        auth_hash = getHash('GET', almacen_id)
+        ret = httpGetRequest(BaseURL + 'skusWithStock?almacenId=%s' % [almacen_id], auth_hash)
+        return ret
+    end
 end
