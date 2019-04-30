@@ -17,4 +17,11 @@ class WelcomeController < ApplicationController
 		render json: {'auth': auth, 'action': action, 'hash': hashed}
 	end
 
+    def almacenes
+		auth_hash = getHash('GET', '')
+        ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
+        render json: ret
+        return ret
+    end
+
 end

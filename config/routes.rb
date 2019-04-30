@@ -13,6 +13,6 @@ Rails.application.routes.draw do
 	get '/moveStock', to: 'storages#moveStock'
 	get '/stock', to: 'storages#obtener_productos'
 	post '/orders', to: 'trader#orders'
-	get '/almacenes', to: 'storages#almacenes'
+	get '/almacenes', to: 'welcome#almacenes'
 	get '/skusWithStock', to: 'storages#skusWithStock'
 end

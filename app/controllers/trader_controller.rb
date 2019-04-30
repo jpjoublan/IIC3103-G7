@@ -46,9 +46,6 @@ class TraderController < ApplicationController
 		pulmon = skusWithStock_funcion(bodega_pulmon["_id"]).detect {|b| b['_id']==sku}
 		capacidad_pulmon = pulmon.nil? ? 0: pulmon['total']
 		capacidad_recepcion = recepcion.nil? ? 0: recepcion['total']
-		puts pulmon
-		puts recepcion
-		puts cantidad
 		if capacidad_recepcion + capacidad_pulmon - cantidad > 500
 			enviados = 0
 			if capacidad_pulmon > 0
