@@ -20,7 +20,10 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
+  host: localhost
+  username: IIC3103-G7
+  password: <%= ENV['IIC3103-G7_DATABASE_PASSWORD'] %> 
+  
 development:
   <<: *default
   database: IIC3103-G7_development
@@ -75,11 +78,9 @@ test:
 #
 # You can use this database configuration with:
 #
-#   production:
-#     url: <%= ENV['DATABASE_URL'] %>
+#   production:#     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
   <<: *default
   database: IIC3103-G7_production
-  username: IIC3103-G7
-  password: <%= ENV['IIC3103-G7_DATABASE_PASSWORD'] %>
+
