@@ -77,9 +77,13 @@ class ApplicationController < ActionController::Base
         return resp
     end
 
-    def moveStockBodega_funcion(producto_id, almacen_id, oc, precio)
+    def moveStockBodega_funcion(producto_id, almacen_id, precio=1, oc=nil)
 		auth_hash = getHash('POST', producto_id + almacen_id)
-        body = {"productoId": producto_id, "almacenId": almacen_id, "oc": oc, "precio": precio}
+		if oc.nil?
+	        body = {"productoId": producto_id, "almacenId": almacen_id, "precio": precio}
+    	else
+	        body = {"productoId": producto_id, "almacenId": almacen_id, "oc": oc, "precio": precio}
+	    end	
         resp = httpPostRequest(BaseURL + 'moveStockBodega'  , auth_hash, body)
 		return resp
 	end

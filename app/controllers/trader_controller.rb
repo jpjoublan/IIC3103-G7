@@ -36,24 +36,52 @@ class TraderController < ApplicationController
 	def orders
 		body = JSON.parse(request.body.read)
 		sku = body['sku']
-		cantidad = body['cantidad']
+		cantidad = [body['cantidad'], 20].min
 		almacenid = body['almacenId']
 		bodegas = almacenes()
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
-		bodega_despacho = bodegas.detect {|b| b['despacho']}
-		despacho = skusWithStock_funcion(bodega_despacho["_id"]).detect {|b| b['_id']==sku}
+		bodega_recepcion = bodegas.detect {|b| b['recepcion']}	
+		bodega_despacho = bodegas.detect {|b| b['despacho']}	
+		recepcion = skusWithStock_funcion(bodega_recepcion["_id"]).detect {|b| b['_id']==sku}
 		pulmon = skusWithStock_funcion(bodega_pulmon["_id"]).detect {|b| b['_id']==sku}
 		capacidad_pulmon = pulmon.nil? ? 0: pulmon['total']
-		capacidad_despacho = despacho.nil? ? 0: despacho['total']
-		can_send = capacidad_despacho + capacidad_pulmon - cantidad > 500 ? true : false
-		if can_send
-			if cantidad < capacidad_despacho
-				a = 0
+		capacidad_recepcion = recepcion.nil? ? 0: recepcion['total']
+		puts pulmon
+		puts recepcion
+		puts cantidad
+		if capacidad_recepcion + capacidad_pulmon - cantidad > 500
+			enviados = 0
+			if capacidad_pulmon > 0
+				productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], sku, "100")
+				productos_pulmon = productos_pulmon.sort_by { |k| k["vencimiento"] }
+				while cantidad > 0 and capacidad_pulmon > 0
+					prod = productos_pulmon.first
+					moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+					moveStockBodega_funcion(prod["_id"], almacenid)
+					capacidad_pulmon -= 1
+					cantidad -= 1
+					productos_pulmon.delete_at(0)
+					enviados += 1
+				end
 			end
-			render :json => {:error => "not-found"}.to_json, :status => 404
+			if capacidad_recepcion > 0 and cantidad > 0
+				productos_recepcion = obtener_productos_funcion(bodega_recepcion, sku, "100")
+				while cantidad > 0 and capacidad_recepcion > 0		
+					prod = productos_recepcion.first
+					moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+					moveStockBodega_funcion(prod["_id"], almacenid)
+					capacidad_recepcion -= 1
+					cantidad -= 1
+					productos_recepcion.delete_at(0)
+					enviados += 1
+				end	
+			end
+			render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
+			return
+		else
+			render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
+			return
 		end
-
-		render :json => {:error => "not-found"}.to_json, :status => 404
 	end
 	
 
