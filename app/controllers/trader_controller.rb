@@ -47,7 +47,9 @@ class TraderController < ApplicationController
 		capacidad_despacho = despacho.nil? ? 0: despacho['total']
 		can_send = capacidad_despacho + capacidad_pulmon - cantidad > 500 ? true : false
 		if can_send
-			puts "Puede enviar productos"
+			if cantidad < capacidad_despacho
+				a = 0
+			end
 			render :json => {:error => "not-found"}.to_json, :status => 404
 		end
 

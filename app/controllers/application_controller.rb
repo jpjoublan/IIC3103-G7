@@ -52,12 +52,6 @@ class ApplicationController < ActionController::Base
 		return JSON.parse(response.body)
 	end
 
-	def almacenes
-		auth_hash = getHash('GET', '')
-        ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
-        return ret
-    end
-
     def obtener_productos_funcion(almacen_id, sku, limit = 100)
         auth_hash = getHash('GET', almacen_id + sku)
         resp = httpGetRequest(BaseURL + 'stock?almacenId=%s&sku=%s&limit=%s' % [almacen_id, sku, limit] , auth_hash)
