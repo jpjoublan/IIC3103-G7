@@ -1,7 +1,7 @@
 class TraderController < ApplicationController
 
 	def moveStockBodega
-        # Mover producto entre bodega de despacjo y la bodega de otro grupo (funcion para despachar)
+        # Mover producto entre bodega de despacho y la bodega de otro grupo (funcion para despachar)
         #
         #
         producto_id = params[:productoid]
