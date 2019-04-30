@@ -22,8 +22,8 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: localhost
   username: IIC3103-G7
-  password: <%= ENV['IIC3103-G7_DATABASE_PASSWORD'] %>  
-
+  password: <%= ENV['IIC3103-G7_DATABASE_PASSWORD'] %> 
+  
 development:
   <<: *default
   database: IIC3103-G7_development
