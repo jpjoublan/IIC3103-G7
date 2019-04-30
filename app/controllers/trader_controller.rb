@@ -21,12 +21,12 @@ class TraderController < ApplicationController
 
 	def inventories
 		auth_hash = getHash('GET', '')
-		ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
+		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
 		stock = []
 		ret.each do |almacen|	
 			id = almacen['_id']
 			auth_hash = getHash('GET', id)
-			aux = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/skusWithStock?almacenId=' + id, auth_hash)
+			aux = httpGetRequest(BaseURL + 'skusWithStock?almacenId=' + id, auth_hash)
 			aux.each do |cantidad|
 				not_found = true
 				stock.each do |total|
@@ -34,8 +34,6 @@ class TraderController < ApplicationController
 						total[:total] += cantidad['total']
 						not_found = false
 					end
-					puts total
-					puts cantidad
 				end
 				if not_found
 					stock.push({'sku': cantidad['_id'], 'total': cantidad['total']})
