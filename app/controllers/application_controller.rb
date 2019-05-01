@@ -7,7 +7,7 @@ require 'cgi'
 
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
-	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega'
+	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
 	groupsURL = 'tuerca%s.ing.puc.cl/'
 
 	def getHash(action, params)
