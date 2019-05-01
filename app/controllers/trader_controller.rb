@@ -24,6 +24,8 @@ class TraderController < ApplicationController
 		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
 		stock = []
 		ret.each do |almacen|
+			puts '****************************************'
+			puts almacen
 			id = almacen['_id']
 			auth_hash = getHash('GET', id)
 			aux = httpGetRequest(BaseURL + 'skusWithStock?almacenId=' + id, auth_hash)

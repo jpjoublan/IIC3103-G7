@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
 
     def almacenes
 		auth_hash = getHash('GET', '')
-        ret = httpGetRequest('https://integracion-2019-dev.herokuapp.com/bodega/almacenes', auth_hash)
+        ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
         return ret
     end
 
@@ -99,5 +99,19 @@ class ApplicationController < ActionController::Base
 		return ret
 	end
 
+	def vaciarDespacho()
+		bodegas = almacenes()
+		bodega_despacho = bodegas.detect {|b| b['despacho']}
+		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
+		skus_with_stock = skusWithStock_funcion(bodega_despacho['_id'])
+		puts bodega_despacho
+		skus_with_stock.each do |prod|
+			productos_despacho = obtener_productos_funcion(bodega_despacho['_id'], prod['_id'], "100")
+			productos_despacho.each do |prod2|
+				puts prod2
+				moveStock_funcion(prod2['_id'], bodega_pulmon['_id'])
+			end
+		end
+	end
 
 end
