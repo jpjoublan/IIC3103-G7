@@ -37,6 +37,8 @@ class ApplicationJob < ActiveJob::Base
 #                    1002 => {'stock_min' => , 'produce' => }, 1003 => {'stock_min' => , 'produce' => },
 #                    1004 => {'stock_min' => , 'produce' => }}
 
+        feedstock = [1009, 1006, 1014, 1015,1005, 1016, 1010, 1012, 1008, 1007, 1011, 1001, 1002, 1003, 1004]
+
         products = {1009 => {'stock_min' =>22,'tiempo_produccion' =>400,'duracion_esperada' =>15,'lote_produccion' =>3,'produce' =>FALSE,'grupos_productores' =>'1,8,9'},
             1109 => {'stock_min' =>60,'tiempo_produccion' =>30,'duracion_esperada' =>1.5,'lote_produccion' =>12,'produce' =>TRUE,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
             1209 => {'stock_min' =>50,'tiempo_produccion' =>30,'duracion_esperada' =>1.5,'lote_produccion' =>14,'produce' =>TRUE,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
@@ -80,7 +82,7 @@ class ApplicationJob < ActiveJob::Base
         }
         order_rate = 1.3
 
-        self.class.set(:wait => 60.minutes).perform_later()
+        self.class.set(:wait => 20.minutes).perform_later()
 
         stock = inventories()
         products.each do |sku, dict|
@@ -128,10 +130,6 @@ class ApplicationJob < ActiveJob::Base
                 end
             end
         end
-
-        # Revisar si hay ordenes de compra
-
-        # Revisar stock disponible y pedir o fabricar en caso de ser necesario
 
 
     end
