@@ -42,7 +42,6 @@ class TraderController < ApplicationController
 				end
 			end
 		end
-		render json: stock
 		return stock
 	end
 
