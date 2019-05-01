@@ -10,20 +10,20 @@ class TraderController < ApplicationController
         #cambiar precio cuando se necesite
         precio = params[:precio]
         auth_hash = getHash('POST', producto_id + almacen_id)
-        
+
         body = {"productoId": producto_id, "almacenId": almacen_id, "oc": oc, "precio": precio}
         resp = httpPostRequest(BaseURL + 'moveStockBodega'  , auth_hash, body)
-		
+
 		render json: resp
 		return resp
 	end
-	
+
 
 	def inventories
 		auth_hash = getHash('GET', '')
 		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
 		stock = []
-		ret.each do |almacen|	
+		ret.each do |almacen|
 			id = almacen['_id']
 			auth_hash = getHash('GET', id)
 			aux = httpGetRequest(BaseURL + 'skusWithStock?almacenId=' + id, auth_hash)
@@ -37,10 +37,11 @@ class TraderController < ApplicationController
 				end
 				if not_found
 					stock.push({'sku': cantidad['_id'], 'total': cantidad['total']})
-				end	
+				end
 			end
 		end
 		render json: stock
+		return stock
 	end
 
 	def orders
@@ -50,8 +51,8 @@ class TraderController < ApplicationController
 		almacenid = body['almacenId']
 		bodegas = almacenes()
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
-		bodega_recepcion = bodegas.detect {|b| b['recepcion']}	
-		bodega_despacho = bodegas.detect {|b| b['despacho']}	
+		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
+		bodega_despacho = bodegas.detect {|b| b['despacho']}
 		recepcion = skusWithStock_funcion(bodega_recepcion["_id"]).detect {|b| b['_id']==sku}
 		pulmon = skusWithStock_funcion(bodega_pulmon["_id"]).detect {|b| b['_id']==sku}
 		capacidad_pulmon = pulmon.nil? ? 0: pulmon['total']
@@ -73,7 +74,7 @@ class TraderController < ApplicationController
 			end
 			if capacidad_recepcion > 0 and cantidad > 0
 				productos_recepcion = obtener_productos_funcion(bodega_recepcion, sku, "100")
-				while cantidad > 0 and capacidad_recepcion > 0		
+				while cantidad > 0 and capacidad_recepcion > 0
 					prod = productos_recepcion.first
 					moveStock_funcion(prod["_id"], bodega_despacho["_id"])
 					moveStockBodega_funcion(prod["_id"], almacenid)
@@ -81,7 +82,7 @@ class TraderController < ApplicationController
 					cantidad -= 1
 					productos_recepcion.delete_at(0)
 					enviados += 1
-				end	
+				end
 			end
 			render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
 			return
@@ -90,11 +91,11 @@ class TraderController < ApplicationController
 			return
 		end
 	end
-	
+
 
 	def testear
 		# Reemplazar por funcion que se quiere testear.
 		# Para las funciones post de nuestra API (orders)
-		return orders()		
+		return orders()
 	end
 end
