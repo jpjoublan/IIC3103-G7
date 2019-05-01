@@ -29,6 +29,7 @@ class TraderController < ApplicationController
 			id = almacen['_id']
 			auth_hash = getHash('GET', id)
 			aux = httpGetRequest(BaseURL + 'skusWithStock?almacenId=' + id, auth_hash)
+			puts aux
 			aux.each do |cantidad|
 				not_found = true
 				stock.each do |total|

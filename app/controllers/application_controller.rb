@@ -104,12 +104,10 @@ class ApplicationController < ActionController::Base
 		bodega_despacho = bodegas.detect {|b| b['despacho']}
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
 		skus_with_stock = skusWithStock_funcion(bodega_despacho['_id'])
-		puts bodega_despacho
 		skus_with_stock.each do |prod|
 			productos_despacho = obtener_productos_funcion(bodega_despacho['_id'], prod['_id'], "100")
 			productos_despacho.each do |prod2|
-				puts prod2
-				moveStock_funcion(prod2['_id'], bodega_pulmon['_id'])
+				moveStock_funcion(prod2['_id'], "5cc7b139a823b10004d8e6f6")
 			end
 		end
 	end
