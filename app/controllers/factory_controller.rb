@@ -26,25 +26,33 @@ class FactoryController < ApplicationController
 		proporciones = {
 			'1001' => {'lote': 10, 'materias_primas': []},
 			'1003' => {'lote': 100, 'materias_primas': []},
-			'1005' => {'lote': 5, 'materias_primas': []},
 			'1006' => {'lote': 1, 'materias_primas': []},
 			'1008' => {'lote': 1, 'materias_primas': []},
 			'1016' => {'lote': 10, 'materias_primas': []},
 			'1006' => {'lote': 8, 'materias_primas': []},
-			'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
-			'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
 			'1105' => {'lote': 10, 'materias_primas': [{'sku': '1005', 'unidades_lote': 1}]},
+			'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
+			'1107' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
 			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
+			'1109' => {'lote': 12, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
 			'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 1.1}]},
+			'1112' => {'lote': 20, 'materias_primas': [{'sku': '1012', 'unidades_lote': 1}]},
 			'1115' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 3}]},
+			'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
+			'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 0.96}]},
+			'1209' => {'lote': 14, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
 			'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1215' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 4}]},
 			'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
 			'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 0.5}]},
+			'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 0.96}]},
+			'1309' => {'lote': 11, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
 			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
-			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+			'1407' => {'lote': 14, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]}
 			}
+
+
 		producto = proporciones[sku]
 		if producto[:materias_primas].length > 0
 			vaciarDespacho()
