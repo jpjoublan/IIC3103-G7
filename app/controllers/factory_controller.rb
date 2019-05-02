@@ -10,28 +10,30 @@ class FactoryController < ApplicationController
 		cantidad = params[:cantidad]
 		resp = produce_funcion(sku, cantidad)
 		render json: resp
-		return resp		
+		return resp
 	end
-	
+
 	def produce_funcion(sku, cantidad)
 		auth_hash = getHash('PUT', sku + cantidad)
 		body = {"sku": sku, "cantidad": cantidad}
 		moverMateriasPrimasDespacho(sku, cantidad.to_i)
 		resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
 		vaciarDespacho()
-		return resp		
+		return resp
 	end
 
 	def moverMateriasPrimasDespacho(sku, cantidad)
 		proporciones = {
 			'1001' => {'lote': 10, 'materias_primas': []},
 			'1003' => {'lote': 100, 'materias_primas': []},
+			'1005' => {'lote': 5, 'materias_primas': []},
 			'1006' => {'lote': 1, 'materias_primas': []},
 			'1008' => {'lote': 1, 'materias_primas': []},
 			'1016' => {'lote': 10, 'materias_primas': []},
 			'1006' => {'lote': 8, 'materias_primas': []},
 			'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
 			'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
+			'1105' => {'lote': 10, 'materias_primas': [{'sku': '1005', 'unidades_lote': 1}]},
 			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
 			'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 1.1}]},
@@ -46,7 +48,7 @@ class FactoryController < ApplicationController
 		producto = proporciones[sku]
 		if producto[:materias_primas].length > 0
 			vaciarDespacho()
-			bodegas = almacenes()	
+			bodegas = almacenes()
 			bodega_pulmon = bodegas.detect {|b| b['pulmon']}
 			bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 			bodega_despacho = bodegas.detect {|b| b['despacho']}
