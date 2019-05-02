@@ -18,6 +18,7 @@ class FactoryController < ApplicationController
 		body = {"sku": sku, "cantidad": cantidad}
 		moverMateriasPrimasDespacho(sku, cantidad.to_i)
 		resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
+		vaciarDespacho()
 		return resp		
 	end
 
@@ -37,6 +38,8 @@ class FactoryController < ApplicationController
 			'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+			'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 2}]},
+			'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 1}]},
 			}
 		producto = proporciones[sku]
 		if producto[:materias_primas].length > 0
@@ -46,11 +49,13 @@ class FactoryController < ApplicationController
 			bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 			bodega_despacho = bodegas.detect {|b| b['despacho']}
 			productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], producto[:materias_primas][0][:sku], '100')
+			productos_recepcion = obtener_productos_funcion(bodega_recepcion['_id'], producto[:materias_primas][0][:sku], '100')
+			productos = productos_pulmon + productos_recepcion
 			enviados = 0
 			while enviados < cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote] and enviados < 100
-				prod = productos_pulmon.first
+				prod = productos.first
 				moveStock_funcion(prod["_id"], bodega_despacho["_id"])
-				productos_pulmon.delete_at(0)
+				productos.delete_at(0)
 				enviados += 1
 			end
 		end
