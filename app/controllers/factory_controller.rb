@@ -35,7 +35,9 @@ class FactoryController < ApplicationController
 			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
 			'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 1.1}]},
+			'1115' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 3}]},
 			'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+			'1215' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 4}]},
 			'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
 			'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 0.5}]},
 			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
@@ -50,7 +52,10 @@ class FactoryController < ApplicationController
 			bodega_despacho = bodegas.detect {|b| b['despacho']}
 			productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], producto[:materias_primas][0][:sku], '100')
 			productos_recepcion = obtener_productos_funcion(bodega_recepcion['_id'], producto[:materias_primas][0][:sku], '100')
-			productos = productos_pulmon + productos_recepcion
+			productos = []
+			bodegas.each do |almacen|
+				productos += obtener_productos_funcion(almacen['_id'], producto[:materias_primas][0][:sku], '100')
+			end
 			enviados = 0
 			necesarios = cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote]
 			necesarios = necesarios.ceil
