@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 	root 'welcome#index'
 	get 'inventories', to: 'trader#inventories'
 	get '/fabrica/fabricarSinPago', to: 'factory#produce'
+	get '/fabrica/pedirProductoGrupo', to: 'application#pedirProductoGrupoURL'
 	post 'orders', to: 'trader#orders'
 	get 'simularOrden', to: 'welcome#simular'
 	get 'factorytester', to: 'factory#testear'

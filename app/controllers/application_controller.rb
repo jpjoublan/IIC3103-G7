@@ -99,6 +99,21 @@ class ApplicationController < ActionController::Base
 		return ret
 	end
 
+	def pedirProductoGrupoURL
+		# sku: Producto a pedir
+		# grupo: Grupo al cual se le quiere pedir
+		# cantidad: Cantidad del producto a pedir
+		# almacenId: Almacen de destino (nuestro almacen de recepcion)
+		grupo = params[:grupo]
+		sku = params[:sku]
+		cantidad = params[:cantidad]
+		almacenId = params[:almacenId]
+		groupsURL = 'https://tuerca%s.ing.puc.cl/'
+		body = {'sku': sku, 'cantidad': cantidad, 'almacenId': almacenId}
+		ret = httpPostRequest(groupsURL % [grupo], '', body)
+		return ret
+	end
+
 	def vaciarDespacho()
 		#TODO: La bodega para sacar el despacho no debe estar hardcodeada.
 		puts 'VACIANDO DESPACHO'
