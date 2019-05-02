@@ -9,7 +9,48 @@ class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
 	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
 	groupsURL = 'tuerca%s.ing.puc.cl/'
-
+	Products = {
+			'1001'=> {'min'=> 1, 'name' =>'Arroz grano corto'},
+			'1002'=> {'min'=> 1, 'name' =>'Vinagre de arroz'},
+			'1003'=> {'min'=> 1, 'name' =>'Azúcar'},
+			'1004'=> {'min'=> 1, 'name' =>'Sal'},
+			'1005'=> {'min'=> 1, 'name' =>'Kanikama entero'},
+			'1006'=> {'min'=> 1, 'name' =>'Camarón'},
+			'1007'=> {'min'=> 1, 'name' =>'Filete de salmón'},
+			'1008'=> {'min'=> 1, 'name' =>'Filete de salmón ahumado'},
+			'1009'=> {'min'=> 1, 'name' =>'Filete de atún'},
+			'1010'=> {'min'=> 1, 'name' =>'Palta'},
+			'1011'=> {'min'=> 1, 'name' =>'Sésamo'},
+			'1012'=> {'min'=> 1, 'name' =>'Queso crema'},
+			'1013'=> {'min'=> 300, 'name' =>'Masago'},
+			'1014'=> {'min'=> 1, 'name' =>'Cebollín entero'},
+			'1015'=> {'min'=> 1, 'name' =>'Ciboulette entero'},
+			'1016'=> {'min'=> 1, 'name' =>'Nori entero'},
+			'1101'=> {'min'=> 1, 'name' =>'Arroz cocido'},
+			'1105'=> {'min'=> 50, 'name' =>'Kanikama para roll'},
+			'1106'=> {'min'=> 400, 'name' =>'Camarón cocido'},
+			'1107'=> {'min'=> 1, 'name' =>'Salmón cortado para roll'},
+			'1108'=> {'min'=> 1, 'name' =>'Salmón ahumado cortado para roll'},
+			'1109'=> {'min'=> 50, 'name' =>'Atún cortado para roll'},
+			'1110'=> {'min'=> 1, 'name' =>'Palta cortada para envoltura'},
+			'1111'=> {'min'=> 1, 'name' =>'Sésamo tostado'},
+			'1112'=> {'min'=> 1, 'name' =>'Queso crema para roll'},
+			'1114'=> {'min'=> 50, 'name' =>'Cebollín cortado para roll'},
+			'1115'=> {'min'=> 30, 'name' =>'Ciboulette picado para roll'},
+			'1116'=> {'min'=> 1, 'name' =>'Nori entero cortado para roll'},
+			'1201'=> {'min'=> 250, 'name' =>'Arroz cocido para roll'},
+			'1207'=> {'min'=> 1, 'name' =>'Salmón cortado para nigiri'},
+			'1209'=> {'min'=> 20, 'name' =>'Atún cortado para nigiri'},
+			'1210'=> {'min'=> 1, 'name' =>'Palta cortada para roll'},
+			'1211'=> {'min'=> 1, 'name' =>'Sésamo tostado para envoltura'},
+			'1215'=> {'min'=> 20, 'name' =>'Ciboulette picado para envoltura'},
+			'1216'=> {'min'=> 50, 'name' =>'Nori entero cortado para nigiri'},
+			'1301'=> {'min'=> 50, 'name' =>'Arroz cocido para nigiri'},
+			'1307'=> {'min'=> 1, 'name' =>'Salmón cortado para sashimi'},
+			'1309'=> {'min'=> 170, 'name' =>'Atún cortado para sashimi'},
+			'1310'=> {'min'=> 1, 'name' =>'Palta cortada para nigiri'},
+			'1407'=> {'min'=> 1, 'name' =>'Salmón cortado para envoltura'}
+		}
 	def getHash(action, params)
 		key = "WyZsey$Opy37to"
 		data = action + params

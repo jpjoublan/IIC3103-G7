@@ -1,18 +1,23 @@
-<h1>Hola Mundo</h1>
+<h1>Cumplimientos</h1>
 
+<table>
+  <tr>
+    <th>Name</th>
+    <th>sku</th>
+    <th>Stock minimo</th>
+    <th>stock actual</th>
+    <th>% cumplimiento</th>
+  </tr>
 
-<%= form_tag("/simularOrden", method: "get") do %>
-	<%= label_tag(:sku, "Producto") %>
-	<%= text_field_tag(:sku) %>
-	</br>
-	<%= label_tag(:cantidad, "Cantidad") %>
-	<%= text_field_tag(:cantidad, 0) %>	</br>
-	</br>
-	<%= label_tag(:almacenId, "Almacen") %>
-	<%= text_field_tag(:almacenId) %>
-	</br>
-	<%= label_tag(:url, "url") %>
-	<%= text_field_tag(:url) %>
-	</br>
-	<%= submit_tag("Simular Pedido") %>
+<% @stocks.each do |product| %>
+  <tr>
+    <td style='text-align: left;'><%= product[:name] %></td>
+    <td><%= product[:sku] %></td>
+    <td><%= product[:min] %></td>
+    <td><%= product[:total] %></td>
+    <td><%= product[:total]*100.0/product[:min] %>%</td>
+  </tr>
 <% end %>
+</table>
+
+<br />
