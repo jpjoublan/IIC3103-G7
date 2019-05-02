@@ -23,6 +23,13 @@ class FactoryController < ApplicationController
 
 	def moverMateriasPrimasDespacho(sku, cantidad)
 		proporciones = {
+			'1001' => {'lote': 10, 'materias_primas': []},
+			'1003' => {'lote': 100, 'materias_primas': []},
+			'1006' => {'lote': 1, 'materias_primas': []},
+			'1008' => {'lote': 1, 'materias_primas': []},
+			'1016' => {'lote': 10, 'materias_primas': []},
+			'1006' => {'lote': 8, 'materias_primas': []},
+			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
 			'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
 			'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
@@ -31,22 +38,21 @@ class FactoryController < ApplicationController
 			'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			}
-		vaciarDespacho()
-		bodegas = almacenes()	
 		producto = proporciones[sku]
-		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
-		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
-		bodega_despacho = bodegas.detect {|b| b['despacho']}
-		puts producto
-		productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], producto[:materias_primas][0][:sku], '100')
-		print 'Productos pulmon', productos_pulmon
-		enviados = 0
-		while enviados < cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote] and enviados < 100
-			prod = productos_pulmon.first
-			puts prod
-			moveStock_funcion(prod["_id"], bodega_despacho["_id"])
-			productos_pulmon.delete_at(0)
-			enviados += 1
+		if producto[:materias_primas].length > 0
+			vaciarDespacho()
+			bodegas = almacenes()	
+			bodega_pulmon = bodegas.detect {|b| b['pulmon']}
+			bodega_recepcion = bodegas.detect {|b| b['recepcion']}
+			bodega_despacho = bodegas.detect {|b| b['despacho']}
+			productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], producto[:materias_primas][0][:sku], '100')
+			enviados = 0
+			while enviados < cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote] and enviados < 100
+				prod = productos_pulmon.first
+				moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+				productos_pulmon.delete_at(0)
+				enviados += 1
+			end
 		end
 	end
 
