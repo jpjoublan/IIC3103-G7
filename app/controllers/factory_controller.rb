@@ -32,7 +32,7 @@ class FactoryController < ApplicationController
 			'1006' => {'lote': 8, 'materias_primas': []},
 			'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
 			'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
-			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 0.48}]},
+			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
 			'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 1.1}]},
 			'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
@@ -55,7 +55,6 @@ class FactoryController < ApplicationController
 			necesarios = cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote]
 			necesarios = necesarios.ceil
 			print 'SE NECESITAN', necesarios
-			return nil
 			while enviados < necesarios and enviados < 100
 				prod = productos.first
 				puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
