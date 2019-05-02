@@ -25,15 +25,21 @@ class FactoryController < ApplicationController
 		proporciones = {
 			'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
 			'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
-			'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]}
+			'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
+			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
+			'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+			'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			}
 		vaciarDespacho()
-		bodegas = almacenes()
+		bodegas = almacenes()	
 		producto = proporciones[sku]
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 		bodega_despacho = bodegas.detect {|b| b['despacho']}
+		puts producto
 		productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], producto[:materias_primas][0][:sku], '100')
+		print 'Productos pulmon', productos_pulmon
 		enviados = 0
 		while enviados < cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote] and enviados < 100
 			prod = productos_pulmon.first
