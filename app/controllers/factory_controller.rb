@@ -48,6 +48,7 @@ class FactoryController < ApplicationController
 			'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 0.5}]},
 			'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 0.96}]},
 			'1309' => {'lote': 11, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
+			'1307' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 0.99}]},
 			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1407' => {'lote': 14, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]}
 			}
