@@ -30,16 +30,16 @@ class FactoryController < ApplicationController
 			'1008' => {'lote': 1, 'materias_primas': []},
 			'1016' => {'lote': 10, 'materias_primas': []},
 			'1006' => {'lote': 8, 'materias_primas': []},
-			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
 			'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
-			'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
-			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
+			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 0.48}]},
 			'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+			'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 1.1}]},
 			'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+			'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
+			'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 0.5}]},
 			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
-			'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 2}]},
-			'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 1}]},
+			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 			}
 		producto = proporciones[sku]
 		if producto[:materias_primas].length > 0
@@ -52,9 +52,13 @@ class FactoryController < ApplicationController
 			productos_recepcion = obtener_productos_funcion(bodega_recepcion['_id'], producto[:materias_primas][0][:sku], '100')
 			productos = productos_pulmon + productos_recepcion
 			enviados = 0
-			while enviados < cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote] and enviados < 100
+			necesarios = cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote]
+			necesarios = necesarios.ceil
+			print 'SE NECESITAN', necesarios
+			return nil
+			while enviados < necesarios and enviados < 100
 				prod = productos.first
-				moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+				puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
 				productos.delete_at(0)
 				enviados += 1
 			end
