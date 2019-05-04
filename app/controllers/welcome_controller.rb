@@ -4,6 +4,9 @@ class WelcomeController < ApplicationController
 		auth_hash = getHash('GET', '')
 		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
 		stock = []
+		Products.each do |sku, value|
+			stock.push({'sku': sku, 'total': 0, 'name': value['name'], 'min': value['min']})
+		end
 		ret.each do |almacen|
 			id = almacen['_id']
 			auth_hash = getHash('GET', id)
@@ -24,7 +27,6 @@ class WelcomeController < ApplicationController
 			end
 		end
 		@stocks = stock
-		puts @stocks
 		return
 	end
 

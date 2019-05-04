@@ -15,7 +15,7 @@
     <td><%= product[:sku] %></td>
     <td><%= product[:min] %></td>
     <td><%= product[:total] %></td>
-    <td><%= product[:total]*100.0/product[:min] %>%</td>
+    <td><%= [product[:total]*100.0/product[:min], 100].min %>%</td>
   </tr>
 <% end %>
 </table>
