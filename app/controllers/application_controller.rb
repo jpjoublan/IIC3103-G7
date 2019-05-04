@@ -8,7 +8,6 @@ require 'cgi'
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
 	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
-	groupsURL = 'tuerca%s.ing.puc.cl/'
 	Products = {
 			'1001'=> {'min'=> 1, 'name' =>'Arroz grano corto'},
 			'1002'=> {'min'=> 1, 'name' =>'Vinagre de arroz'},
@@ -51,6 +50,8 @@ class ApplicationController < ActionController::Base
 			'1310'=> {'min'=> 20, 'name' =>'Palta cortada para nigiri'},
 			'1407'=> {'min'=> 40, 'name' =>'Salmón cortado para envoltura'}
 		}
+	GroupsURL = 'http://tuerca%s.ing.puc.cl/'
+
 	def getHash(action, params)
 		key = "WyZsey$Opy37to"
 		data = action + params
@@ -65,7 +66,7 @@ class ApplicationController < ActionController::Base
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
 		req['content-type'] = 'application/json'
 		http = Net::HTTP.new(uri.host, uri.port)
-		http.use_ssl = true
+		http.use_ssl = (uri.scheme == 'https')
 		response = http.request(req)
 		return JSON.parse(response.body)
 	end
@@ -76,7 +77,7 @@ class ApplicationController < ActionController::Base
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
 		req['content-type'] = 'application/json'
 		http = Net::HTTP.new(uri.host, uri.port)
-		http.use_ssl = true
+		http.use_ssl = (uri.scheme == 'https')
 		req.body = body.to_json
 		response = http.request(req)
 		return JSON.parse(response.body)
@@ -88,7 +89,7 @@ class ApplicationController < ActionController::Base
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
 		req['content-type'] = 'application/json'
 		http = Net::HTTP.new(uri.host, uri.port)
-		http.use_ssl = true
+		http.use_ssl = (uri.scheme == 'https')
 		req.body = body.to_json
 		response = http.request(req)
 		return JSON.parse(response.body)
@@ -136,9 +137,9 @@ class ApplicationController < ActionController::Base
 		# cantidad: Cantidad del producto a pedir
 		# almacenId: Almacen de destino (nuestro almacen de recepcion)
 		body = {'sku': sku, 'cantidad': cantidad, 'almacenId': almacenId}
-		ret = httpPostRequest(groupsURL % [grupo], '', body)
+		ret = httpPostRequest(GroupsURL % [grupo], '', body)
 		return ret
-	end
+	end	
 
 	def pedirProductoGrupoURL
 		# sku: Producto a pedir
