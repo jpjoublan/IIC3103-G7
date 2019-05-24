@@ -16,4 +16,6 @@ Rails.application.routes.draw do
 	post '/orders', to: 'trader#orders'
 	get '/almacenes', to: 'welcome#almacenes'
 	get '/skusWithStock', to: 'storages#skusWithStock'
+	get '/crear', to: 'orders#createOC'
+	get '/obtener', to: 'orders#getOC'
 end

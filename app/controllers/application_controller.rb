@@ -8,6 +8,7 @@ require 'cgi'
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
 	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
+	BaseURL_oc = 'https://integracion-2019-prod.herokuapp.com/oc/'
 	Products = {
 			'1001'=> {'min'=> 1, 'name' =>'Arroz grano corto'},
 			'1002'=> {'min'=> 1, 'name' =>'Vinagre de arroz'},
@@ -170,6 +171,26 @@ class ApplicationController < ActionController::Base
 				puts bodega_pulmon
 			end
 		end
+	end
+
+
+	# HACIA ABAJO REVISAR, ES NUEVO.
+
+
+	#SE DEJARON FUERA PARAMETROS OPCIONALES
+	def createOC_funcion(cliente, proveedor, sku, fechaEntrega, cantidad, precioUnitario, canal )
+		auth_hash = getHash('PUT', '')
+		body = {'cliente': cliente, 'proveedor': proveedor, 'sku': sku, 'fechaEntrega': fechaEntrega,
+			 'cantidad': cantidad, 'precioUnitario': precioUnitario, 'canal': canal}
+		resp = httpPutRequest(BaseURL_oc + 'crear', auth_hash, body)
+		return resp
+	end
+
+	def getOC_funcion(id)
+		auth_hash = getHash('GET', '')
+		body = {}
+		resp = httpGetRequest(BaseURL_oc + 'obtener/' + id, auth_hash )
+		return resp
 	end
 
 end
