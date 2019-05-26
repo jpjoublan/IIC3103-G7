@@ -3,12 +3,14 @@ require 'open-uri'
 require 'json'
 require 'base64'
 require 'cgi'
+require 'date'
 
 
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
-	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
-	BaseURL_oc = 'https://integracion-2019-prod.herokuapp.com/oc/'
+	BaseURL =  'https://integracion-2019-dev.herokuapp.com/bodega/'
+	BaseURL_oc = 'https://integracion-2019-dev.herokuapp.com/oc/'
+	GroupsURL = 'http://tuerca%s.ing.puc.cl/'
 	Products = {
 			'1001'=> {'min'=> 1, 'name' =>'Arroz grano corto'},
 			'1002'=> {'min'=> 1, 'name' =>'Vinagre de arroz'},
@@ -51,7 +53,7 @@ class ApplicationController < ActionController::Base
 			'1310'=> {'min'=> 20, 'name' =>'Palta cortada para nigiri'},
 			'1407'=> {'min'=> 40, 'name' =>'Salmón cortado para envoltura'}
 		}
-	GroupsURL = 'http://tuerca%s.ing.puc.cl/'
+
 
 	def getHash(action, params)
 		key = "WyZsey$Opy37to"
@@ -149,9 +151,30 @@ class ApplicationController < ActionController::Base
 		# grupo: Grupo al cual se le quiere pedir
 		# cantidad: Cantidad del producto a pedir
 		# almacenId: Almacen de destino (nuestro almacen de recepcion)
-		body = {'sku': sku, 'cantidad': cantidad, 'almacenId': almacenId}
-		ret = httpPostRequest(GroupsURL % [grupo], '', body)
-		return ret
+		id_grupos = {
+			'1' => {'desarrollo': '5cbd31b7c445af0004739be3', 'produccion': '5cc66e378820160004a4c3bc'},
+			'2' => {'desarrollo': '5cbd31b7c445af0004739be4', 'produccion': '5cc66e378820160004a4c3bd'},
+			'3' => {'desarrollo': '5cbd31b7c445af0004739be5', 'produccion': '5cc66e378820160004a4c3be'},
+			'4' => {'desarrollo': '5cbd31b7c445af0004739be6', 'produccion': '5cc66e378820160004a4c3bf'},
+			'5' => {'desarrollo': '5cbd31b7c445af0004739be7', 'produccion': '5cc66e378820160004a4c3c0'},
+			'6' => {'desarrollo': '5cbd31b7c445af0004739be8', 'produccion': '5cc66e378820160004a4c3c1'},
+			'7' => {'desarrollo': '5cbd31b7c445af0004739be9', 'produccion': '5cc66e378820160004a4c3c2'},
+			'8' => {'desarrollo': '5cbd31b7c445af0004739bea', 'produccion': '5cc66e378820160004a4c3c3'},
+			'9' => {'desarrollo': '5cbd31b7c445af0004739beb', 'produccion': '5cc66e378820160004a4c3c4'},
+			'10' => {'desarrollo': '5cbd31b7c445af0004739bec', 'produccion': '5cc66e378820160004a4c3c5'},
+			'11' => {'desarrollo': '5cbd31b7c445af0004739bed', 'produccion': '5cc66e378820160004a4c3c6'},
+			'12' => {'desarrollo': '5cbd31b7c445af0004739bee', 'produccion': '5cc66e378820160004a4c3c7'},
+			'13' => {'desarrollo': '5cbd31b7c445af0004739bef', 'produccion': '5cc66e378820160004a4c3c8'},
+			'14' => {'desarrollo': '5cbd31b7c445af0004739bf0', 'produccion': '5cc66e378820160004a4c3c9'},
+			}
+		fecha = p DateTime.now.strftime('%Q').to_i
+		fecha += 86400000 ## Le sumamos un dia de plazo
+		## Obtener stock
+		resp = createOC_funcion(id_grupos['7'][:desarrollo], id_grupos[grupo][:desarrollo], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
+		id = resp['_id']
+		body = {'oc': id}
+		ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
+		return resp
 	end
 
 	def pedirProductoGrupoURL

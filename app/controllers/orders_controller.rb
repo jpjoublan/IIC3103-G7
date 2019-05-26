@@ -3,14 +3,11 @@ class OrdersController < ApplicationController
     #PRUEBAS DE FUNCIONES ORDENES DE COMPRA
 
     def createOC
-        cliente = '5cbd31b7c445af0004739be9'
-        proveedor = '5cbd31b7c445af0004739be4'
+        grupo = '8'
         sku = '1006'
-        fechaEntrega = 26596545850500
         cantidad = '10'
-        precioUnitario = '1'
-        canal = 'b2b'
-        resp = createOC_funcion(cliente, proveedor, sku, fechaEntrega, cantidad, precioUnitario, canal )
+        almacen = '1'
+        resp = pedirProductoGrupo( grupo, sku, cantidad, almacen)
         render json:resp
     end
 
@@ -29,7 +26,7 @@ class OrdersController < ApplicationController
     end
 
     def anularOC
-        id = "5ceb0f59a949a800044c8c0b"
+        id = "5ceb12819b541400040faa46"
         anulacion = "No tenemos"
 
         resp = anularOC_funcion(id, anulacion)

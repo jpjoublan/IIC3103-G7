@@ -49,9 +49,16 @@ class TraderController < ApplicationController
 
 	def orders
 		body = JSON.parse(request.body.read)
-		sku = body['sku']
-		cantidad = [body['cantidad'], 200].min
-		almacenid = body['almacenId']
+		_id = body['oc']
+		##
+		resp = getOC_funcion(_id)
+		cantidad = resp['cantidad'].to_i
+		sku = resp['sku']
+
+		##
+		# sku = body['sku']
+		# cantidad = [body['cantidad'], 200].min
+		# almacenid = body['almacenId']
 		bodegas = almacenes()
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
