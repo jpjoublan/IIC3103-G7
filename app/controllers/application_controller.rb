@@ -96,6 +96,18 @@ class ApplicationController < ActionController::Base
 		return JSON.parse(response.body)
 	end
 
+	def httpDeleteRequest(url, auth_hash, body)
+		uri = URI(url)
+		req = Net::HTTP::Delete.new(uri)
+		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
+		req['content-type'] = 'application/json'
+		http = Net::HTTP.new(uri.host, uri.port)
+		http.use_ssl = (uri.scheme == 'https')
+		req.body = body.to_json
+		response = http.request(req)
+		return JSON.parse(response.body)
+	end
+
     def obtener_productos_funcion(almacen_id, sku, limit = 100)
         auth_hash = getHash('GET', almacen_id + sku)
         resp = httpGetRequest(BaseURL + 'stock?almacenId=%s&sku=%s&limit=%s' % [almacen_id, sku, limit] , auth_hash)
@@ -140,7 +152,7 @@ class ApplicationController < ActionController::Base
 		body = {'sku': sku, 'cantidad': cantidad, 'almacenId': almacenId}
 		ret = httpPostRequest(GroupsURL % [grupo], '', body)
 		return ret
-	end	
+	end
 
 	def pedirProductoGrupoURL
 		# sku: Producto a pedir
@@ -178,7 +190,7 @@ class ApplicationController < ActionController::Base
 
 
 	#SE DEJARON FUERA PARAMETROS OPCIONALES
-	def createOC_funcion(cliente, proveedor, sku, fechaEntrega, cantidad, precioUnitario, canal )
+	def createOC_funcion(cliente, proveedor, sku, fechaEntrega, cantidad, precioUnitario, canal)
 		auth_hash = getHash('PUT', '')
 		body = {'cliente': cliente, 'proveedor': proveedor, 'sku': sku, 'fechaEntrega': fechaEntrega,
 			 'cantidad': cantidad, 'precioUnitario': precioUnitario, 'canal': canal}
@@ -191,6 +203,24 @@ class ApplicationController < ActionController::Base
 		body = {}
 		resp = httpGetRequest(BaseURL_oc + 'obtener/' + id, auth_hash )
 		return resp
+	end
+
+	def recepcionarOC_funcion(id)
+		auth_hash = getHash('POST', '')
+		body = {'_id': id}
+		resp = httpPostRequest(BaseURL_oc + 'recepcionar/' + id, auth_hash, body)
+	end
+
+	def rechazarOC_funcion(id, rechazo)
+		auth_hash = getHash('POST', '')
+		body = {'_id': id, 'rechazo': rechazo}
+		resp = httpPostRequest(BaseURL_oc + 'rechazar/' + id, auth_hash, body)
+	end
+
+	def anularOC_funcion(id, anulacion)
+		auth_hash = getHash('POST', '')
+		body = {'_id': id, 'anulacion': anulacion}
+		resp = httpDeleteRequest(BaseURL_oc + 'anular/' + id, auth_hash, body)
 	end
 
 end

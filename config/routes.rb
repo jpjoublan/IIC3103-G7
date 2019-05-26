@@ -18,4 +18,7 @@ Rails.application.routes.draw do
 	get '/skusWithStock', to: 'storages#skusWithStock'
 	get '/crear', to: 'orders#createOC'
 	get '/obtener', to: 'orders#getOC'
+	get '/recepcionar', to: 'orders#recepcionarOC'
+	get '/anular', to: 'orders#anularOC'
+	get '/rechazar', to: 'orders#rechazarOC'
 end
