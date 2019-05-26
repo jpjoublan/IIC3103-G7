@@ -1,4 +1,40 @@
 class FactoryController < ApplicationController
+	Proporciones = {
+		'1001' => {'lote': 10, 'materias_primas': []},
+		'1003' => {'lote': 100, 'materias_primas': []},
+		'1006' => {'lote': 1, 'materias_primas': []},
+		'1008' => {'lote': 1, 'materias_primas': []},
+		'1016' => {'lote': 10, 'materias_primas': []},
+		'1006' => {'lote': 8, 'materias_primas': []},
+		'1009' => {'lote': 3, 'materias_primas': []},
+		'1105' => {'lote': 10, 'materias_primas': [{'sku': '1005', 'unidades_lote': 1}]},
+		'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
+		'1107' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+		'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
+		'1109' => {'lote': 12, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
+		'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+		'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 2}]},
+		'1112' => {'lote': 20, 'materias_primas': [{'sku': '1012', 'unidades_lote': 1}]},
+		'1115' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 3}]},
+		'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
+		'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+		'1209' => {'lote': 14, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
+		'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+		'1215' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 4}]},
+		'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
+		'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 1}]},
+		'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+		'1301' => {'lote': 5, 'materias_primas': [{'sku': '1101', 'unidades_lote': 1}]},
+		'1309' => {'lote': 11, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
+		'1307' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+		'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+		'1407' => {'lote': 14, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+		'1101' => {'lote': 10, 'materias_primas': [{'sku': '1001', 'unidades_lote': 8},
+												   {'sku': '1003', 'unidades_lote': 2},
+												   {'sku': '1004', 'unidades_lote': 3},
+												   {'sku': '1002', 'unidades_lote': 4}]
+					}
+				}
 
 	def produce
 		# Esta funcion se utiliza para mandar a producir un producto especifico.
@@ -6,79 +42,54 @@ class FactoryController < ApplicationController
 		# de 1006 (camarones)
 		sku = params[:sku]
 		cantidad = params[:cantidad]
-		resp = produce_funcion(sku, cantidad)
+		resp = produce_funcion(sku, cantidad.to_i)
 		render json: resp
 		return resp
 	end
 
 	def produce_funcion(sku, cantidad)
-		auth_hash = getHash('PUT', sku + cantidad)
-		body = {"sku": sku, "cantidad": cantidad}
-		moverMateriasPrimasDespacho(sku, cantidad.to_i)
-		resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
-		vaciarDespacho()
-		return resp
+		producidos = 0
+		resps = {'responses': []}
+		lote = Proporciones[sku][:lote]
+		if cantidad % lote != 0
+			resps[:data] = {'error': 'El tamaño del lote no es correcto', 'cantidad': cantidad, 'tamano_lote': lote}
+			return resps
+		end
+		while cantidad > producidos
+			auth_hash = getHash('PUT', sku + lote.to_s)
+			body = {"sku": sku, "cantidad": lote}
+			moverMateriasPrimasDespacho(sku)
+			resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
+			resps[:responses].push(resp)
+			producidos += lote
+		end
+		resps[:data] = {"sku": sku, "producidos": producidos}
+		return resps
 	end
 
-	def moverMateriasPrimasDespacho(sku, cantidad)
-		proporciones = {
-			'1001' => {'lote': 10, 'materias_primas': []},
-			'1003' => {'lote': 100, 'materias_primas': []},
-			'1006' => {'lote': 1, 'materias_primas': []},
-			'1008' => {'lote': 1, 'materias_primas': []},
-			'1016' => {'lote': 10, 'materias_primas': []},
-			'1006' => {'lote': 8, 'materias_primas': []},
-			'1009' => {'lote': 3, 'materias_primas': []},
-			'1105' => {'lote': 10, 'materias_primas': [{'sku': '1005', 'unidades_lote': 1}]},
-			'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
-			'1107' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
-			'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
-			'1109' => {'lote': 12, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
-			'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
-			'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 2}]},
-			'1112' => {'lote': 20, 'materias_primas': [{'sku': '1012', 'unidades_lote': 1}]},
-			'1115' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 3}]},
-			'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
-			'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
-			'1209' => {'lote': 14, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
-			'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
-			'1215' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 4}]},
-			'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
-			'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 1}]},
-			'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
-			'1301' => {'lote': 5, 'materias_primas': [{'sku': '1101', 'unidades_lote': 1}]},
-			'1309' => {'lote': 11, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
-			'1307' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
-			'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
-			'1407' => {'lote': 14, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]}
-			}
-
-
-		producto = proporciones[sku]
-		
-		if producto[:materias_primas].length > 0
+	def moverMateriasPrimasDespacho(sku)
+		producto = Proporciones[sku]
+		movidos = 0
+		if producto[:materias_primas].length > 0	
 			vaciarDespacho()
 			bodegas = almacenes()
 			bodega_pulmon = bodegas.detect {|b| b['pulmon']}
 			bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 			bodega_despacho = bodegas.detect {|b| b['despacho']}
-			productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], producto[:materias_primas][0][:sku], '100')
-			productos_recepcion = obtener_productos_funcion(bodega_recepcion['_id'], producto[:materias_primas][0][:sku], '100')
 			productos = []
 			bodegas.each do |almacen|
-				productos += obtener_productos_funcion(almacen['_id'], producto[:materias_primas][0][:sku], '100')
+				producto[:materias_primas].each do |ingredient|
+					productos += obtener_productos_funcion(almacen['_id'], ingredient[:sku], ingredient[:unidades_lote])
+				end
 			end
-			enviados = 0
-			necesarios = cantidad*producto[:materias_primas][0][:unidades_lote]/producto[:lote]
-			necesarios = necesarios.ceil
-			print 'SE NECESITAN', necesarios
-			while enviados < necesarios and enviados < 100
+			while productos.length > 0
 				prod = productos.first
 				puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
 				productos.delete_at(0)
-				enviados += 1
+				movidos += 1
 			end
 		end
+		return movidos
 	end
 
 end
