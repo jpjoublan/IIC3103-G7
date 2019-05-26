@@ -7,8 +7,8 @@ require 'cgi'
 
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
-	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
-	BaseURL_oc = 'https://integracion-2019-prod.herokuapp.com/oc/'
+	BaseURL =  'https://integracion-2019-dev.herokuapp.com/bodega/'
+	BaseURL_oc = 'https://integracion-2019-dev.herokuapp.com/oc/'
 	Products = {
 			'1001'=> {'min'=> 1, 'name' =>'Arroz grano corto'},
 			'1002'=> {'min'=> 1, 'name' =>'Vinagre de arroz'},
