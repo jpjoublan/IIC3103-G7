@@ -172,6 +172,7 @@ class ApplicationController < ActionController::Base
 		bodegas = almacenes()
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 		## Obtener stock
+		stock_grupo = obtenerStock(grupo)
 		resp = createOC_funcion(id_grupos['7'][:desarrollo], id_grupos[grupo][:desarrollo], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
 		id = resp['_id']
 		body = {'sku': sku, 'cantidad': cantidad.to_i, 'almacenId': bodega_recepcion['_id'], 'oc': id}
@@ -246,6 +247,12 @@ class ApplicationController < ActionController::Base
 		auth_hash = getHash('POST', '')
 		body = {'_id': id, 'anulacion': anulacion}
 		resp = httpDeleteRequest(BaseURL_oc + 'anular/' + id, auth_hash, body)
+	end
+
+	def obtenerStock(grupo)
+		auth_hash = getHash('GET', '')
+		resp = httpGetRequest(GroupsURL % [grupo] + 'inventories', auth_hash )
+		return resp
 	end
 
 end
