@@ -73,9 +73,50 @@ class FactoryController < ApplicationController
 		if producto[:materias_primas].length > 0	
 			vaciarDespacho()
 			bodegas = almacenes()
-			bodega_pulmon = bodegas.detect {|b| b['pulmon']}
-			bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 			bodega_despacho = bodegas.detect {|b| b['despacho']}
+			productos = []
+			bodegas.each do |almacen|
+				producto[:materias_primas].each do |ingredient|
+					productos += obtener_productos_funcion(almacen['_id'], ingredient[:sku], ingredient[:unidades_lote])
+				end
+			end
+			while productos.length > 0
+				prod = productos.first
+				puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+				productos.delete_at(0)
+				movidos += 1
+			end
+		end
+		return movidos
+	end
+
+	def cocinar_funcion(sku, cantidad)
+		producidos = 0
+		resps = {'responses': []}
+		lote = Proporciones[sku][:lote]
+		if cantidad % lote != 0
+			resps[:data] = {'error': 'El tamaño del lote no es correcto', 'cantidad': cantidad, 'tamano_lote': lote}
+			return resps
+		end
+		while cantidad > producidos
+			auth_hash = getHash('PUT', sku + lote.to_s)
+			body = {"sku": sku, "cantidad": lote}
+			moverMateriasPrimasCocina(sku)
+			resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
+			resps[:responses].push(resp)
+			producidos += lote
+		end
+		resps[:data] = {"sku": sku, "producidos": producidos}
+		return resps
+	end	
+
+	def moverMateriasPrimasCocina(sku)
+		producto = Proporciones[sku]
+		movidos = 0
+		if producto[:materias_primas].length > 0	
+			vaciarDespacho()
+			bodegas = almacenes()
+			bodega_despacho = bodegas.detect {|b| b['cocina']}
 			productos = []
 			bodegas.each do |almacen|
 				producto[:materias_primas].each do |ingredient|
