@@ -40,6 +40,24 @@ class OrdersController < ApplicationController
         render json:resp
     end
 
+    def sftp
+        Net::SFTP.start('fierro.ing.puc.cl', 'grupo7_dev', :password => '9AmQHvLiEwzK37W') do |sftp|
+            ocs = JSON.load File.new("public/ocs.json") 
+            sftp.dir.entries('/pedidos').each do |remote_file|
+                if !['.', '..'].include? remote_file.name and !ocs.has_key? remote_file.name
+                    file_data = sftp.download!('/pedidos/' + remote_file.name)
+                    f = Nokogiri::XML(file_data)  
+                    ocs[remote_file.name] = f.xpath('/order/id').text
+                    puts f.xpath('/order/id').text
+                end
+            end
+            File.open("public/ocs.json","w") do |f|
+              f.write(JSON.pretty_generate(ocs))
+            end
+        end
+    render json:{'status': 'ok'}
+    end
+
 
 
 end
