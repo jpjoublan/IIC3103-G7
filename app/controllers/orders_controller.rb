@@ -44,7 +44,6 @@ class OrdersController < ApplicationController
         Net::SFTP.start('fierro.ing.puc.cl', 'grupo7_dev', :password => '9AmQHvLiEwzK37W') do |sftp|
             ocs = JSON.load File.new("public/ocs.json") 
             sftp.dir.entries('/pedidos').each do |remote_file|
-                # Cargar el archivo que tiene los que ya leimos
                 if !['.', '..'].include? remote_file.name and !ocs.has_key? remote_file.name
                     file_data = sftp.download!('/pedidos/' + remote_file.name)
                     f = Nokogiri::XML(file_data)  
