@@ -37,7 +37,7 @@ if defined?(::Rails::Server)
       1310 => {'stock_min' =>20,'tiempo_produccion' =>10,'duracion_esperada' =>2,'lote_produccion' =>12,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
       1012 => {'stock_min' =>6,'tiempo_produccion' =>150,'duracion_esperada' =>72,'lote_produccion' =>7,'produce' =>false,'grupos_productores' =>'11,12,13'},
       1112 => {'stock_min' =>130,'tiempo_produccion' =>10,'duracion_esperada' =>24,'lote_produccion' =>20,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
-      1008 => {'stock_min' =>25,'tiempo_produccion' =>220,'duracion_esperada' =>48,'lote_produccion' =>10,'produce' =>false,'grupos_productores' =>'1,5,7'},
+      1008 => {'stock_min' =>25,'tiempo_produccion' =>220,'duracion_esperada' =>48,'lote_produccion' =>10,'produce' =>true,'grupos_productores' =>'1,5,7'},
       1108 => {'stock_min' =>10,'tiempo_produccion' =>20,'duracion_esperada' =>4,'lote_produccion' =>6,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
       1007 => {'stock_min' =>24,'tiempo_produccion' =>300,'duracion_esperada' =>20,'lote_produccion' =>8,'produce' =>false,'grupos_productores' =>'6,11,13'},
       1107 => {'stock_min' =>50,'tiempo_produccion' =>20,'duracion_esperada' =>2,'lote_produccion' =>11,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
@@ -126,7 +126,7 @@ if defined?(::Rails::Server)
 						'30008' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 3},{'sku': '1307','unidades_lote': 3}]}}
 
     order_rate = 1.3
-    scheduler.every '5m', first: :now do
+    scheduler.every '20m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         puts "comenzó el job"
         #BUSCAMOS LO QUE TENEMOS EN STOCK
