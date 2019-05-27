@@ -127,7 +127,7 @@ if defined?(::Rails::Server)
 						'30008' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 3},{'sku': '1307','unidades_lote': 3}]}}
 
     order_rate = 1.3
-    scheduler.every '20s', first: :now do
+    scheduler.every '1m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         puts "comenzó el job"
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -146,10 +146,11 @@ if defined?(::Rails::Server)
             stock_cantidad = 0
             #product_in es producto que tenemos en stock
             stock.each do |product_in|
-                
                 #SI EL SKU ESTA EN STOCK (se tendra que restar el stock que ya tenemos)
                 if product_in[:sku] == sku
                     stock_cantidad = product_in[:total]
+                    puts "stock CANTIDAAAAD"
+                    puts stock_cantidad
                 end
 
             end
@@ -173,14 +174,16 @@ if defined?(::Rails::Server)
                     puts "cambios"
                     puts a_pedir
                     numero_lotes = a_pedir / dict['lote_produccion']
-
+                    
                     #IF ABAJO NO VA, HAY QUE COMPLETAR DICCIONARIO
                     if proporciones[sku] != nil
                         puts proporciones[sku][:materias_primas]
                         #SI EL SKU NO TIENE MATERIAS PRIMAS
                         if proporciones[sku][:materias_primas] == [] 
-                        #CAMBIAR A INT A PEDIR DENTRO DE LA FUNCION DE ABAJO
-                            FactoryController.new.produce_funcion(sku, a_pedir.to_s)
+                            puts 'MATERIA PRIMA'
+                            puts sku
+                            puts sku.class
+                            FactoryController.new.produce_funcion(sku, a_pedir)
 
                         #SI EL SKU TIENE MATERIAS PRIMAS   
                         else
@@ -191,7 +194,7 @@ if defined?(::Rails::Server)
                                 #BOOL PARA REVISAR SI ESTA EN STOCK
                                 esta_stock = false
                                 stock.each do |product_in|
-
+                                    puts "loooop"
                                     if materias['sku'] == product_in[:sku]
                                         esta_stock = true
                                         #revisamos si tenemos el minimo de stock para hacer el producto
@@ -212,7 +215,7 @@ if defined?(::Rails::Server)
                             end
                             if hay_todo 
                                 puts "------------------------------------- HAAAAAAAAY"
-                                FactoryController.new.produce_funcion(sku, a_pedir.to_s)
+                                FactoryController.new.produce_funcion(sku, a_pedir)
                             
                             end
 
@@ -222,11 +225,20 @@ if defined?(::Rails::Server)
                     
 
                 else
-                    #PEDIR A OTRO GRUPO 
-                    grupos =dict['grupos_productores'].split(',')
-                    grupos.each do |grupo|
-                        ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir, bodega_recepcion_id)
-                    end
+                    #PEDIR A OTRO GRUPO
+                    
+                    #a_pedir = a_pedir.to_i
+                    #grupos =dict['grupos_productores'].split(',')
+                    #grupos.each do |grupo|
+                    #    puts "lala"
+                    #    begin
+                    #        ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
+                    #    rescue 
+                    #        puts "fallo!"
+                    #        break
+                    #    end
+                        
+                    #end
                     
                 end
             end
