@@ -174,9 +174,9 @@ class ApplicationController < ActionController::Base
 		## Obtener stock
 		resp = createOC_funcion(id_grupos['7'][:desarrollo], id_grupos[grupo][:desarrollo], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
 		id = resp['_id']
-		body = {'sku': sku, 'cantidad': cantidad.to_i, 'almacenId': almacenId, 'oc': id}		
+		body = {'sku': sku, 'cantidad': cantidad.to_i, 'almacenId': bodega_recepcion['_id'], 'oc': id}
 		ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
-		return resp
+		return ret
 	end
 
 	def pedirProductoGrupoURL
