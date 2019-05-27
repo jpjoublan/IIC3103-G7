@@ -24,6 +24,9 @@ class TraderController < ApplicationController
 		auth_hash = getHash('GET', '')
 		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
 		stock = []
+		Products.each do |sku, value|
+			stock.push({'sku': sku, 'total': -value['min'], 'nombre': value['name']})
+		end
 		ret.each do |almacen|
 			puts '****************************************'
 			puts almacen
@@ -44,6 +47,10 @@ class TraderController < ApplicationController
 				end
 			end
 		end
+		stock.each do |prod|
+			prod[:total] = [0, prod[:total]].max
+		end
+		render json: stock
 		return stock
 	end
 
