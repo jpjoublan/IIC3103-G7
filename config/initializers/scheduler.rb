@@ -59,7 +59,7 @@ if defined?(::Rails::Server)
   proporciones = {'1101' => {'lote':10 , 'materias_primas': [{'sku': '1001','unidades_lote': 8},{'sku': '1003','unidades_lote': 3},{'sku': '1004','unidades_lote': 2},{'sku': '1002','unidades_lote': 4}]},
 						'1001' => {'lote': 10, 'materias_primas': []},
 						'1003' => {'lote': 100, 'materias_primas': []},
-						'1006' => {'lote': 1, 'materias_primas': []},
+						#'1006' => {'lote': 1, 'materias_primas': []},
 						'1008' => {'lote': 1, 'materias_primas': []},
 						'1016' => {'lote': 10, 'materias_primas': []},
 						'1006' => {'lote': 8, 'materias_primas': []},
@@ -81,7 +81,6 @@ if defined?(::Rails::Server)
 						'1215' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 4}]},
 						'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
 						'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 1}]},
-						'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
 						'1301' => {'lote': 5, 'materias_primas': [{'sku': '1101', 'unidades_lote': 1}]},
 						'1309' => {'lote': 11, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
 						'1307' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
@@ -127,7 +126,7 @@ if defined?(::Rails::Server)
 						'30008' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 3},{'sku': '1307','unidades_lote': 3}]}}
 
     order_rate = 1.3
-    scheduler.every '1m', first: :now do
+    scheduler.every '5m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         puts "comenzó el job"
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -184,7 +183,7 @@ if defined?(::Rails::Server)
                             puts sku
                             puts sku.class
                             FactoryController.new.produce_funcion(sku, a_pedir)
-
+                            puts "pase este punto"
                         #SI EL SKU TIENE MATERIAS PRIMAS   
                         else
                             #BOOL PARA CHEQUEAR SI HAY SUFICIENTE DE TODAS LAS MATERIAS PRIMAS
@@ -227,18 +226,18 @@ if defined?(::Rails::Server)
                 else
                     #PEDIR A OTRO GRUPO
                     
-                    #a_pedir = a_pedir.to_i
-                    #grupos =dict['grupos_productores'].split(',')
-                    #grupos.each do |grupo|
-                    #    puts "lala"
-                    #    begin
-                    #        ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
-                    #    rescue 
-                    #        puts "fallo!"
-                    #        break
-                    #    end
+                    a_pedir = a_pedir.to_i
+                    grupos =dict['grupos_productores'].split(',')
+                    grupos.each do |grupo|
+                        puts "lala"
+                        begin
+                            ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
+                        rescue 
+                            puts "fallo!"
+                            break
+                        end
                         
-                    #end
+                    end
                     
                 end
             end
