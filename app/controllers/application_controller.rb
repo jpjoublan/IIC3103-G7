@@ -172,12 +172,27 @@ class ApplicationController < ActionController::Base
 		bodegas = almacenes()
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 		## Obtener stock
+		cantidad_int = cantidad.to_i
 		stock_grupo = obtenerStock(grupo)
-		resp = createOC_funcion(id_grupos['7'][:desarrollo], id_grupos[grupo][:desarrollo], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
-		id = resp['_id']
-		body = {'sku': sku, 'cantidad': cantidad.to_i, 'almacenId': bodega_recepcion['_id'], 'oc': id}
-		ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
-		return ret
+		stock_grupo.each do |product|
+			if product["sku"] == sku
+				if product["total"] >= cantidad_int
+					resp = createOC_funcion(id_grupos['7'][:desarrollo], id_grupos[grupo][:desarrollo], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
+					id = resp['_id']
+					body = {'sku': sku, 'cantidad': cantidad_int, 'almacenId': bodega_recepcion['_id'], 'oc': id}
+					ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
+					return ret
+				elsif product["total"] < cantidad_int and product["total"] > 0
+					resp = createOC_funcion(id_grupos['7'][:desarrollo], id_grupos[grupo][:desarrollo], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
+					id = resp['_id']
+					body = {'sku': sku, 'cantidad': product["total"], 'almacenId': bodega_recepcion['_id'], 'oc': id}
+					ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
+					return ret
+				end
+			end
+		end
+
+
 	end
 
 	def pedirProductoGrupoURL
