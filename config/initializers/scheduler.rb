@@ -230,12 +230,11 @@ if defined?(::Rails::Server)
                     grupos =dict['grupos_productores'].split(',')
                     grupos.each do |grupo|
                         puts "lala"
-                        begin
-                            ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
-                        rescue 
-                            puts "fallo!"
-                            break
-                        end
+                        puts a_pedir
+                        
+                        resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
+                        puts resp
+                        
                         
                     end
                     
