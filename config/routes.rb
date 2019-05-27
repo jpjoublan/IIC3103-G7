@@ -21,4 +21,5 @@ Rails.application.routes.draw do
 	get '/recepcionar', to: 'orders#recepcionarOC'
 	get '/anular', to: 'orders#anularOC'
 	get '/rechazar', to: 'orders#rechazarOC'
+	get 'sftptest', to: 'orders#sftp'
 end
