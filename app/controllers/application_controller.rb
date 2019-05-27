@@ -169,10 +169,12 @@ class ApplicationController < ActionController::Base
 			}
 		fecha = p DateTime.now.strftime('%Q').to_i
 		fecha += 86400000 ## Le sumamos un dia de plazo
+		bodegas = almacenes()
+		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 		## Obtener stock
 		resp = createOC_funcion(id_grupos['7'][:desarrollo], id_grupos[grupo][:desarrollo], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
 		id = resp['_id']
-		body = {'oc': id}
+		body = {'sku': sku, 'cantidad': cantidad, 'almacenId': almacenId, 'oc': id}		
 		ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
 		return resp
 	end

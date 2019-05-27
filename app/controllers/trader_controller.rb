@@ -50,15 +50,15 @@ class TraderController < ApplicationController
 	def orders
 		body = JSON.parse(request.body.read)
 		_id = body['oc']
-		##
+		## NUEVO
 		resp = getOC_funcion(_id)
 		cantidad = resp['cantidad'].to_i
 		sku = resp['sku']
 
-		##
+		## NUEVO
 		# sku = body['sku']
 		# cantidad = [body['cantidad'], 200].min
-		# almacenid = body['almacenId']
+		almacenid = body['almacenId']
 		bodegas = almacenes()
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
@@ -95,9 +95,12 @@ class TraderController < ApplicationController
 					enviados += 1
 				end
 			end
+			recepcionarOC_funcion(_id)
 			render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
 			return
 		else
+			rechazo = 'No tenemos suficiente stock'
+			rechazarOC_funcion(_id, rechazo)
 			render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
 			return
 		end
