@@ -3,9 +3,9 @@ class OrdersController < ApplicationController
     #PRUEBAS DE FUNCIONES ORDENES DE COMPRA
 
     def createOC
-        grupo = '8'
-        sku = '1006'
-        cantidad = '10'
+        grupo = '1'
+        sku = '1009'
+        cantidad = '100'
         almacen = '1'
         resp = pedirProductoGrupo( grupo, sku, cantidad, almacen)
         render json:resp
@@ -42,12 +42,12 @@ class OrdersController < ApplicationController
 
     def sftp
         Net::SFTP.start('fierro.ing.puc.cl', 'grupo7_dev', :password => '9AmQHvLiEwzK37W') do |sftp|
-            ocs = JSON.load File.new("public/ocs.json") 
+            ocs = JSON.load File.new("public/ocs.json")
             sftp.dir.entries('/pedidos').each do |remote_file|
                 if !['.', '..'].include? remote_file.name and !ocs.has_key? remote_file.name
                     file_data = sftp.download!('/pedidos/' + remote_file.name)
-                    f = Nokogiri::XML(file_data)  
-                    ocs[remote_file.name] = f.xpath('/order/id').text
+                    f = Nokogiri::XML(file_data)
+                    ocs[remote_file.name] = {'id': f.xpath('/order/id').text, 'estado': 'recibida'}
                     puts f.xpath('/order/id').text
                 end
             end

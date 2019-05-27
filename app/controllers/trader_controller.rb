@@ -65,7 +65,7 @@ class TraderController < ApplicationController
 		## NUEVO
 		# sku = body['sku']
 		# cantidad = [body['cantidad'], 200].min
-		almacenid = body['almacenId']
+		almacenid = body['almacenId'] ### OJOOOO
 		bodegas = almacenes()
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
@@ -110,6 +110,19 @@ class TraderController < ApplicationController
 			rechazarOC_funcion(_id, rechazo)
 			render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
 			return
+		end
+	end
+
+	def orders_sftp
+		ocs = JSON.load File.new("public/ocs.json")
+		ocs.each do |oc|
+			if ocs[oc][:estado] == "recibida"
+				resp = getOC_funcion(ocs[oc][:id])
+				cantidad = resp['cantidad'].to_i
+				sku = resp['sku']
+				almacenid = body['almacenId']
+
+			end
 		end
 	end
 

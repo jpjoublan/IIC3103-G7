@@ -175,6 +175,7 @@ class ApplicationController < ActionController::Base
 		cantidad_int = cantidad.to_i
 		stock_grupo = obtenerStock(grupo)
 		stock_grupo.each do |product|
+		begin
 			if product["sku"] == sku
 				if product["total"] >= cantidad_int
 					resp = createOC_funcion(id_grupos['7'][:desarrollo], id_grupos[grupo][:desarrollo], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
@@ -190,6 +191,9 @@ class ApplicationController < ActionController::Base
 					return ret
 				end
 			end
+		rescue
+			return 'fallo!'
+		end
 		end
 
 
