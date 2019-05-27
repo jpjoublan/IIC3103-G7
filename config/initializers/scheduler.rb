@@ -4,12 +4,15 @@ require 'open-uri'
 require 'json'
 require 'base64'
 require 'cgi'
+require '././app/controllers/factory_controller.rb'
 
 
 
 if defined?(::Rails::Server)
   scheduler = Rufus::Scheduler::singleton
   feedstock = [1009, 1006, 1014, 1015,1005, 1016, 1010, 1012, 1008, 1007, 1011, 1001, 1002, 1003, 1004]
+
+  bodega_recepcion_id = "5cc7b139a823b10004d8e6f1"
 
   products = {1009 => {'stock_min' =>22,'tiempo_produccion' =>400,'duracion_esperada' =>15,'lote_produccion' =>3,'produce' =>false,'grupos_productores' =>'1,8,9'},
       1109 => {'stock_min' =>60,'tiempo_produccion' =>30,'duracion_esperada' =>1.5,'lote_produccion' =>12,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
@@ -52,65 +55,184 @@ if defined?(::Rails::Server)
       1301 => {'stock_min' =>50,'tiempo_produccion' =>10,'duracion_esperada' =>2,'lote_produccion' =>5,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
       1201 => {'stock_min' =>250,'tiempo_produccion' =>10,'duracion_esperada' =>2,'lote_produccion' =>10,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'}
   }
-  order_rate = 1.3
-  scheduler.every '1m' do
-    puts "comenzó el job";
-    stock = TraderController.new.inventories()
-    puts "ya reviso inventories";
-    products.each do |sku, dict|
-        puts "esta revisando cada producto"
-        produce = dict['produce']
-        stock_min = dict['stock_min']
-        lote_produccion = dict['lote_produccion']
-        productores = dict['grupos_productores'].split(',')
-        in_stock = false
-        stock.each do |product|
-            if product[:sku] == sku
-                in_stock = true
-                break
+
+  proporciones = {'1101' => {'lote':10 , 'materias_primas': [{'sku': '1001','unidades_lote': 8},{'sku': '1003','unidades_lote': 3},{'sku': '1004','unidades_lote': 2},{'sku': '1002','unidades_lote': 4}]},
+						'1001' => {'lote': 10, 'materias_primas': []},
+						'1003' => {'lote': 100, 'materias_primas': []},
+						'1006' => {'lote': 1, 'materias_primas': []},
+						'1008' => {'lote': 1, 'materias_primas': []},
+						'1016' => {'lote': 10, 'materias_primas': []},
+						'1006' => {'lote': 8, 'materias_primas': []},
+						'1009' => {'lote': 3, 'materias_primas': []},
+						'1105' => {'lote': 10, 'materias_primas': [{'sku': '1005', 'unidades_lote': 1}]},
+						'1106' => {'lote': 100, 'materias_primas':[{'sku': '1006', 'unidades_lote': 100}]},
+						'1107' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+						'1108' => {'lote': 6, 'materias_primas': [{'sku': '1008', 'unidades_lote': 1}]},
+						'1109' => {'lote': 12, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
+						'1110' => {'lote': 6, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+						'1111' => {'lote': 2, 'materias_primas': [{'sku': '1011', 'unidades_lote': 2}]},
+                        '1112' => {'lote': 20, 'materias_primas': [{'sku': '1012', 'unidades_lote': 1}]},
+                        '1114' => {'lote':4 , 'materias_primas': [{'sku': '1014','unidades_lote': 1}]},
+						'1115' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 3}]},
+						'1116' => {'lote': 10, 'materias_primas':[{'sku': '1016', 'unidades_lote': 11}]},
+						'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+						'1209' => {'lote': 14, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
+						'1210' => {'lote': 9, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+						'1215' => {'lote': 8, 'materias_primas': [{'sku': '1015', 'unidades_lote': 4}]},
+						'1216' => {'lote': 10, 'materias_primas': [{'sku': '1016', 'unidades_lote': 2}]},
+						'1211' => {'lote': 10, 'materias_primas': [{'sku': '1111', 'unidades_lote': 1}]},
+						'1207' => {'lote': 12, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+						'1301' => {'lote': 5, 'materias_primas': [{'sku': '1101', 'unidades_lote': 1}]},
+						'1309' => {'lote': 11, 'materias_primas': [{'sku': '1009', 'unidades_lote': 1}]},
+						'1307' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+						'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
+						'1407' => {'lote': 14, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
+						'10001' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1105','unidades_lote': 1},{'sku': '1210','unidades_lote': 1},{'sku': '1211','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10002' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1105','unidades_lote': 1},{'sku': '1013','unidades_lote': 5},{'sku': '1210','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10003' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1105','unidades_lote': 1},{'sku': '1013','unidades_lote': 5},{'sku': '1210','unidades_lote': 1},{'sku': '1211','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10004' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1210','unidades_lote': 1},{'sku': '1211','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10005' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1013','unidades_lote': 5},{'sku': '1210','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10006' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1210','unidades_lote': 1},{'sku': '1107','unidades_lote': 1},{'sku': '1211','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10007' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1013','unidades_lote': 5},{'sku': '1210','unidades_lote': 1},{'sku': '1107','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10008' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1109','unidades_lote': 1},{'sku': '1210','unidades_lote': 1},{'sku': '1211','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10009' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1109','unidades_lote': 1},{'sku': '1013','unidades_lote': 5},{'sku': '1210','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10010' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1210','unidades_lote': 1},{'sku': '1110','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10011' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1114','unidades_lote': 1},{'sku': '1110','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10012' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1110','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1108','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10013' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1110','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10014' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1105','unidades_lote': 1},{'sku': '1110','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10015' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1109','unidades_lote': 1},{'sku': '1115','unidades_lote': 1},{'sku': '1110','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10016' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1110','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1107','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10017' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1110','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1107','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10018' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1105','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1407','unidades_lote': 1},{'sku': '1116','unidades_lote': 1}]},
+						'10019' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1210','unidades_lote': 1},{'sku': '1116','unidades_lote': 1},{'sku': '1407','unidades_lote': 1}]},
+						'10020' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1116','unidades_lote': 1},{'sku': '1106','unidades_lote': 4},{'sku': '1112','unidades_lote': 1},{'sku': '1114','unidades_lote': 1},{'sku': '1407','unidades_lote': 1}]},
+						'10021' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1116','unidades_lote': 1},{'sku': '1109','unidades_lote': 1},{'sku': '1114','unidades_lote': 1},{'sku': '1407','unidades_lote': 1}]},
+						'10022' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1116','unidades_lote': 1},{'sku': '1107','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1210','unidades_lote': 1},{'sku': '1215','unidades_lote': 1}]},
+						'10023' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1116','unidades_lote': 1},{'sku': '1109','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1210','unidades_lote': 1},{'sku': '1215','unidades_lote': 1}]},
+						'10024' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1116','unidades_lote': 1},{'sku': '1210','unidades_lote': 1},{'sku': '1114','unidades_lote': 1},{'sku': '1115','unidades_lote': 1},{'sku': '1211','unidades_lote': 1}]},
+						'10025' => {'lote':1 , 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1116','unidades_lote': 1},{'sku': '1210','unidades_lote': 1},{'sku': '1114','unidades_lote': 1},{'sku': '1115','unidades_lote': 1},{'sku': '1013','unidades_lote': 5}]},
+						'20001' => {'lote':1 , 'materias_primas': [{'sku': '1301','unidades_lote': 1},{'sku': '1207','unidades_lote': 1},{'sku': '1310','unidades_lote': 1},{'sku': '1112','unidades_lote': 1},{'sku': '1216','unidades_lote': 1}]},
+						'20002' => {'lote':1 , 'materias_primas': [{'sku': '1301','unidades_lote': 1},{'sku': '1216','unidades_lote': 1},{'sku': '1106','unidades_lote': 4}]},
+						'20003' => {'lote':1 , 'materias_primas': [{'sku': '1301','unidades_lote': 1},{'sku': '1216','unidades_lote': 1},{'sku': '1207','unidades_lote': 1}]},
+						'20004' => {'lote':1 , 'materias_primas': [{'sku': '1301','unidades_lote': 1},{'sku': '1216','unidades_lote': 1},{'sku': '1209','unidades_lote': 1}]},
+						'20005' => {'lote':1 , 'materias_primas': [{'sku': '1301','unidades_lote': 1},{'sku': '1216','unidades_lote': 1},{'sku': '1209','unidades_lote': 1},{'sku': '1310','unidades_lote': 1},{'sku': '1112','unidades_lote': 1}]},
+						'30001' => {'lote':1 , 'materias_primas': [{'sku': '1307','unidades_lote': 3}]},
+						'30002' => {'lote':1 , 'materias_primas': [{'sku': '1307','unidades_lote': 4}]},
+						'30003' => {'lote':1 , 'materias_primas': [{'sku': '1307','unidades_lote': 5}]},
+						'30004' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 3}]},
+						'30005' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 4}]},
+						'30006' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 5}]},
+						'30007' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 2},{'sku': '1307','unidades_lote': 2}]},
+						'30008' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 3},{'sku': '1307','unidades_lote': 3}]}}
+
+    order_rate = 1.3
+    scheduler.every '20s', first: :now do
+        #COMENZAMOS LA ITERACION DEL JOB
+        puts "comenzó el job"
+        #BUSCAMOS LO QUE TENEMOS EN STOCK
+        stock = TraderController.new.inventories()
+        puts "------------------------------------------------------"
+        puts stock
+        puts "------------------------------------------------------"
+        #RECORREMOS CADA ELEMENTO CORRESPONDIENTE AL STOCK MINIMO
+        products.each do |sku, dict|
+            sku = sku.to_s
+            puts sku
+            puts dict
+
+            
+            #PREDEFINIMOS CANTIDAD EN STOCK = 0
+            stock_cantidad = 0
+            #product_in es producto que tenemos en stock
+            stock.each do |product_in|
+                
+                #SI EL SKU ESTA EN STOCK (se tendra que restar el stock que ya tenemos)
+                if product_in[:sku] == sku
+                    stock_cantidad = product_in[:total]
+                end
+
             end
-        end
-        if in_stock
-            puts "in stock"
-            if product[:total] < (stock_min * order_rate)
-                if produce
-                    #### Cuando tengamos que pedir menos podemos usar esto
-                    # to_produce = (stock_min*0.5).round(0)
-                    # while to_produce % lote_produccion !=0
-                    #     to_produce -= 1
-                    # end
-                    puts "mando a producir"
-                    FactoryController.new.produce_funcion(sku, stock_min*2)
+            #producto no se encuentra en stock
+            #PONDERADOR DE CUBRIMIENTO DE STOCK
+            ponderador = 1.1
+            
+            a_pedir = dict['stock_min']* ponderador - stock_cantidad
+            if a_pedir > 0
+                #si nosotros producimos el producto
+                if dict['produce']
+                    #PEDIR A LA API
+                    puts "pediremos stock de:"
+                    puts sku 
+                    puts "cantidad:"
+                    puts a_pedir
+                    a_pedir = a_pedir.to_i
+                    if a_pedir % dict['lote_produccion'] != 0
+                        a_pedir = (a_pedir / dict['lote_produccion']) * dict['lote_produccion']  + dict['lote_produccion']
+                    end
+                    puts "cambios"
+                    puts a_pedir
+                    numero_lotes = a_pedir / dict['lote_produccion']
+
+                    #IF ABAJO NO VA, HAY QUE COMPLETAR DICCIONARIO
+                    if proporciones[sku] != nil
+                        puts proporciones[sku][:materias_primas]
+                        #SI EL SKU NO TIENE MATERIAS PRIMAS
+                        if proporciones[sku][:materias_primas] == [] 
+                        #CAMBIAR A INT A PEDIR DENTRO DE LA FUNCION DE ABAJO
+                            FactoryController.new.produce_funcion(sku, a_pedir.to_s)
+
+                        #SI EL SKU TIENE MATERIAS PRIMAS   
+                        else
+                            #BOOL PARA CHEQUEAR SI HAY SUFICIENTE DE TODAS LAS MATERIAS PRIMAS
+                            hay_todo = true
+                            
+                            proporciones[sku][:materias_primas].each do |materias|  
+                                #BOOL PARA REVISAR SI ESTA EN STOCK
+                                esta_stock = false
+                                stock.each do |product_in|
+
+                                    if materias['sku'] == product_in[:sku]
+                                        esta_stock = true
+                                        #revisamos si tenemos el minimo de stock para hacer el producto
+
+                                        if materias['unidades_lote'] * numero_lotes > product_in[:total]
+                                            hay_todo = false
+                                        end
+                                    
+                                    end
+                                    
+                                end
+                                #SI FALTA ALGUNA MATERIA PRIMA YA NO PRODUCIMOS 
+                                if esta_stock == false
+                                    hay_todo = false
+                                    break
+                                end
+
+                            end
+                            if hay_todo 
+                                puts "------------------------------------- HAAAAAAAAY"
+                                FactoryController.new.produce_funcion(sku, a_pedir.to_s)
+                            
+                            end
+
+
+                        end
+                    end
+                    
+
                 else
-                  puts "aka"
-                    to_produce = (stock_min*0.3).round(0)
-                    while to_produce % lote_produccion !=0
-                        to_produce -= 1
+                    #PEDIR A OTRO GRUPO 
+                    grupos =dict['grupos_productores'].split(',')
+                    grupos.each do |grupo|
+                        ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir, bodega_recepcion_id)
                     end
-                    productores.each do |group|
-                        puts "pidio a un grupo"
-                        ApplicationController.new.pedirProductoGrupo(group, sku, to_produce, "5cc7b139a823b10004d8e6f1") #### No sé de donde sacar el almacenId (es nuestro?)
-                    end
+                    
                 end
             end
-        else
-            if produce
-                puts "mando a producir 2"
-                FactoryController.new.produce_funcion(sku, stock_min*3)
-            else
-                puts "aqui"
-                to_produce = (stock_min*0.3).round(0)
-                while to_produce % lote_produccion !=0
-                    to_produce -= 1
-                end
-                productores.each do |group|
-                  puts "pide a otro grupo"
-                    ApplicationController.new.pedirProductoGrupo(group, sku, to_produce, "5cc7b139a823b10004d8e6f1") #### No sé de donde sacar el almacenId (es nuestro?)
-                end
-            end
+            
         end
+        
+
     end
-
-  end
-
 end
