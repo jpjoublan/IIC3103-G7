@@ -25,7 +25,7 @@ class FactoryController < ApplicationController
 			auth_hash = getHash('PUT', sku + lote.to_s)
 			body = {"sku": sku, "cantidad": lote}
 			moverMateriasPrimasDespacho(sku)
-			puts resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
+			resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
 			resps[:responses].push(resp)
 			producidos += lote
 		end
@@ -48,7 +48,7 @@ class FactoryController < ApplicationController
 			end
 			while productos.length > 0
 				prod = productos.first
-				puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+				moveStock_funcion(prod["_id"], bodega_despacho["_id"])
 				productos.delete_at(0)
 				movidos += 1
 			end
@@ -91,7 +91,7 @@ class FactoryController < ApplicationController
 			end
 			while productos.length > 0
 				prod = productos.first
-				puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+				moveStock_funcion(prod["_id"], bodega_despacho["_id"])
 				productos.delete_at(0)
 				movidos += 1
 			end
@@ -104,12 +104,9 @@ class FactoryController < ApplicationController
 		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
 		stock = []
 		ret.each do |almacen|
-			puts '****************************************'
-			puts almacen
 			id = almacen['_id']
 			auth_hash = getHash('GET', id)
 			aux = httpGetRequest(BaseURL + 'skusWithStock?almacenId=' + id, auth_hash)
-			puts aux
 			aux.each do |cantidad|
 				not_found = true
 				stock.each do |total|

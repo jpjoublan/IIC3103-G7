@@ -61,7 +61,6 @@ class OrdersController < ApplicationController
                     id = f.xpath('/order/id').text
                     resp = getOC_funcion(id)
                     ocs[remote_file.name] = {'id': id, 'estado': resp[0]['estado'], 'sku': resp[0]['sku'], 'qty': resp[0]['cantidad']}
-                    puts f.xpath('/order/id').text
                 end
             end
             File.open("public/ocs.json","w") do |f|

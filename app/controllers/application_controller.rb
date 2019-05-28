@@ -296,16 +296,15 @@ class ApplicationController < ActionController::Base
 
 	def vaciarDespacho()
 		#TODO: La bodega para sacar el despacho no debe estar hardcodeada.
-		puts 'VACIANDO DESPACHO'
 		bodegas = almacenes()
 		bodega_despacho = bodegas.detect {|b| b['despacho']}
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
+		
 		skus_with_stock = skusWithStock_funcion(bodega_despacho['_id'])
 		skus_with_stock.each do |prod|
 			productos_despacho = obtener_productos_funcion(bodega_despacho['_id'], prod['_id'], "100")
 			productos_despacho.each do |prod2|
-				puts moveStock_funcion(prod2['_id'], '5cc7b139a823b10004d8e6f3')
-				puts bodega_pulmon
+				moveStock_funcion(prod2['_id'], '5cc7b139a823b10004d8e6f3')
 			end
 		end
 	end
