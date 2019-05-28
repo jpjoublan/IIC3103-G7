@@ -9,7 +9,7 @@ require 'date'
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
 	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
-	BaseURL_oc = 'https://integracion-2019-prod.herokuapp.com/oc/'
+	BaseURL_oc = 'https://integracion-2019-dev.herokuapp.com/oc/'
 	GroupsURL = 'http://tuerca%s.ing.puc.cl/'
 	Products = {
 			'1001'=> {'min'=> 1, 'name' =>'Arroz grano corto'},
@@ -243,10 +243,10 @@ class ApplicationController < ActionController::Base
 		bodegas = almacenes()
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 		## Obtener stock
+		begin
 		cantidad_int = cantidad.to_i
 		stock_grupo = obtenerStock(grupo)
 		stock_grupo.each do |product|
-		begin
 			if product["sku"] == sku
 				if product["total"] >= cantidad_int
 					resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion

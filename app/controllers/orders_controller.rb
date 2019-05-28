@@ -3,9 +3,9 @@ class OrdersController < ApplicationController
     #PRUEBAS DE FUNCIONES ORDENES DE COMPRA
 
     def createOC(renders = true)
-        grupo = '3'
-        sku = '1004'
-        cantidad = '10'
+        grupo = '6'
+        sku = '1007'
+        cantidad = '20'
         almacen = '1'
         resp = pedirProductoGrupo( grupo, sku, cantidad, almacen)
         if renders
@@ -14,7 +14,7 @@ class OrdersController < ApplicationController
     end
 
     def getOC(renders = true)
-        id = "5ceb0ea6a949a800044c8c09"
+        id = "5ceb552c1553dd00041ba68a"
 
         resp = getOC_funcion(id)
         if renders
@@ -50,7 +50,8 @@ class OrdersController < ApplicationController
     end
 
     def sftp(renders = true)
-        Net::SFTP.start('fierro.ing.puc.cl', 'grupo7', :password => '9AmQHvLiEwzK37W') do |sftp|
+        ## Clave produccion; zZvsd7L38kq4TwbC7
+        Net::SFTP.start('fierro.ing.puc.cl', 'grupo7_dev', :password => '9AmQHvLiEwzK37W') do |sftp|
             ocs = JSON.load File.new("public/ocs.json")
             sftp.dir.entries('/pedidos').each do |remote_file|
                 if !['.', '..'].include? remote_file.name and !ocs.has_key? remote_file.name
@@ -58,7 +59,7 @@ class OrdersController < ApplicationController
                     f = Nokogiri::XML(file_data)
                     id = f.xpath('/order/id').text
                     resp = getOC_funcion(id)
-                    ocs[remote_file.name] = {'id': id, 'estado': resp[0]['estado']}
+                    ocs[remote_file.name] = {'id': id, 'estado': resp[0]['estado'], 'sku': resp[0]['sku'], 'qty': resp[0]['cantidad']}
                     puts f.xpath('/order/id').text
                 end
             end
