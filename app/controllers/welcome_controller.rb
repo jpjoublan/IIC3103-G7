@@ -56,4 +56,11 @@ class WelcomeController < ApplicationController
         return ret
     end
 
+    def testsch(renders = true)
+    	puts 'ESTA SE LLAMO DESDE EL SCHEDULER!!'
+    	if renders
+			    render json: {'status': 'SCHEDULER LLAMO ENDPOINT'}
+    	end
+    	return {'status': 'SCHEDULER LLAMO ENDPOINT'}
+    end
 end
