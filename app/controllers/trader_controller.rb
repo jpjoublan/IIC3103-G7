@@ -46,7 +46,7 @@ class TraderController < ApplicationController
 			end
 		end
 		stock.each do |prod|
-			prod[:total] = [0, prod[:total]].max
+			prod[:total] = [[0, prod[:total]].max, 100].min
 		end
 		if renders
 			render json: stock

@@ -9,7 +9,7 @@ require 'date'
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
 	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
-	BaseURL_oc = 'https://integracion-2019-dev.herokuapp.com/oc/'
+	BaseURL_oc = 'https://integracion-2019-prod.herokuapp.com/oc/'
 	GroupsURL = 'http://tuerca%s.ing.puc.cl/'
 	Products = {'1009' => {'min' =>23, 'name' => 'Filete de atún'},
                 '1109' => {'min' =>50, 'name' => 'Atún cortado para roll'},
@@ -62,7 +62,6 @@ class ApplicationController < ActionController::Base
 		'1005' => {'lote': 100, 'materias_primas': []},
 		'1006' => {'lote': 1, 'materias_primas': []},
 		'1008' => {'lote': 10, 'materias_primas': []},
-		'1016' => {'lote': 10, 'materias_primas': []},
 		'1007' => {'lote': 8, 'materias_primas': []},
 		'1010' => {'lote': 5, 'materias_primas': []},
 		'1011' => {'lote': 4, 'materias_primas': []},
