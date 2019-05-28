@@ -72,7 +72,7 @@ class FactoryController < ApplicationController
 	def moverMateriasPrimasDespacho(sku)
 		producto = Proporciones[sku]
 		movidos = 0
-		if producto[:materias_primas].length > 0	
+		if producto[:materias_primas].length > 0
 			vaciarDespacho()
 			bodegas = almacenes()
 			bodega_despacho = bodegas.detect {|b| b['despacho']}
@@ -110,12 +110,12 @@ class FactoryController < ApplicationController
 		end
 		resps[:data] = {"sku": sku, "producidos": producidos}
 		return resps
-	end	
+	end
 
 	def moverMateriasPrimasCocina(sku)
 		producto = Proporciones[sku]
 		movidos = 0
-		if producto[:materias_primas].length > 0	
+		if producto[:materias_primas].length > 0
 			vaciarDespacho()
 			bodegas = almacenes()
 			bodega_despacho = bodegas.detect {|b| b['cocina']}
@@ -133,6 +133,71 @@ class FactoryController < ApplicationController
 			end
 		end
 		return movidos
+	end
+
+	def all_inventories
+		auth_hash = getHash('GET', '')
+		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
+		stock = []
+		ret.each do |almacen|
+			puts '****************************************'
+			puts almacen
+			id = almacen['_id']
+			auth_hash = getHash('GET', id)
+			aux = httpGetRequest(BaseURL + 'skusWithStock?almacenId=' + id, auth_hash)
+			puts aux
+			aux.each do |cantidad|
+				not_found = true
+				stock.each do |total|
+					if total[:sku] == cantidad['_id']
+						total[:total] += cantidad['total']
+						not_found = false
+					end
+				end
+				if not_found
+					stock.push({'sku': cantidad['_id'], 'total': cantidad['total'], 'nombre': Products[cantidad['_id']]['name']})
+				end
+			end
+		end
+		return stock
+	end
+
+
+	def orders_sftp
+		ocs = JSON.load File.new("public/ocs.json")
+		ocs.each do |oc|
+			if ocs[oc][:estado] == "creada"
+				resp = getOC_funcion(ocs[oc][:id])
+				cantidad = resp['cantidad'].to_i
+				sku = resp['sku']
+				inventory = all_inventories()
+				materias_suficientes = True
+				# total_materias = Proporciones[sku][:materias_primas].length
+				# materias_suficientes = 0
+
+				Proporciones[sku][:materias_primas].each do |materia|
+					inventory.each do |producto|
+						if producto['sku'] == materia['sku']
+							if (materia['unidades_lote'] * cantidad) > producto['total']
+								materias_suficientes = False
+								break
+							end
+						end
+					end
+				end
+				if materias_suficientes
+					resp = recepcionarOC_funcion(ocs[oc][:id])
+					cocinar_funcion(sku, cantidad)
+
+				else
+					resp = rechazarOC_funcion(ocs[oc][:id])
+				end
+				ocs[oc][:estado] = resp['estado']
+			end
+		end
+		File.open("public/ocs.json","w") do |f|
+		  f.write(JSON.pretty_generate(ocs))
+		end
 	end
 
 end

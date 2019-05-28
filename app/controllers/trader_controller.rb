@@ -86,7 +86,7 @@ class TraderController < ApplicationController
 				while cantidad > 0 and productos_pulmon.length > 0
 					prod = productos_pulmon.first
 					puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
-					puts moveStockBodega_funcion(prod["_id"], almacenid)
+					puts moveStockBodega_funcion(prod["_id"], almacenid, _id)
 					capacidad_pulmon -= 1
 					cantidad -= 1
 					productos_pulmon.delete_at(0)
@@ -98,7 +98,7 @@ class TraderController < ApplicationController
 				while cantidad > 0 and productos_recepcion.length > 0
 					prod = productos_recepcion.first
 					moveStock_funcion(prod["_id"], bodega_despacho["_id"])
-					moveStockBodega_funcion(prod["_id"], almacenid)
+					moveStockBodega_funcion(prod["_id"], almacenid, _id)
 					capacidad_recepcion -= 1
 					cantidad -= 1
 					productos_recepcion.delete_at(0)
@@ -117,19 +117,6 @@ class TraderController < ApplicationController
 				render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
 			end
 			return
-		end
-	end
-
-	def orders_sftp
-		ocs = JSON.load File.new("public/ocs.json")
-		ocs.each do |oc|
-			if ocs[oc][:estado] == "recibida"
-				resp = getOC_funcion(ocs[oc][:id])
-				cantidad = resp['cantidad'].to_i
-				sku = resp['sku']
-				almacenid = body['almacenId']
-
-			end
 		end
 	end
 

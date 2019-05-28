@@ -205,7 +205,7 @@ class ApplicationController < ActionController::Base
         return resp
     end
 
-    def moveStockBodega_funcion(producto_id, almacen_id, precio=1, oc=nil)
+    def moveStockBodega_funcion(producto_id, almacen_id, oc, precio=1)
 		auth_hash = getHash('POST', producto_id + almacen_id)
 		if oc.nil?
 	        body = {"productoId": producto_id, "almacenId": almacen_id, "precio": precio}
