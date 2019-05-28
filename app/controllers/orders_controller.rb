@@ -50,7 +50,7 @@ class OrdersController < ApplicationController
     end
 
     def sftp(renders = true)
-        Net::SFTP.start('fierro.ing.puc.cl', 'grupo7_dev', :password => '9AmQHvLiEwzK37W') do |sftp|
+        Net::SFTP.start('fierro.ing.puc.cl', 'grupo7', :password => '9AmQHvLiEwzK37W') do |sftp|
             ocs = JSON.load File.new("public/ocs.json")
             sftp.dir.entries('/pedidos').each do |remote_file|
                 if !['.', '..'].include? remote_file.name and !ocs.has_key? remote_file.name
