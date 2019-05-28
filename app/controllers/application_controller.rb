@@ -253,9 +253,9 @@ class ApplicationController < ActionController::Base
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 		## Obtener stock
 		begin
-		cantidad_int = cantidad.to_i
-		stock_grupo = obtenerStock(grupo)
-		stock_grupo.each do |product|
+			cantidad_int = cantidad.to_i
+			stock_grupo = obtenerStock(grupo)
+			stock_grupo.each do |product|
 			if product["sku"] == sku
 				if product["total"] >= cantidad_int
 					resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
