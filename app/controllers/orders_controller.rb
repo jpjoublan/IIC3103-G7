@@ -40,8 +40,8 @@ class OrdersController < ApplicationController
         end
     end
 
-    def rechazarOC
-        id = "5ceb0f7fa949a800044c8c0c"
+    def rechazarOC(renders = true)
+        id = "5ced6b990fdaa30004c8539b"
         rechazo = 'No hay'
         resp = rechazarOC_funcion(id, rechazo)
         if renders

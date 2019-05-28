@@ -132,8 +132,8 @@ class FactoryController < ApplicationController
 		ocs.each do |oc|
 			if ocs[oc][:estado] == "creada"
 				resp = getOC_funcion(ocs[oc][:id])
-				cantidad = resp['cantidad'].to_i
-				sku = resp['sku']
+				cantidad = resp[0]['cantidad'].to_i
+				sku = resp[0]['sku']
 				inventory = all_inventories()
 				materias_suficientes = True
 				# total_materias = Proporciones[sku][:materias_primas].length
@@ -156,7 +156,7 @@ class FactoryController < ApplicationController
 				else
 					resp = rechazarOC_funcion(ocs[oc][:id])
 				end
-				ocs[oc][:estado] = resp['estado']
+				ocs[oc][:estado] = resp[0]['estado']
 			end
 		end
 		File.open("public/ocs.json","w") do |f|

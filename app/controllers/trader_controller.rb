@@ -62,8 +62,11 @@ class TraderController < ApplicationController
 		_id = body['oc']
 		## NUEVO
 		resp = getOC_funcion(_id)
-		cantidad = resp['cantidad'].to_i
-		sku = resp['sku']
+		cantidad = resp[0]['cantidad'].to_i
+		sku = resp[0]['sku']
+
+		cliente = resp['cliente']
+		puts cliente
 
 		## NUEVO
 		# sku = body['sku']
