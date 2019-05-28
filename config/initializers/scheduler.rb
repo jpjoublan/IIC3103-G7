@@ -125,12 +125,13 @@ if defined?(::Rails::Server)
 						'30007' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 2},{'sku': '1307','unidades_lote': 2}]},
 						'30008' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 3},{'sku': '1307','unidades_lote': 3}]}}
 
+    #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '20m', first: :now do
+    scheduler.every '1m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         puts "comenzó el job"
         #BUSCAMOS LO QUE TENEMOS EN STOCK
-        stock = TraderController.new.inventories()
+        stock = TraderController.new.inventories(renders = false)
         puts "------------------------------------------------------"
         puts stock
         puts "------------------------------------------------------"
@@ -245,4 +246,12 @@ if defined?(::Rails::Server)
         
 
     end
+
+    #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
+
+    scheduler.every '2m' do
+        puts "hola"
+
+    end
+
 end
