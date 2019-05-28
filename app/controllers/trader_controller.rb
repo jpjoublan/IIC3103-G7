@@ -60,6 +60,9 @@ class TraderController < ApplicationController
 		## NUEVO
 		resp = getOC_funcion(_id)
 		cantidad = resp[0]['cantidad'].to_i
+		sku = resp[0]['sku']
+		cliente = resp[0]['cliente']
+		puts 'LLEGO UNA ORDEN PARA', sku, 'CLIENTE', cliente, 'CANTIDAD', cantidad
 		if cantidad > 100
 			rechazo = 'No tenemos suficiente stock'
 			rechazarOC_funcion(_id, rechazo)
@@ -68,10 +71,6 @@ class TraderController < ApplicationController
 			end
 			return
 		end
-		sku = resp[0]['sku']
-
-		cliente = resp[0]['cliente']
-
 		## NUEVO
 		# sku = body['sku']
 		# cantidad = [body['cantidad'], 200].min
@@ -113,6 +112,7 @@ class TraderController < ApplicationController
 			end
 			recepcionarOC_funcion(_id)
 			resp2 = getOC_funcion(_id)
+			puts 'SUPUESTAMENTE SE ENVIÓ LA ORDERN AL GRUPO'
 			if renders
 				render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
 			end
