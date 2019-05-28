@@ -66,7 +66,9 @@ class TraderController < ApplicationController
 		sku = resp[0]['sku']
 
 		cliente = resp['cliente']
+		puts '***************'
 		puts cliente
+		puts '***************'
 
 		## NUEVO
 		# sku = body['sku']
