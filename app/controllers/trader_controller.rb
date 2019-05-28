@@ -60,6 +60,14 @@ class TraderController < ApplicationController
 		## NUEVO
 		resp = getOC_funcion(_id)
 		cantidad = resp[0]['cantidad'].to_i
+		if cantidad > 100
+			rechazo = 'No tenemos suficiente stock'
+			rechazarOC_funcion(_id, rechazo)
+			if render
+				render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
+			end
+			return
+		end
 		sku = resp[0]['sku']
 
 		cliente = resp[0]['cliente']
