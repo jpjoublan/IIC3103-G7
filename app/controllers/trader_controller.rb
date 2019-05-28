@@ -112,6 +112,10 @@ class TraderController < ApplicationController
 					end
 				end
 				recepcionarOC_funcion(_id)
+				resp2 = getOC_funcion(_id)
+				puts '----------------'
+				puts resp2[0]['estado']
+				puts '----------------'
 				if renders
 					render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
 				end
