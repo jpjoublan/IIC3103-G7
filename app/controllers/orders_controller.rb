@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
         render json:resp
     end
 
-    def sftp
+    def sftp(renders = true)
         Net::SFTP.start('fierro.ing.puc.cl', 'grupo7_dev', :password => '9AmQHvLiEwzK37W') do |sftp|
             ocs = JSON.load File.new("public/ocs.json")
             sftp.dir.entries('/pedidos').each do |remote_file|
@@ -55,7 +55,9 @@ class OrdersController < ApplicationController
               f.write(JSON.pretty_generate(ocs))
             end
         end
-    render json:{'status': 'ok'}
+        if renders
+            render json:{'status': 'ok'}
+        end
     end
 
 

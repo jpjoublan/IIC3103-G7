@@ -1,7 +1,7 @@
 class TraderController < ApplicationController
 
 
-	def moveStockBodega
+	def moveStockBodega(renders = true)
         # Mover producto entre bodega de despacho y la bodega de otro grupo (funcion para despachar)
         #
         #
@@ -14,13 +14,14 @@ class TraderController < ApplicationController
 
         body = {"productoId": producto_id, "almacenId": almacen_id, "oc": oc, "precio": precio}
         resp = httpPostRequest(BaseURL + 'moveStockBodega'  , auth_hash, body)
-
-		render json: resp
+        if renders
+			render json: resp
+		end
 		return resp
 	end
 
 
-	def inventories
+	def inventories(renders = true)
 		auth_hash = getHash('GET', '')
 		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
 		stock = []
@@ -50,11 +51,13 @@ class TraderController < ApplicationController
 		stock.each do |prod|
 			prod[:total] = [0, prod[:total]].max
 		end
-		render json: stock
+		if renders
+			render json: stock
+		end
 		return stock
 	end
 
-	def orders
+	def orders(renders = true)
 		body = JSON.parse(request.body.read)
 		_id = body['oc']
 		## NUEVO
@@ -103,12 +106,16 @@ class TraderController < ApplicationController
 				end
 			end
 			recepcionarOC_funcion(_id)
-			render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
+			if renders
+				render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
+			end
 			return
 		else
 			rechazo = 'No tenemos suficiente stock'
 			rechazarOC_funcion(_id, rechazo)
-			render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
+			if render
+				render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
+			end
 			return
 		end
 	end

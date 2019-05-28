@@ -1,13 +1,15 @@
 class StoragesController < ApplicationController
 
-    def moveStock
+    def moveStock(renders = true)
         # Esta funcion se utiliza para mover stock desde un almacen a otro, sin importar cual es el almacen de origen
         # Solo se ingresa producto id y almacen id
         #
         producto_id = params[:productoid]
         almacen_id = params[:almacenid]
         resp = moveStock_funcion(producto_id, almcacen_id)
-        render json: resp	
+        if renders
+            render json: resp	
+        end
         return resp
     end
 
