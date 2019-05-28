@@ -65,7 +65,8 @@ class TraderController < ApplicationController
 		cantidad = resp[0]['cantidad'].to_i
 		sku = resp[0]['sku']
 
-		cliente = resp['cliente']
+		cliente = resp[0]['cliente']
+
 		puts '***************'
 		puts cliente
 		puts '***************'
