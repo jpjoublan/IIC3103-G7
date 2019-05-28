@@ -2,42 +2,51 @@ class OrdersController < ApplicationController
 
     #PRUEBAS DE FUNCIONES ORDENES DE COMPRA
 
-    def createOC
+    def createOC(renders = true)
         grupo = '1'
         sku = '1009'
         cantidad = '100'
         almacen = '1'
         resp = pedirProductoGrupo( grupo, sku, cantidad, almacen)
-        render json:resp
+        if renders
+            render json:resp
+        end
     end
 
-    def getOC
+    def getOC(renders = true)
         id = "5ceb0ea6a949a800044c8c09"
 
         resp = getOC_funcion(id)
-        render json:resp
+        if renders
+            render json:resp
+        end
     end
 
-    def recepcionarOC
+    def recepcionarOC(renders = true)
         id = "5ceb0ea6a949a800044c8c09"
-
         resp = recepcionarOC_funcion(id)
-        render json:resp
+        if renders
+            render json:resp
+        end
     end
 
-    def anularOC
+    def anularOC(renders = true)
         id = "5ceb12819b541400040faa46"
         anulacion = "No tenemos"
 
         resp = anularOC_funcion(id, anulacion)
-        render json:resp
+        if renders
+            render json:resp
+        end
     end
 
     def rechazarOC
         id = "5ceb0f7fa949a800044c8c0c"
         rechazo = 'No hay'
         resp = rechazarOC_funcion(id, rechazo)
-        render json:resp
+        if renders
+            render json:resp
+        end
     end
 
     def sftp(renders = true)
