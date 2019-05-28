@@ -56,7 +56,9 @@ class OrdersController < ApplicationController
                 if !['.', '..'].include? remote_file.name and !ocs.has_key? remote_file.name
                     file_data = sftp.download!('/pedidos/' + remote_file.name)
                     f = Nokogiri::XML(file_data)
-                    ocs[remote_file.name] = {'id': f.xpath('/order/id').text, 'estado': 'recibida'}
+                    id = f.xpath('/order/id').text
+                    resp = getOC_funcion(id)
+                    ocs[remote_file.name] = {'id': id, 'estado': resp[0]['estado']}
                     puts f.xpath('/order/id').text
                 end
             end
