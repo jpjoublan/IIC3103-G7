@@ -125,7 +125,9 @@ class TraderController < ApplicationController
 				return
 			end
 		rescue Exception => e
+			puts '------************'
 			puts e
+			puts '------************'
 		end
 	end
 
