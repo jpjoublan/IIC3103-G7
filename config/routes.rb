@@ -22,4 +22,5 @@ Rails.application.routes.draw do
 	get '/anular', to: 'orders#anularOC'
 	get '/rechazar', to: 'orders#rechazarOC'
 	get 'sftptest', to: 'orders#sftp'
+	get '/testingscheduler', to: 'welcome#testsch'
 end

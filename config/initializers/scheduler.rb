@@ -5,6 +5,7 @@ require 'json'
 require 'base64'
 require 'cgi'
 require '././app/controllers/factory_controller.rb'
+require '././app/controllers/application_controller.rb'
 
 
 
@@ -127,7 +128,7 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '1m', first: :now do
+    scheduler.every '3m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         puts "comenzó el job"
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -216,10 +217,7 @@ if defined?(::Rails::Server)
                             if hay_todo 
                                 puts "------------------------------------- HAAAAAAAAY"
                                 FactoryController.new.produce_funcion(sku, a_pedir)
-                            
                             end
-
-
                         end
                     end
                     
@@ -249,9 +247,15 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-    scheduler.every '2m' do
-        puts "hola"
-
+    scheduler.every '10s' do
+		uri = URI('http://tuerca7.ing.puc.cl/')
+		req = Net::HTTP::Get.new(uri)
+		req['Authorization'] = 'INTEGRACION grupo7:'
+		req['content-type'] = 'application/json'
+		http = Net::HTTP.new(uri.host, uri.port)
+		http.use_ssl = (uri.scheme == 'https')
+		response = http.request(req)
+		puts response
     end
 
 end
