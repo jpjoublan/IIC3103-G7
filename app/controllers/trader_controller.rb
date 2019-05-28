@@ -58,70 +58,74 @@ class TraderController < ApplicationController
 	end
 
 	def orders(renders = true)
-		body = JSON.parse(request.body.read)
-		_id = body['oc']
-		## NUEVO
-		resp = getOC_funcion(_id)
-		cantidad = resp[0]['cantidad'].to_i
-		sku = resp[0]['sku']
+		begin
+			body = JSON.parse(request.body.read)
+			_id = body['oc']
+			## NUEVO
+			resp = getOC_funcion(_id)
+			cantidad = resp[0]['cantidad'].to_i
+			sku = resp[0]['sku']
 
-		cliente = resp[0]['cliente']
+			cliente = resp[0]['cliente']
 
-		puts '***************'
-		puts cliente
-		puts '***************'
+			puts '***************'
+			puts cliente
+			puts '***************'
 
-		## NUEVO
-		# sku = body['sku']
-		# cantidad = [body['cantidad'], 200].min
-		almacenid = body['almacenId'] ### OJOOOO
-		bodegas = almacenes()
-		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
-		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
-		bodega_despacho = bodegas.detect {|b| b['despacho']}
-		recepcion = skusWithStock_funcion(bodega_recepcion["_id"]).detect {|b| b['_id']==sku}
-		pulmon = skusWithStock_funcion(bodega_pulmon["_id"]).detect {|b| b['_id']==sku}
-		capacidad_pulmon = pulmon.nil? ? 0: pulmon['total']
-		capacidad_recepcion = recepcion.nil? ? 0: recepcion['total']
-		if capacidad_recepcion + capacidad_pulmon - cantidad > 500
-			enviados = 0
-			if capacidad_pulmon > 0
-				productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], sku, "100")
-				productos_pulmon = productos_pulmon.sort_by { |k| k["vencimiento"] }
-				while cantidad > 0 and productos_pulmon.length > 0
-					prod = productos_pulmon.first
-					puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
-					puts moveStockBodega_funcion(prod["_id"], almacenid, _id)
-					capacidad_pulmon -= 1
-					cantidad -= 1
-					productos_pulmon.delete_at(0)
-					enviados += 1
+			## NUEVO
+			# sku = body['sku']
+			# cantidad = [body['cantidad'], 200].min
+			almacenid = body['almacenId'] ### OJOOOO
+			bodegas = almacenes()
+			bodega_pulmon = bodegas.detect {|b| b['pulmon']}
+			bodega_recepcion = bodegas.detect {|b| b['recepcion']}
+			bodega_despacho = bodegas.detect {|b| b['despacho']}
+			recepcion = skusWithStock_funcion(bodega_recepcion["_id"]).detect {|b| b['_id']==sku}
+			pulmon = skusWithStock_funcion(bodega_pulmon["_id"]).detect {|b| b['_id']==sku}
+			capacidad_pulmon = pulmon.nil? ? 0: pulmon['total']
+			capacidad_recepcion = recepcion.nil? ? 0: recepcion['total']
+			if capacidad_recepcion + capacidad_pulmon - cantidad > 500
+				enviados = 0
+				if capacidad_pulmon > 0
+					productos_pulmon = obtener_productos_funcion(bodega_pulmon['_id'], sku, "100")
+					productos_pulmon = productos_pulmon.sort_by { |k| k["vencimiento"] }
+					while cantidad > 0 and productos_pulmon.length > 0
+						prod = productos_pulmon.first
+						puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+						puts moveStockBodega_funcion(prod["_id"], almacenid, _id)
+						capacidad_pulmon -= 1
+						cantidad -= 1
+						productos_pulmon.delete_at(0)
+						enviados += 1
+					end
 				end
-			end
-			if capacidad_recepcion > 0 and cantidad > 0
-				productos_recepcion = obtener_productos_funcion(bodega_recepcion['_id'], sku, "100")
-				while cantidad > 0 and productos_recepcion.length > 0
-					prod = productos_recepcion.first
-					moveStock_funcion(prod["_id"], bodega_despacho["_id"])
-					moveStockBodega_funcion(prod["_id"], almacenid, _id)
-					capacidad_recepcion -= 1
-					cantidad -= 1
-					productos_recepcion.delete_at(0)
-					enviados += 1
+				if capacidad_recepcion > 0 and cantidad > 0
+					productos_recepcion = obtener_productos_funcion(bodega_recepcion['_id'], sku, "100")
+					while cantidad > 0 and productos_recepcion.length > 0
+						prod = productos_recepcion.first
+						moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+						moveStockBodega_funcion(prod["_id"], almacenid, _id)
+						capacidad_recepcion -= 1
+						cantidad -= 1
+						productos_recepcion.delete_at(0)
+						enviados += 1
+					end
 				end
+				recepcionarOC_funcion(_id)
+				if renders
+					render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
+				end
+				return
+			else
+				rechazo = 'No tenemos suficiente stock'
+				rechazarOC_funcion(_id, rechazo)
+				if render
+					render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
+				end
+				return
 			end
-			recepcionarOC_funcion(_id)
-			if renders
-				render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
-			end
-			return
-		else
-			rechazo = 'No tenemos suficiente stock'
-			rechazarOC_funcion(_id, rechazo)
-			if render
-				render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
-			end
-			return
+		rescue Exception => e
+			puts e
 		end
 	end
 
