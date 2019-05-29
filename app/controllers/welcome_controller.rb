@@ -20,12 +20,13 @@ class WelcomeController < ApplicationController
 					end
 				end
 				if not_found
-					stock.push({'sku': cantidad['_id'], 'total': cantidad['total'], 
-								'name': Products[cantidad['_id']]['name'],
-								'min': Products[cantidad['_id']]['min']})
+					stock.push({'sku': cantidad['_id'], 'total': 0, 
+								'name': Products[cantidad['_id']][:name],
+								'min': Products[cantidad['_id']][:min]})
 				end
 			end
 		end
+		puts stock
 		@stocks = stock
 		return
 	end

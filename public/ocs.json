@@ -13,20 +13,38 @@
   },
   "1559106123468-3317.xml": {
     "id": "5cee124a0645020004e1540c",
-    "estado": "creada",
+    "estado": "aceptada",
     "sku": "10025",
     "qty": 2
   },
   "1559106123468-9080.xml": {
     "id": "5cee124a0645020004e1540d",
-    "estado": "creada",
+    "estado": "aceptada",
     "sku": "10014",
     "qty": 2
   },
   "1559106123467-1058.xml": {
     "id": "5cee124a0645020004e1540b",
-    "estado": "creada",
+    "estado": "aceptada",
     "sku": "10012",
     "qty": 2
+  },
+  "1559109734598-7362.xml": {
+    "id": "5cee2065c467530004194404",
+    "estado": "aceptada",
+    "sku": "10025",
+    "qty": 2
+  },
+  "1559109734598-7812.xml": {
+    "id": "5cee2066c467530004194405",
+    "estado": "aceptada",
+    "sku": "10017",
+    "qty": 2
+  },
+  "1559109734598-5173.xml": {
+    "id": "5cee2066c467530004194406",
+    "estado": "aceptada",
+    "sku": "10006",
+    "qty": 4
   }
 }

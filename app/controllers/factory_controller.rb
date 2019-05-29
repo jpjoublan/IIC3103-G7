@@ -86,7 +86,8 @@ class FactoryController < ApplicationController
 			productos = []
 			bodegas.each do |almacen|
 				producto[:materias_primas].each do |ingredient|
-					productos += obtener_productos_funcion(almacen['_id'], ingredient[:sku], ingredient[:unidades_lote])
+					news = obtener_productos_funcion(almacen['_id'], ingredient[:sku], ingredient[:unidades_lote])
+					productos += news
 				end
 			end
 			while productos.length > 0
@@ -126,41 +127,39 @@ class FactoryController < ApplicationController
 
 	def orders_sftp
 		ocs = JSON.load File.new("public/ocs.json")
-		ocs.each do |oc, value|
-			puts oc
-			if ocs[oc]["estado"] == "creada"
+		ocs.each do |useless, oc|
+			puts 'OC: ', useless
+			puts 'Value: ', oc
+			if oc["estado"] == "creada"
 				puts 'ESTABA CREADA'
-				resp = getOC_funcion(ocs[oc]["id"])
-				puts resp
+				resp = getOC_funcion(oc["id"])
 				cantidad = resp[0]['cantidad'].to_i
 				sku = resp[0]['sku']
 				inventory = all_inventories()
 				materias_suficientes = true
-				resp = recepcionarOC_funcion(ocs[oc]["id"])
+				resp = recepcionarOC_funcion(oc["id"])
+				oc["estado"] = resp[0]['estado']
+				File.open("public/ocs.json","w") do |f|
+				  f.write(JSON.pretty_generate(ocs))
+				end
 				# total_materias = Proporciones[sku][:materias_primas].length
 				# materias_suficientes = 0
-				puts Proporciones[sku]
 				Proporciones[sku][:materias_primas].each do |materia|
 					inventory.each do |producto|
 						if producto['sku'] == materia[:sku]
 							if (materia[:unidades_lote] * cantidad) > producto[:total]
 								materias_suficientes = false
-								break
 							end
 						end
 					end
 				end
 				if materias_suficientes
-					resp = recepcionarOC_funcion(ocs[oc]["id"])
+					resp = recepcionarOC_funcion(oc["id"])
 					cocinar_funcion(sku, cantidad)
-				else
-					resp = rechazarOC_funcion(ocs[oc]["id"])
+				#else
+				#	resp = rechazarOC_funcion(ocs[oc]["id"])
 				end
-				ocs[oc]["estado"] = resp[0]['estado']
 			end
-		end
-		File.open("public/ocs.json","w") do |f|
-		  f.write(JSON.pretty_generate(ocs))
 		end
 	end
 	
