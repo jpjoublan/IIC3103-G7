@@ -8,8 +8,8 @@ require 'date'
 
 class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
-	BaseURL =  'https://integracion-2019-prod.herokuapp.com/bodega/'
-	BaseURL_oc = 'https://integracion-2019-prod.herokuapp.com/oc/'
+	BaseURL =  'https://integracion-2019-dev.herokuapp.com/bodega/'
+	BaseURL_oc = 'https://integracion-2019-dev.herokuapp.com/oc/'
 	GroupsURL = 'http://tuerca%s.ing.puc.cl/'
 	Products = {'1009' => {'min' =>23, 'name' => 'Filete de atún'},
                 '1109' => {'min' =>50, 'name' => 'Atún cortado para roll'},

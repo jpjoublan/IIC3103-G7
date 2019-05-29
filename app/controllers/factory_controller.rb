@@ -127,6 +127,7 @@ class FactoryController < ApplicationController
 	def orders_sftp
 		ocs = JSON.load File.new("public/ocs.json")
 		ocs.each do |oc|
+			puts oc
 			if ocs[oc][:estado] == "creada"
 				resp = getOC_funcion(ocs[oc][:id])
 				cantidad = resp[0]['cantidad'].to_i
@@ -140,7 +141,7 @@ class FactoryController < ApplicationController
 					inventory.each do |producto|
 						if producto['sku'] == materia['sku']
 							if (materia['unidades_lote'] * cantidad) > producto['total']
-								materias_suficientes = False
+								materias_suficientes = false
 								break
 							end
 						end
@@ -149,7 +150,6 @@ class FactoryController < ApplicationController
 				if materias_suficientes
 					resp = recepcionarOC_funcion(ocs[oc][:id])
 					cocinar_funcion(sku, cantidad)
-
 				else
 					resp = rechazarOC_funcion(ocs[oc][:id])
 				end
@@ -158,6 +158,29 @@ class FactoryController < ApplicationController
 		end
 		File.open("public/ocs.json","w") do |f|
 		  f.write(JSON.pretty_generate(ocs))
+		end
+	end
+
+
+	def despachar_cliente
+		ocs = JSON.load File.new("public/ocs.json")
+		ocs.each do |oc|
+		inventory = all_inventories()
+			if ocs[oc][:estado] == "aceptada"
+				materias_suficientes = true
+				inventory.each do |producto|
+					if producto['sku'] == ocs[oc][:sku]
+						if (ocs[oc][:qty]) > producto['total']
+							materias_suficientes = false
+							break
+						end
+					end
+				end
+				if materias_suficientes
+					## Mover de cocina a despacho o no se de donde, pero a despacho
+					## Usar esta funcion despachar de application controller
+				end
+			end
 		end
 	end
 
