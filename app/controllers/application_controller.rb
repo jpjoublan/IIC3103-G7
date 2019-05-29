@@ -228,8 +228,10 @@ class ApplicationController < ActionController::Base
 	end
 
     def obtener_productos_funcion(almacen_id, sku, limit = 100)
+    	puts 'PIDIENDO PRODUCTOS DENTRO DE FUNCION'
         auth_hash = getHash('GET', almacen_id + sku)
         resp = httpGetRequest(BaseURL + 'stock?almacenId=%s&sku=%s&limit=%s' % [almacen_id, sku, limit] , auth_hash)
+        puts 'SE HIZO EL GET'
         return resp
     end
 
