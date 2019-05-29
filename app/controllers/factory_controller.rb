@@ -184,6 +184,7 @@ class FactoryController < ApplicationController
 		inventory = all_inventories()
 		ocs.each do |oc, value|
 			sku = value[sku]
+			materias_suficientes = true
 			if value['aceptada'] === 'creada' || value['aceptada'] === 'aceptada'
 				Proporciones[sku][:materias_primas].each do |materia|
 					inventory.each do |producto|
