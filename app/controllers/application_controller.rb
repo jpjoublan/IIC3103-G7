@@ -143,6 +143,8 @@ class ApplicationController < ActionController::Base
 	end
 
 	def httpGetRequest(url, auth_hash)
+		print 'HACIENDO REQUEST', url
+		puts
 		uri = URI(url)
 		req = Net::HTTP::Get.new(uri)
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
@@ -270,8 +272,11 @@ class ApplicationController < ActionController::Base
 					return ret
 				end
 			end
-		rescue
-			return 'fallo!'
+		rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError,
+       Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => e
+			return 'Conexión fallida'
+		rescue Exception => e
+			return 'Fallo!'
 		end
 		end
 

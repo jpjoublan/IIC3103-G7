@@ -230,10 +230,12 @@ if defined?(::Rails::Server)
                     grupos.each do |grupo|
                         puts "lala"
                         puts a_pedir
-                        
-                        resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
-                        puts resp
-                        
+						begin
+                        	resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
+                        	puts resp
+                        rescue
+                        	puts 'LA MIERDA GRUPO QLIAO'
+                        end
                         
                     end
                     
