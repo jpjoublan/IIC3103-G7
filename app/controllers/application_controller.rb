@@ -231,7 +231,7 @@ class ApplicationController < ActionController::Base
     	puts 'PIDIENDO PRODUCTOS DENTRO DE FUNCION', sku, almacen_id
         auth_hash = getHash('GET', almacen_id + sku)
         resp = httpGetRequest(BaseURL + 'stock?almacenId=%s&sku=%s&limit=%s' % [almacen_id, sku, limit] , auth_hash)
-        puts 'SE HIZO EL GET'
+        puts 'SE HIZO EL GET', resp
         return resp
     end
 
