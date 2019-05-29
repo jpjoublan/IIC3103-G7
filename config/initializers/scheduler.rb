@@ -128,7 +128,7 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '3m', first: :now do
+    scheduler.every '10m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -167,29 +167,28 @@ if defined?(::Rails::Server)
                     end
                     
                     numero_lotes = a_pedir / dict['lote_produccion']
-                    puts sku
+                    a_pedir = dict['lote_produccion']
                     #IF ABAJO NO VA, HAY QUE COMPLETAR DICCIONARIO
                     if proporciones[sku] != nil
                         
                         #SI EL SKU NO TIENE MATERIAS PRIMAS
                         if proporciones[sku][:materias_primas] == [] 
-                            puts proporciones[sku][:materias_primas]
-                            
-                            FactoryController.new.produce_funcion(sku, a_pedir)
-                            puts "pase este punto"
+                            puts '=========================================='
+                        	print 'MANDANDO A COMPRAR: ', sku
+                        	puts ''
+                        	print 'CANTIDAD: ', a_pedir
+                        	puts ''
+                        	print 'RESPUESTA: ', FactoryController.new.produce_funcion(sku, a_pedir)
+                        	puts ''
                         #SI EL SKU TIENE MATERIAS PRIMAS   
                         else
                             #BOOL PARA CHEQUEAR SI HAY SUFICIENTE DE TODAS LAS MATERIAS PRIMAS
                             hay_todo = true
                             
                             proporciones[sku][:materias_primas].each do |materias|  
-                                puts proporciones[sku][:materias_primas]
                                 #BOOL PARA REVISAR SI ESTA EN STOCK
                                 esta_stock = false
                                 stock.each do |product_en|
-                                    puts "loooop"
-                                    puts materias[:sku]
-                                    puts product_en[:sku]
                                     if materias[:sku] == product_en[:sku]
                                         esta_stock = true
                                         #revisamos si tenemos el minimo de stock para hacer el producto
@@ -209,8 +208,14 @@ if defined?(::Rails::Server)
 
                             end
                             if hay_todo 
-                                puts "------------------------------------- HAAAAAAAAY"
-                                FactoryController.new.produce_funcion(sku, a_pedir)
+
+                            	puts '=========================================='
+                        		print 'MANDANDO A PRODUCIR: ', sku
+        	                	puts ''
+            	            	print 'CANTIDAD: ', a_pedir
+                	        	puts ''
+                    	    	print 'RESPUESTA: ', FactoryController.new.produce_funcion(sku, a_pedir)
+                        		puts ''
                             end
                         end
                     end
@@ -220,12 +225,20 @@ if defined?(::Rails::Server)
                     #PEDIR A OTRO GRUPO
                     
                     a_pedir = a_pedir.to_i
-                    grupos =dict['grupos_productores'].split(',')
+                    a_pedir = 5
+                    grupos = dict['grupos_productores'].split(',')
                     grupos.each do |grupo|
                         
 						begin
-                        	resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
-                        	puts resp
+                    	puts '=========================================================='
+                        print 'MANDANDO A PEDIR: ', sku
+                    	puts ''
+	                    print 'GRUPO: ', grupo
+                    	puts ''
+                        print 'Cantidad: ', a_pedir
+    	               	puts ''
+                        resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
+                   		puts resp
                         rescue
                         	puts 'LA MIERDA GRUPO QLIAO'
                         end
@@ -242,13 +255,13 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-    scheduler.every '3m' do
-        puts " -------- scheduler 2 -----------"
+    #scheduler.every '3m' do
+    #    puts " -------- scheduler 2 -----------"
         # Actualizamos ordenes de compra
-        OrdersController.new.sftp(renders = false)
+    #    OrdersController.new.sftp(renders = false)
         # Acepta o rechaza segun criterios
-        FactoryController.new.orders_sftp()
-        puts " --------      EEEENNNNNNNDDDDDDD       scheduler 2 -----------"
-    end
+    #    FactoryController.new.orders_sftp()
+    #    puts " --------      EEEENNNNNNNDDDDDDD       scheduler 2 -----------"
+    #end
 
 end
