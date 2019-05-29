@@ -84,11 +84,12 @@ class TraderController < ApplicationController
 		bodegas = almacenes()
 		puts 'CALCULANDO PRODUCTOS TOTALES'
 		puts bodegas
+		productos = []
 		bodegas.each do |almacen|
 			puts 'PIDIENDO PRODUCTOS'
 			productos_aux = obtener_productos_funcion(almacen['_id'], sku)
 			puts 'Se salio de la funcion'
-			puts productos_aux
+			puts 'PRODUCTOS AUX:', productos_aux
 			productos += productos_aux
 		end
 		print 'PRODUCTOS: ', productos
