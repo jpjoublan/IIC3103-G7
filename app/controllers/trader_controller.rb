@@ -45,13 +45,17 @@ class TraderController < ApplicationController
 				end
 			end
 		end
+		ret_stock = []
 		stock.each do |prod|
 			prod[:total] = [[0, prod[:total]].max, 100].min
+			if prod[:total] > 0
+				ret_stock.push(prod)
+			end
 		end
 		if renders
-			render json: stock
+			render json: ret_stock
 		end
-		return stock
+		return ret_stock
 	end
 
 	def orders(renders = true)
