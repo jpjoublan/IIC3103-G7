@@ -100,6 +100,8 @@ class TraderController < ApplicationController
 			enviados = 0
 			while cantidad > 0 and productos.length > 0
 				prod = productos.first
+				puts 'MOVIENDO PRODUCTO', prod
+				puts 'PARA ORDEN DE COMPRA', _id
 				puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
 				puts moveStockBodega_funcion(prod["_id"], almacenid, _id)
 				cantidad -= 1
