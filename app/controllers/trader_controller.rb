@@ -83,6 +83,7 @@ class TraderController < ApplicationController
 		almacenid = body['almacenId'] ### OJOOOO
 		bodegas = almacenes()
 		puts 'CALCULANDO PRODUCTOS TOTALES'
+		puts bodegas
 		bodegas.each do |almacen|
 			productos_aux = obtener_productos_funcion(almacen['_id'], sku)
 			puts productos_aux
