@@ -139,9 +139,10 @@ class FactoryController < ApplicationController
 				resp = recepcionarOC_funcion(ocs[oc]["id"])
 				# total_materias = Proporciones[sku][:materias_primas].length
 				# materias_suficientes = 0
+				puts Proporciones[sku]
 				Proporciones[sku][:materias_primas].each do |materia|
-					inventory.each do |key, producto|
-						if producto['sku'] == materia['sku']
+					inventory.each do |producto|
+						if producto['sku'] == materia[:sku]
 							if (materia[:unidades_lote] * cantidad) > producto[:total]
 								materias_suficientes = false
 								break

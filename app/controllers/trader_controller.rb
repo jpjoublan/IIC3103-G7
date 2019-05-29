@@ -66,10 +66,10 @@ class TraderController < ApplicationController
 		cantidad = resp[0]['cantidad'].to_i
 		sku = resp[0]['sku']
 		cliente = resp[0]['cliente']
-		print 'LLEGO UNA ORDEN PARA: ', sku, '         CLIENTE: ', cliente, '         CANTIDAD: ', cantidad
+		print 'LLEGO UNA ORDEN PARA: ', sku, ' CLIENTE: ', cliente, ' CANTIDAD: ', cantidad
 		puts ''
 		if cantidad > 100
-			rechazo = 'No tenemos suficiente stock'
+			rechazo = 'No tenemos suficiente stock 1'
 			puts rechazo
 			rechazarOC_funcion(_id, rechazo)
 			if render
@@ -85,33 +85,31 @@ class TraderController < ApplicationController
 		bodegas.each do |almacen|
 			productos += obtener_productos_funcion(almacen['_id'], sku)
 		end
+		print 'PRODUCTOS: ', productos
+		puts ''
 		bodega_pulmon = bodegas.detect {|b| b['pulmon']}
 		bodega_recepcion = bodegas.detect {|b| b['recepcion']}
 		bodega_despacho = bodegas.detect {|b| b['despacho']}
-		recepcion = skusWithStock_funcion(bodega_recepcion["_id"]).detect {|b| b['_id']==sku}
-		pulmon = skusWithStock_funcion(bodega_pulmon["_id"]).detect {|b| b['_id']==sku}
-		capacidad_pulmon = pulmon.nil? ? 0: pulmon['total']
-		capacidad_recepcion = recepcion.nil? ? 0: recepcion['total']
 		if productos.length >= cantidad
 			enviados = 0
 			while cantidad > 0 and productos.length > 0
 				prod = productos.first
-				moveStock_funcion(prod["_id"], bodega_despacho["_id"])
-				moveStockBodega_funcion(prod["_id"], almacenid, _id)
-				capacidad_pulmon -= 1
+				puts moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+				puts moveStockBodega_funcion(prod["_id"], almacenid, _id)
 				cantidad -= 1
 				productos.delete_at(0)
 				enviados += 1
 			end
-			recepcionarOC_funcion(_id)
+			puts recepcionarOC_funcion(_id)
 			resp2 = getOC_funcion(_id)
 			puts 'SUPUESTAMENTE SE ENVIÓ LA ORDERN AL GRUPO'
+			puts resp2
 			if renders
 				render :json => {"sku": sku, "cantidad": enviados, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": true, "despachado": true}.to_json, :status => 201
 			end
 			return
 		else
-			rechazo = 'No tenemos suficiente stock'
+			rechazo = 'No tenemos suficiente stock 2'
 			puts rechazo
 			rechazarOC_funcion(_id, rechazo)
 			if render
