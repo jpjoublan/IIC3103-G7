@@ -181,8 +181,22 @@ class FactoryController < ApplicationController
 
 	def despachar_clientes
 		ocs = JSON.load File.new("public/ocs.json")
-		ocs.each do |oc, value|
 		inventory = all_inventories()
+		ocs.each do |oc, value|
+			sku = value[sku]
+			if value['aceptada'] === 'creada' || value['aceptada'] === 'aceptada'
+				Proporciones[sku][:materias_primas].each do |materia|
+				inventory.each do |producto|
+					if producto['sku'] == materia[:sku]
+						if (materia[:unidades_lote] * cantidad) > producto[:total]
+							materias_suficientes = false
+						end
+					end
+				end
+			end
+			if materias_suficientes
+				resp = recepcionarOC_funcion(oc["id"])
+				cocinar_funcion(sku, cantidad)
 			if ocs[oc][:estado] == "aceptada"
 				materias_suficientes = true
 				inventory.each do |producto|
