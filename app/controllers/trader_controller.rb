@@ -66,9 +66,11 @@ class TraderController < ApplicationController
 		cantidad = resp[0]['cantidad'].to_i
 		sku = resp[0]['sku']
 		cliente = resp[0]['cliente']
-		puts 'LLEGO UNA ORDEN PARA', sku, 'CLIENTE', cliente, 'CANTIDAD', cantidad
+		print 'LLEGO UNA ORDEN PARA: ', sku, '         CLIENTE: ', cliente, '         CANTIDAD: ', cantidad
+		puts ''
 		if cantidad > 100
 			rechazo = 'No tenemos suficiente stock'
+			puts rechazo
 			rechazarOC_funcion(_id, rechazo)
 			if render
 				render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201
@@ -123,6 +125,7 @@ class TraderController < ApplicationController
 			return
 		else
 			rechazo = 'No tenemos suficiente stock'
+			puts rechazo
 			rechazarOC_funcion(_id, rechazo)
 			if render
 				render :json => {"sku": sku, "cantidad": 0, "almacenId": almacenid, "grupoProveedor": 7, "aceptado": false, "despachado": false }.to_json, :status => 201

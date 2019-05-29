@@ -130,8 +130,8 @@ class ApplicationController < ActionController::Base
 		'30004' => {'lote': 1, 'materias_primas': [{'sku': '1309','unidades_lote': 3}]},
 		'30005' => {'lote': 1, 'materias_primas': [{'sku': '1309','unidades_lote': 4}]},
 		'30006' => {'lote': 1, 'materias_primas': [{'sku': '1309','unidades_lote': 5}]},
-		'30007' => {'lote': 1, 'materias_primas': [{'sku': '1309','unidades_lote': 2},{'sku': 1307,'unidades_lote': 2}]},
-		'30008' => {'lote': 1, 'materias_primas': [{'sku': '1309','unidades_lote': 3},{'sku': 1307,'unidades_lote': 3}]}
+		'30007' => {'lote': 1, 'materias_primas': [{'sku': '1309','unidades_lote': 2},{'sku': '1307','unidades_lote': 2}]},
+		'30008' => {'lote': 1, 'materias_primas': [{'sku': '1309','unidades_lote': 3},{'sku': '1307','unidades_lote': 3}]}
 	}
 
 	def getHash(action, params)

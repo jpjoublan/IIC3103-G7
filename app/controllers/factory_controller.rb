@@ -128,19 +128,21 @@ class FactoryController < ApplicationController
 		ocs = JSON.load File.new("public/ocs.json")
 		ocs.each do |oc, value|
 			puts oc
-			if ocs[oc][:estado] == "creada"
-				resp = getOC_funcion(ocs[oc][:id])
+			if ocs[oc]["estado"] == "creada"
+				puts 'ESTABA CREADA'
+				resp = getOC_funcion(ocs[oc]["id"])
+				puts resp
 				cantidad = resp[0]['cantidad'].to_i
 				sku = resp[0]['sku']
 				inventory = all_inventories()
 				materias_suficientes = true
-				resp = recepcionarOC_funcion(ocs[oc][:id])
+				resp = recepcionarOC_funcion(ocs[oc]["id"])
 				# total_materias = Proporciones[sku][:materias_primas].length
 				# materias_suficientes = 0
 				Proporciones[sku][:materias_primas].each do |materia|
-					inventory.each do |producto|
+					inventory.each do |key, producto|
 						if producto['sku'] == materia['sku']
-							if (materia['unidades_lote'] * cantidad) > producto['total']
+							if (materia[:unidades_lote] * cantidad) > producto[:total]
 								materias_suficientes = false
 								break
 							end
@@ -148,12 +150,12 @@ class FactoryController < ApplicationController
 					end
 				end
 				if materias_suficientes
-					resp = recepcionarOC_funcion(ocs[oc][:id])
+					resp = recepcionarOC_funcion(ocs[oc]["id"])
 					cocinar_funcion(sku, cantidad)
 				else
-					resp = rechazarOC_funcion(ocs[oc][:id])
+					resp = rechazarOC_funcion(ocs[oc]["id"])
 				end
-				ocs[oc][:estado] = resp[0]['estado']
+				ocs[oc]["estado"] = resp[0]['estado']
 			end
 		end
 		File.open("public/ocs.json","w") do |f|
