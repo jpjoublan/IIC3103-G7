@@ -196,6 +196,7 @@ class ApplicationController < ActionController::Base
 		req = Net::HTTP::Post.new(uri)
 		req['Authorization'] = 'INTEGRACION grupo7:' + auth_hash
 		req['content-type'] = 'application/json'
+		req['group'] = '7'
 		http = Net::HTTP.new(uri.host, uri.port)
 		http.use_ssl = (uri.scheme == 'https')
 		req.body = body.to_json
@@ -228,10 +229,8 @@ class ApplicationController < ActionController::Base
 	end
 
     def obtener_productos_funcion(almacen_id, sku, limit = 100)
-    	puts 'PIDIENDO PRODUCTOS DENTRO DE FUNCION', sku, almacen_id
         auth_hash = getHash('GET', almacen_id + sku)
         resp = httpGetRequest(BaseURL + 'stock?almacenId=%s&sku=%s&limit=%s' % [almacen_id, sku, limit] , auth_hash)
-        puts 'SE HIZO EL GET', resp
         return resp
     end
 
