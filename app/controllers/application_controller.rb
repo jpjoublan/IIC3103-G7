@@ -93,7 +93,7 @@ class ApplicationController < ActionController::Base
 		'1307' => {'lote': 11, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
 		'1310' => {'lote': 12, 'materias_primas': [{'sku': '1010', 'unidades_lote': 3}]},
 		'1407' => {'lote': 14, 'materias_primas': [{'sku': '1007', 'unidades_lote': 1}]},
-		'1101' => {'lote': 10, 'materias_primas': [{'sku': '1001', 'unidades_lote': 8}, {'sku': '1003', 'unidades_lote': 2},{'sku': '1004', 'unidades_lote': 3},{'sku': '1002', 'unidades_lote': 4}]},
+		'1101' => {'lote': 10, 'materias_primas': [{'sku': '1001', 'unidades_lote': 8}, {'sku': '1003', 'unidades_lote': 3},{'sku': '1004', 'unidades_lote': 2},{'sku': '1002', 'unidades_lote': 4}]},
 		'10001' => {'lote': 1, 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1105','unidades_lote': 1},{'sku': '1210','unidades_lote': 1},{'sku': '1211', 'unidades_lote': 1},{'sku': '1116', 'unidades_lote': 1}]},
 		'10002' => {'lote': 1, 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1105','unidades_lote': 1},{'sku': '1013','unidades_lote': 5},{'sku': '1210', 'unidades_lote': 1},{'sku': '1116', 'unidades_lote': 1}]},
 		'10003' => {'lote': 1, 'materias_primas': [{'sku': '1201','unidades_lote': 1},{'sku': '1105','unidades_lote': 1},{'sku': '1013','unidades_lote': 5},{'sku': '1210', 'unidades_lote': 1},{'sku': '1211', 'unidades_lote': 1},{'sku': '1116', 'unidades_lote': 1}]},

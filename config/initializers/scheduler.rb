@@ -128,7 +128,7 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '10m', first: :now do
+    scheduler.every '15m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -255,13 +255,21 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-    #scheduler.every '3m' do
-    #    puts " -------- scheduler 2 -----------"
-        # Actualizamos ordenes de compra
-    #    OrdersController.new.sftp(renders = false)
-        # Acepta o rechaza segun criterios
-    #    FactoryController.new.orders_sftp()
-    #    puts " --------      EEEENNNNNNNDDDDDDD       scheduler 2 -----------"
-    #end
+    scheduler.every '3m' do
+        puts " -------- scheduler 2 -----------"
+    	# Actualizamos ordenes de compra
+        OrdersController.new.sftp(renders = false)
+    	# Acepta o rechaza segun criterios
+        FactoryController.new.orders_sftp()
+        puts " --------      EEEENNNNNNNDDDDDDD       scheduler 2 -----------"
+    end
+
+
+	scheduler.every '4m' do
+        puts " -------- scheduler 2 -----------"
+    	# Acepta o rechaza segun criterios
+        FactoryController.new.despachar_clientes()
+        puts " --------      EEEENNNNNNNDDDDDDD       scheduler 2 -----------"
+    end    
 
 end
