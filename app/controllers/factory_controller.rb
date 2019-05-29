@@ -133,7 +133,8 @@ class FactoryController < ApplicationController
 				cantidad = resp[0]['cantidad'].to_i
 				sku = resp[0]['sku']
 				inventory = all_inventories()
-				materias_suficientes = True
+				materias_suficientes = true
+				resp = recepcionarOC_funcion(ocs[oc][:id])
 				# total_materias = Proporciones[sku][:materias_primas].length
 				# materias_suficientes = 0
 				Proporciones[sku][:materias_primas].each do |materia|
@@ -179,7 +180,7 @@ class FactoryController < ApplicationController
 		return despachados
 	end
 
-	def despachar_cliente
+	def despachar_clientes
 		ocs = JSON.load File.new("public/ocs.json")
 		ocs.each do |oc, value|
 		inventory = all_inventories()

@@ -253,7 +253,8 @@ class ApplicationController < ActionController::Base
 		## Obtener stock
 		begin
 			cantidad_int = cantidad.to_i
-			stock_grupo = obtenerStock(grupo)
+			#stock_grupo = obtenerStock(grupo)
+			stock_grupo = [{'sku'=> sku, 'total'=> 5 }]
 			stock_grupo.each do |product|
 			if product["sku"] == sku
 				if product["total"] >= cantidad_int
