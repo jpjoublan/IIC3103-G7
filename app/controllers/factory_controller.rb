@@ -99,7 +99,7 @@ class FactoryController < ApplicationController
 		return movidos
 	end
 
-	def all_inventories
+	def all_inventories(render = true)
 		auth_hash = getHash('GET', '')
 		ret = httpGetRequest(BaseURL + 'almacenes', auth_hash)
 		stock = []

@@ -132,7 +132,7 @@ if defined?(::Rails::Server)
         #COMENZAMOS LA ITERACION DEL JOB
         puts "comenzó el job"
         #BUSCAMOS LO QUE TENEMOS EN STOCK
-        stock = TraderController.new.inventories(renders = false)
+        stock = FactoryController.new.all_inventories(renders = false)
         puts "------------------------------------------------------"
         puts stock
         puts "------------------------------------------------------"
