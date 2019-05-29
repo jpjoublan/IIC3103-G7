@@ -60,7 +60,6 @@ if defined?(::Rails::Server)
     proporciones = {'1101' => {'lote':10 , 'materias_primas': [{'sku': '1001','unidades_lote': 8},{'sku': '1003','unidades_lote': 3},{'sku': '1004','unidades_lote': 2},{'sku': '1002','unidades_lote': 4}]},
 						'1001' => {'lote': 10, 'materias_primas': []},
 						'1003' => {'lote': 100, 'materias_primas': []},
-						#'1006' => {'lote': 1, 'materias_primas': []},
 						'1008' => {'lote': 1, 'materias_primas': []},
 						'1016' => {'lote': 10, 'materias_primas': []},
 						'1006' => {'lote': 8, 'materias_primas': []},
@@ -128,9 +127,9 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '15m' do
+    scheduler.every '20m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
-        
+        puts '=====================COMENZANDO PRODUCCION========================='
         #BUSCAMOS LO QUE TENEMOS EN STOCK
         stock = FactoryController.new.all_inventories(renders = false)
         
@@ -249,8 +248,7 @@ if defined?(::Rails::Server)
             end
             
         end
-        
-
+        puts '=====================FINALIZANDO PRODUCCION========================='
     end
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
@@ -265,7 +263,7 @@ if defined?(::Rails::Server)
     end
 
 
-	scheduler.every '4m', first: :now do
+	scheduler.every '4m' do
         puts "============REVISANDO DESPACHOS CLIENTES============="
     	# Acepta o rechaza segun criterios
         FactoryController.new.despachar_clientes()

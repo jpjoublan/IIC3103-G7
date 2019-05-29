@@ -128,10 +128,7 @@ class FactoryController < ApplicationController
 	def orders_sftp
 		ocs = JSON.load File.new("public/ocs.json")
 		ocs.each do |useless, oc|
-			puts 'OC: ', useless
-			puts 'Value: ', oc
 			if oc["estado"] == "creada"
-				puts 'ESTABA CREADA'
 				resp = getOC_funcion(oc["id"])
 				cantidad = resp[0]['cantidad'].to_i
 				sku = resp[0]['sku']
@@ -201,7 +198,7 @@ class FactoryController < ApplicationController
 					prods.each do |prod, value|
 						auth_hash = getHash('DELETE', prods[prod]['_id'] + '11' + oc)
 						body = { 'productoId': prods[prod]['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
-						puts httpDeleteRequest(BaseURL + 'stock', auth_hash, body)
+						httpDeleteRequest(BaseURL + 'stock', auth_hash, body)
 					end
 					## Mover de cocina a despacho o no se de donde, pero a despacho
 					## Usar esta funcion despachar de application controller

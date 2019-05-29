@@ -26,7 +26,6 @@ class WelcomeController < ApplicationController
 				end
 			end
 		end
-		puts stock
 		@stocks = stock
 		return
 	end
