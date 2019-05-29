@@ -138,6 +138,18 @@ class FactoryController < ApplicationController
 		return movidos
 	end
 
+	def produce_final(renders = true)
+
+		sku = params[:sku]
+		cantidad = params[:cantidad]
+		resp = cocinar_funcion(sku, cantidad.to_i)
+		if renders
+			render json: resp
+		end
+		return resp
+	end
+
+
 	def cocinar_funcion(sku, cantidad)
 		producidos = 0
 		resps = {'responses': []}
