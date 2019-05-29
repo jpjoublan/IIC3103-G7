@@ -153,8 +153,12 @@ if defined?(::Rails::Server)
             #producto no se encuentra en stock
             #PONDERADOR DE CUBRIMIENTO DE STOCK
             ponderador = 1.1
-            
             a_pedir = dict['stock_min']* ponderador - stock_cantidad
+            if dict['stock_min'] <= stock_cantidad
+            	print 'Pasando producto ', sku, ' porque se tienen ', stock_cantidad, ' y se necesitan ', dict['stock_min']
+            	puts ''
+            	next
+        	end
             if a_pedir > 0
                 #si nosotros producimos el producto
                 if dict['produce']
