@@ -80,7 +80,7 @@ class FactoryController < ApplicationController
 		producto = Proporciones[sku]
 		movidos = 0
 		if producto[:materias_primas].length > 0
-			vaciarDespacho()
+			vaciarCocina()
 			bodegas = almacenes()
 			bodega_despacho = bodegas.detect {|b| b['cocina']}
 			productos = []
@@ -126,7 +126,7 @@ class FactoryController < ApplicationController
 
 	def orders_sftp
 		ocs = JSON.load File.new("public/ocs.json")
-		ocs.each do |oc|
+		ocs.each do |oc, value|
 			puts oc
 			if ocs[oc][:estado] == "creada"
 				resp = getOC_funcion(ocs[oc][:id])
@@ -136,7 +136,6 @@ class FactoryController < ApplicationController
 				materias_suficientes = True
 				# total_materias = Proporciones[sku][:materias_primas].length
 				# materias_suficientes = 0
-
 				Proporciones[sku][:materias_primas].each do |materia|
 					inventory.each do |producto|
 						if producto['sku'] == materia['sku']
@@ -160,11 +159,29 @@ class FactoryController < ApplicationController
 		  f.write(JSON.pretty_generate(ocs))
 		end
 	end
-
+	
+	def moverProductosDespacho(sku, qty)
+		vaciarDespacho()
+		bodegas = almacenes()
+		bodega_despacho = bodegas.detect {|b| b['despacho']}
+		productos = []
+		bodegas.each do |almacen|
+			productos += obtener_productos_funcion(almacen['_id'], sku)
+		end
+		despachados = []
+		while productos.length > 0 and movidos < qty
+			prod = productos.first
+			moveStock_funcion(prod["_id"], bodega_despacho["_id"])
+			despachados.push(prod)
+			productos.delete_at(0)
+			movidos += 1
+		end
+		return despachados
+	end
 
 	def despachar_cliente
 		ocs = JSON.load File.new("public/ocs.json")
-		ocs.each do |oc|
+		ocs.each do |oc, value|
 		inventory = all_inventories()
 			if ocs[oc][:estado] == "aceptada"
 				materias_suficientes = true
@@ -177,8 +194,15 @@ class FactoryController < ApplicationController
 					end
 				end
 				if materias_suficientes
+					prods = moverProductosDespacho(ocs[oc][:sku], ocs[oc][:qty])
+					prods.each do |prod, value|
+						auth_hash = getHash('DELETE', prods[prod]['_id'] + '11' + oc)
+						body = { 'productoId': prods[prod]['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
+						puts httpDeleteRequest(BaseURL + 'stock', auth_hash, body)
+					end
 					## Mover de cocina a despacho o no se de donde, pero a despacho
 					## Usar esta funcion despachar de application controller
+
 				end
 			end
 		end
