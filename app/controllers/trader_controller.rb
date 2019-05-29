@@ -87,6 +87,7 @@ class TraderController < ApplicationController
 		bodegas.each do |almacen|
 			puts 'PIDIENDO PRODUCTOS'
 			productos_aux = obtener_productos_funcion(almacen['_id'], sku)
+			puts 'Se salio de la funcion'
 			puts productos_aux
 			productos += productos_aux
 		end
