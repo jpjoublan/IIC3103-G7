@@ -195,10 +195,10 @@ class FactoryController < ApplicationController
 						end
 					end
 				end
-			end
-			if materias_suficientes
-				resp = recepcionarOC_funcion(oc["id"])
-				cocinar_funcion(sku, cantidad)
+				if materias_suficientes
+					resp = recepcionarOC_funcion(oc["id"])
+					cocinar_funcion(sku, cantidad)
+				end
 			end
 			if ocs[oc][:estado] == "aceptada"
 				materias_suficientes = true
