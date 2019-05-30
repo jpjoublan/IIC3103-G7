@@ -214,7 +214,7 @@ class FactoryController < ApplicationController
 					prods = moverProductosDespacho(ocs[oc][:sku], ocs[oc][:qty])
 					prods.each do |prod, value|
 						auth_hash = getHash('DELETE', prods[prod]['_id'] + '11' + oc)
-						body = { 'productoId': prods[prod]['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
+						body = { 'productoId': prods[prod]['_id'], 'oc': value['id'], 'direccion': '1', 'precio': '1' }
 						httpDeleteRequest(BaseURL + 'stock', auth_hash, body)
 					end
 					## Mover de cocina a despacho o no se de donde, pero a despacho
