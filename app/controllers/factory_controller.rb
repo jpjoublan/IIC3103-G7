@@ -139,7 +139,6 @@ class FactoryController < ApplicationController
 	end
 
 	def produce_final(renders = true)
-
 		sku = params[:sku]
 		cantidad = params[:cantidad]
 		resp = cocinar_funcion(sku, cantidad.to_i)
@@ -174,7 +173,7 @@ class FactoryController < ApplicationController
 		producto = Proporciones[sku]
 		movidos = 0
 		if producto[:materias_primas].length > 0
-			vaciarCocina()
+			#vaciarCocina()
 			bodegas = almacenes()
 			bodega_despacho = bodegas.detect {|b| b['cocina']}
 			productos = []
@@ -235,21 +234,20 @@ class FactoryController < ApplicationController
 				end
 				# total_materias = Proporciones[sku][:materias_primas].length
 				# materias_suficientes = 0
-				Proporciones[sku][:materias_primas].each do |materia|
-					inventory.each do |producto|
-						if producto['sku'] == materia[:sku]
-							if (materia[:unidades_lote] * cantidad) > producto[:total]
-								materias_suficientes = false
-							end
-						end
-					end
-				end
-				if materias_suficientes
-					resp = recepcionarOC_funcion(oc["id"])
-					cocinar_funcion(sku, cantidad)
+				#Proporciones[sku][:materias_primas].each do |materia|
+				#	inventory.each do |producto|
+				#		if producto['sku'] == materia[:sku]
+				#			if (materia[:unidades_lote] * cantidad) > producto[:total]
+				#				materias_suficientes = false
+				#			end
+				#		end
+				#	end
+				#end
+				#if materias_suficientes
+				#	resp = cocinar_funcion(sku, cantidad)
 				#else
 				#	resp = rechazarOC_funcion(ocs[oc]["id"])
-				end
+				#end
 			end
 		end
 	end
@@ -263,6 +261,7 @@ class FactoryController < ApplicationController
 			productos += obtener_productos_funcion(almacen['_id'], sku)
 		end
 		despachados = []
+		movidos = 0
 		while productos.length > 0 and movidos < qty
 			prod = productos.first
 			moveStock_funcion(prod["_id"], bodega_despacho["_id"])
@@ -318,5 +317,60 @@ class FactoryController < ApplicationController
 		end
 	end
 
+	def despacharOrden_funcion(sku, cantidad, oc, renders=true)
+		vaciarCocina()
+		resp = cocinar_funcion(sku, cantidad)
+		if resp.key?("disponible")
+			ocs = JSON.load File.new("public/ocs.json")
+			ocs.each do |file, orden|
+				if orden['id'] == oc
+					orden['estado'] = 'cocinando'
+					File.open("public/ocs.json","w") do |f|
+				  		f.write(JSON.pretty_generate(ocs))
+					end
+				end
+			end
+		end
+		print 'TRATANDO DE COCINAR: ', resp
+		puts ''
+		prods = moverProductosDespacho(sku, cantidad)
+		resps = []
+		prods.each do |prod|
+			auth_hash = getHash('DELETE', prod['_id'] + '11' + oc)
+			body = { 'productoId': prod['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
+			resps.push(httpDeleteRequest(BaseURL + 'stock', auth_hash, body))
+		end
+		if renders
+			render json: resps
+		end
+		return resps
+	end
+
+
+	def despacharTodo
+		ocs = JSON.load File.new("public/ocs.json")
+		ocs.each do |key, oc|
+			if oc['estado'] == 'aceptada'
+				puts 'Despachando', oc
+				despacharOrden_funcion(oc['sku'], oc['qty'], oc['id'], false)
+			end
+		end
+	end
+
+	def despacharOrden(renders=true)
+		sku = params[:sku]
+		cantidad = params[:cantidad]
+		oc = params[:oc]
+		resps = despacharOrden_funcion(sku, cantidad.to_i, oc, renders)
+		#prods = moverProductosDespacho(sku, cantidad.to_i)
+		#resps = []
+		#prods.each do |prod|
+		#	auth_hash = getHash('DELETE', prod['_id'] + '11' + oc)
+		#	body = { 'productoId': prod['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
+		#	resps.push(httpDeleteRequest(BaseURL + 'stock', auth_hash, body))
+		#end
+		#render json: resps
+		return resps
+	end
 
 end

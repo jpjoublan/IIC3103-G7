@@ -25,4 +25,5 @@ Rails.application.routes.draw do
 	get 'despachar', to: 'factory#despachar_clientes'
 	get 'sftptest', to: 'orders#sftp'
 	get '/testingscheduler', to: 'welcome#testsch'
+	get 'despachar2', to: 'factory#despacharOrden'
 end

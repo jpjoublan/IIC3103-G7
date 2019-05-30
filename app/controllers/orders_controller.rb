@@ -60,12 +60,30 @@ class OrdersController < ApplicationController
                     f = Nokogiri::XML(file_data)
                     id = f.xpath('/order/id').text
                     resp = getOC_funcion(id)
-                    ocs[remote_file.name] = {'id': id, 'estado': resp[0]['estado'], 'sku': resp[0]['sku'], 'qty': resp[0]['cantidad']}
+                    ocs[remote_file.name] = {'id': id, 'estado': resp[0]['estado'], 'sku': resp[0]['sku'], 'qty': resp[0]['cantidad'], 'entrega': resp[0]['fechaEntrega']}
                 end
             end
             File.open("public/ocs.json","w") do |f|
               f.write(JSON.pretty_generate(ocs))
             end
+        end
+        if renders
+            render json:{'status': 'ok'}
+        end
+    end
+
+    def refreshSftp(renders=true)
+        ocs = JSON.load File.new("public/ocs.json")
+        ocs.each do |key, oc|
+            if oc['estado'] == 'aceptada' and oc['entrega'] < Time.zone.now
+                oc['estado'] = 'vencida'
+            elsif oc['estado'] != 'finalizada' and oc['estado'] != 'vencida'
+                resp = getOC_funcion(oc['id'])
+                ocs[key]['estado'] = resp[0]['estado']
+            end
+        end
+        File.open("public/ocs.json","w") do |f|
+            f.write(JSON.pretty_generate(ocs))
         end
         if renders
             render json:{'status': 'ok'}
