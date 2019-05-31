@@ -98,6 +98,7 @@ class TraderController < ApplicationController
 		bodega_despacho = bodegas.detect {|b| b['despacho']}
 		if productos.length >= cantidad
 			enviados = 0
+			vaciarDespacho()
 			while cantidad > 0 and productos.length > 0
 				prod = productos.first
 				puts 'MOVIENDO PRODUCTO', prod
