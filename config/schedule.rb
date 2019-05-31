@@ -2,11 +2,11 @@
 
 
 if defined?(::Rails::Server)
-    
+
     feedstock = [1009, 1006, 1014, 1015,1005, 1016, 1010, 1012, 1008, 1007, 1011, 1001, 1002, 1003, 1004]
-  
+
     bodega_recepcion_id = "5cc7b139a823b10004d8e6f1"
-  
+
     products = {1009 => {'stock_min' =>22,'tiempo_produccion' =>400,'duracion_esperada' =>15,'lote_produccion' =>3,'produce' =>false,'grupos_productores' =>'1,8,9'},
         1109 => {'stock_min' =>60,'tiempo_produccion' =>30,'duracion_esperada' =>1.5,'lote_produccion' =>12,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
         1209 => {'stock_min' =>50,'tiempo_produccion' =>30,'duracion_esperada' =>1.5,'lote_produccion' =>14,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
@@ -48,7 +48,7 @@ if defined?(::Rails::Server)
         1301 => {'stock_min' =>50,'tiempo_produccion' =>10,'duracion_esperada' =>2,'lote_produccion' =>5,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'},
         1201 => {'stock_min' =>250,'tiempo_produccion' =>10,'duracion_esperada' =>2,'lote_produccion' =>10,'produce' =>true,'grupos_productores' =>'1,2,3,4,5,6,7,8,9,10,11,12,13,14'}
     }
-  
+
     proporciones = {'1101' => {'lote':10 , 'materias_primas': [{'sku': '1001','unidades_lote': 8},{'sku': '1003','unidades_lote': 3},{'sku': '1004','unidades_lote': 2},{'sku': '1002','unidades_lote': 4}]},
                           '1001' => {'lote': 10, 'materias_primas': []},
                           '1003' => {'lote': 100, 'materias_primas': []},
@@ -117,7 +117,7 @@ if defined?(::Rails::Server)
                           '30006' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 5}]},
                           '30007' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 2},{'sku': '1307','unidades_lote': 2}]},
                           '30008' => {'lote':1 , 'materias_primas': [{'sku': '1309','unidades_lote': 3},{'sku': '1307','unidades_lote': 3}]}}
-  
+
       #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
       order_rate = 1.3
       every 1.minutes do
@@ -133,8 +133,8 @@ if defined?(::Rails::Server)
               sku = sku.to_s
               puts sku
               puts dict
-  
-              
+
+
               #PREDEFINIMOS CANTIDAD EN STOCK = 0
               stock_cantidad = 0
               #product_in es producto que tenemos en stock
@@ -145,19 +145,19 @@ if defined?(::Rails::Server)
                       puts "stock CANTIDAAAAD"
                       puts stock_cantidad
                   end
-  
+
               end
               #producto no se encuentra en stock
               #PONDERADOR DE CUBRIMIENTO DE STOCK
-              ponderador = 1.1
-              
+              ponderador = 4
+
               a_pedir = dict['stock_min']* ponderador - stock_cantidad
               if a_pedir > 0
                   #si nosotros producimos el producto
                   if dict['produce']
                       #PEDIR A LA API
                       puts "pediremos stock de:"
-                      puts sku 
+                      puts sku
                       puts "cantidad:"
                       puts a_pedir
                       a_pedir = a_pedir.to_i
@@ -167,23 +167,23 @@ if defined?(::Rails::Server)
                       puts "cambios"
                       puts a_pedir
                       numero_lotes = a_pedir / dict['lote_produccion']
-                      
+
                       #IF ABAJO NO VA, HAY QUE COMPLETAR DICCIONARIO
                       if proporciones[sku] != nil
                           puts proporciones[sku][:materias_primas]
                           #SI EL SKU NO TIENE MATERIAS PRIMAS
-                          if proporciones[sku][:materias_primas] == [] 
+                          if proporciones[sku][:materias_primas] == []
                               puts 'MATERIA PRIMA'
                               puts sku
                               puts sku.class
                               FactoryController.new.produce_funcion(sku, a_pedir)
                               puts "pase este punto"
-                          #SI EL SKU TIENE MATERIAS PRIMAS   
+                          #SI EL SKU TIENE MATERIAS PRIMAS
                           else
                               #BOOL PARA CHEQUEAR SI HAY SUFICIENTE DE TODAS LAS MATERIAS PRIMAS
                               hay_todo = true
-                              
-                              proporciones[sku][:materias_primas].each do |materias|  
+
+                              proporciones[sku][:materias_primas].each do |materias|
                                   #BOOL PARA REVISAR SI ESTA EN STOCK
                                   esta_stock = false
                                   stock.each do |product_in|
@@ -191,60 +191,60 @@ if defined?(::Rails::Server)
                                       if materias['sku'] == product_in[:sku]
                                           esta_stock = true
                                           #revisamos si tenemos el minimo de stock para hacer el producto
-  
+
                                           if materias['unidades_lote'] * numero_lotes > product_in[:total]
                                               hay_todo = false
                                           end
-                                      
+
                                       end
-                                      
+
                                   end
-                                  #SI FALTA ALGUNA MATERIA PRIMA YA NO PRODUCIMOS 
+                                  #SI FALTA ALGUNA MATERIA PRIMA YA NO PRODUCIMOS
                                   if esta_stock == false
                                       hay_todo = false
                                       break
                                   end
-  
+
                               end
-                              if hay_todo 
+                              if hay_todo
                                   puts "------------------------------------- HAAAAAAAAY"
                                   FactoryController.new.produce_funcion(sku, a_pedir)
-                              
+
                               end
-  
-  
+
+
                           end
                       end
-                      
-  
+
+
                   else
                       #PEDIR A OTRO GRUPO
-                      
+
                       a_pedir = a_pedir.to_i
                       grupos =dict['grupos_productores'].split(',')
                       grupos.each do |grupo|
                           puts "lala"
                           puts a_pedir
-                          
+
                           resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
                           puts resp
-                          
-                          
+
+
                       end
-                      
+
                   end
               end
-              
+
           end
-          
-  
+
+
       end
-  
+
       #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
-  
+
       every 2.minutes do
           puts "hola"
-  
+
       end
-  
+
   end

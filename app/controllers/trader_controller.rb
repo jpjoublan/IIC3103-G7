@@ -68,7 +68,7 @@ class TraderController < ApplicationController
 		cliente = resp[0]['cliente']
 		print 'LLEGO UNA ORDEN PARA: ', sku, ' CLIENTE: ', cliente, ' CANTIDAD: ', cantidad
 		puts ''
-		if cantidad > 100
+		if cantidad > 20
 			rechazo = 'No tenemos suficiente stock 1'
 			puts rechazo
 			rechazarOC_funcion(_id, rechazo)

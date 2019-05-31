@@ -3,9 +3,9 @@ class OrdersController < ApplicationController
     #PRUEBAS DE FUNCIONES ORDENES DE COMPRA
 
     def createOC(renders = true)
-        grupo = '13'
-        sku = '1010'
-        cantidad = '1'
+        grupo = '14'
+        sku = '1307'
+        cantidad = '10'
         almacen = '1'
         resp = pedirProductoGrupo( grupo, sku, cantidad, almacen)
         if renders
@@ -14,7 +14,7 @@ class OrdersController < ApplicationController
     end
 
     def getOC(renders = true)
-        id = "5ceb552c1553dd00041ba68a"
+        id = "5cf07d20b0d70c0004a35d03"
 
         resp = getOC_funcion(id)
         if renders
