@@ -227,7 +227,7 @@ class FactoryController < ApplicationController
 				sku = resp[0]['sku']
 				inventory = all_inventories()
 				materias_suficientes = true
-				resp = rechazarOC_funcion(oc["id"], "no hay")
+				resp = recepcionarOC_funcion(oc["id"]) ## rechazarOC_funcion(oc["id"], "no hay")
 				oc["estado"] = resp[0]['estado']
 				File.open("public/ocs.json","w") do |f|
 				  f.write(JSON.pretty_generate(ocs))
