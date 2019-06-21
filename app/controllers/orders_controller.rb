@@ -90,4 +90,41 @@ class OrdersController < ApplicationController
         end
     end
 
+    def despacharOrden_funcion(sku, oc, cantidad, renders=true)
+        bodegas = almacenes()
+        bodega_despacho = bodegas.detect {|b| b['despacho']}
+        productos = []
+        bodegas.each do |almacen|
+            productos += obtener_productos_funcion(almacen['_id'], sku, cantidad)
+        end
+        resps = []
+        if productos.length >= cantidad
+            prods.each do |prod|
+                auth_hash = getHash('DELETE', prod['_id'] + '11' + oc)
+                body = { 'productoId': prod['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
+                resps.push(httpDeleteRequest(BaseURL + 'stock', auth_hash, body))
+            end
+        end
+        return resps
+    end
+
+    def despacharTodo
+        resps = []
+        ocs = JSON.load File.new("public/ocs.json")
+        ocs.each do |key, oc|
+            sku = oc["sku"]
+            cantidad = oc["cantidad"]
+            oc_id = oc['id']
+            resps.push(despacharOrden_funcion(sku, cantidad, oc_id))
+            resp = getOC_funcion(oc['id'])
+            if resp[0]['estado'] == 'finalizada'
+                oc['estado'] = 'finalizada'
+                File.open("public/ocs.json","w") do |f|
+                    f.write(JSON.pretty_generate(ocs))
+                end
+            end
+        end
+    end
+
+
 end

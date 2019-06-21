@@ -317,7 +317,7 @@ class FactoryController < ApplicationController
 		end
 	end
 
-	def despacharOrden_funcion(sku, cantidad, oc, renders=true)
+	def cocinarOrden_funcion(sku, cantidad, oc, renders=true)
 		vaciarCocina()
 		resp = cocinar_funcion(sku, cantidad)
 		if resp.key?("disponible")
@@ -333,21 +333,13 @@ class FactoryController < ApplicationController
 		end
 		print 'TRATANDO DE COCINAR: ', resp
 		puts ''
-		prods = moverProductosDespacho(sku, cantidad)
-		resps = []
-		prods.each do |prod|
-			auth_hash = getHash('DELETE', prod['_id'] + '11' + oc)
-			body = { 'productoId': prod['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
-			resps.push(httpDeleteRequest(BaseURL + 'stock', auth_hash, body))
-		end
 		if renders
 			render json: resps
 		end
 		return resps
 	end
 
-
-	def despacharTodo
+	def cocinarTodo
 		ocs = JSON.load File.new("public/ocs.json")
 		ocs.each do |key, oc|
 			if oc['estado'] == 'aceptada'
