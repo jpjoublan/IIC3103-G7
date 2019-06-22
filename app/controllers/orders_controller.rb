@@ -112,15 +112,19 @@ class OrdersController < ApplicationController
         resps = []
         ocs = JSON.load File.new("public/ocs.json")
         ocs.each do |key, oc|
-            sku = oc["sku"]
-            cantidad = oc["cantidad"]
-            oc_id = oc['id']
-            resps.push(despacharOrden_funcion(sku, cantidad, oc_id))
-            resp = getOC_funcion(oc['id'])
-            if resp[0]['estado'] == 'finalizada'
-                oc['estado'] = 'finalizada'
-                File.open("public/ocs.json","w") do |f|
-                    f.write(JSON.pretty_generate(ocs))
+            if oc["estado"] == "cocinando"
+                sku = oc["sku"]
+                cantidad = oc["cantidad"]
+                oc_id = oc['id']
+                # Despacha la orden si puede
+                resps.push(despacharOrden_funcion(sku, cantidad, oc_id))
+                # Obtiene la orden desde la api para ver si se finalizó. Si es así, actualiza estado
+                resp = getOC_funcion(oc['id'])
+                if resp[0]['estado'] == 'finalizada'
+                    oc['estado'] = 'finalizada'
+                    File.open("public/ocs.json","w") do |f|
+                        f.write(JSON.pretty_generate(ocs))
+                    end
                 end
             end
         end

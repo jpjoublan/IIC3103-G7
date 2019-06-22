@@ -9,7 +9,7 @@ require '././app/controllers/application_controller.rb'
 
 
 
-if defined?(::Rails::Server)
+if defined?(::Rails::Server) and false
   scheduler = Rufus::Scheduler::singleton
   feedstock = [1009, 1006, 1014, 1015,1005, 1016, 1010, 1012, 1008, 1007, 1011, 1001, 1002, 1003, 1004]
 
@@ -261,8 +261,13 @@ if defined?(::Rails::Server)
         puts "===================REVISANDO SFTP====================="
     	# Actualizamos ordenes de compra
         OrdersController.new.sftp(renders = false)
+        OrdersController.new.refreshSftp(renders = false)
     	# Acepta o rechaza segun criterios
         FactoryController.new.orders_sftp()
+        # Envia a cocinar lo que haya que cocinar (ordenes aceptadas)
+        FactoryController.new.cocinarTodo()
+        # 
+        OrdersController.new.despacharTodo()
         puts "===============TERMINO DE REVISAR SFTP==============="
     end
 
@@ -270,8 +275,6 @@ if defined?(::Rails::Server)
 	scheduler.every '1m' do
         puts "============REVISANDO DESPACHOS CLIENTES============="
     	# Acepta o rechaza segun criterios
-        OrdersController.new.refreshSftp(renders = false)
-        FactoryController.new.despacharTodo()
         puts "========TERMINÓ DE REVISAR DESPACHOS CLIENTES========"
     end
     scheduler.every '15m' do

@@ -343,8 +343,8 @@ class FactoryController < ApplicationController
 		ocs = JSON.load File.new("public/ocs.json")
 		ocs.each do |key, oc|
 			if oc['estado'] == 'aceptada'
-				puts 'Despachando', oc
-				despacharOrden_funcion(oc['sku'], oc['qty'], oc['id'], false)
+				puts 'Cocinando', oc
+				cocinarOrden_funcion(oc['sku'], oc['qty'], oc['id'], false)
 			end
 		end
 	end
