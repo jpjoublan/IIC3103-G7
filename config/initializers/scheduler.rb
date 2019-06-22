@@ -196,7 +196,7 @@ if defined?(::Rails::Server) and false
     end
 
 
-    scheduler.every '130m', first: :now do
+    scheduler.every '130m',first: :now do
         puts " -------- PEDIR A MINIMOS MAS PRODUCIDOS -----------"
         
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1101', 10)
@@ -249,46 +249,5 @@ if defined?(::Rails::Server) and false
     	# Acepta o rechaza segun criterios
         puts "========TERMINÓ DE REVISAR DESPACHOS CLIENTES========"
     end
-    scheduler.every '15m' do
-        puts "============  PIDIENDO SALMON============="
-        FactoryController.new.produce_funcion('1007', 48)
-        puts ''
-        puts "============  PIDIENDO CAMARON============="
-        FactoryController.new.produce_funcion('1006', 100)
-        puts ''
-        puts "============  PIDIENDO MASAGO============="
-        FactoryController.new.produce_funcion('1013', 40)
-        puts ''
-        puts "============  PIDIENDO SALMON AHUMADO============="
-        FactoryController.new.produce_funcion('1008', 30)
-        puts ''
-        puts "============  PIDIENDO SESAMO============="
-        FactoryController.new.produce_funcion('1011', 80)
-        puts ''
-        puts "============  PRODUCIENDO ATUN SASHIMI============="
-        FactoryController.new.produce_funcion('1209', 14)
-        puts ''
-        puts "============  PRODUCIENDO KANIKAMA ROLL============="
-        FactoryController.new.produce_funcion('1105', 10)
-        puts ''
-        puts "============  PIDIENDO SALMON AHUMADO ROLL============="
-        FactoryController.new.produce_funcion('1108', 12)
-        puts ''
-
-    end
-    scheduler.every '6m' do
-        puts "============  PRODUCIENDO ATUN SASHIMI============="
-        FactoryController.new.produce_funcion('1309', 11)
-        puts "============  PRODUCIENDO NORI ENTERO ROLL============="
-        FactoryController.new.produce_funcion('1116', 30)
-        puts "============  PRODUCIENDO NORI NIGIRI============="
-        FactoryController.new.produce_funcion('1216', 20)
-        puts "============  PIDIENDO SALMON ROLL============="
-        FactoryController.new.produce_funcion('1107', 33)
-        puts "============  PIDIENDO SALMON NIGIRI============="
-        FactoryController.new.produce_funcion('1207', 36)
-        puts "============  PIDIENDO SALMON SASHIMI============="
-        FactoryController.new.produce_funcion('1307', 33)
-        FactoryController.new.produce_funcion('1106', 100)
-    end
+    
 end
