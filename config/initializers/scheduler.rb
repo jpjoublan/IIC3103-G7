@@ -229,13 +229,8 @@ if defined?(::Rails::Server) and false
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-<<<<<<< HEAD
-    scheduler.every '2m' do
-        puts "===================REVISANDO SFTP====================="
-=======
     scheduler.every '60m' do
         puts " -------- scheduler 2 -----------"
->>>>>>> scheduler
     	# Actualizamos ordenes de compra
         OrdersController.new.sftp(renders = false)
         OrdersController.new.refreshSftp(renders = false)
@@ -249,13 +244,8 @@ if defined?(::Rails::Server) and false
     end
 
 
-<<<<<<< HEAD
-	scheduler.every '1m' do
-        puts "============REVISANDO DESPACHOS CLIENTES============="
-=======
 	scheduler.every '60m' do
         puts " -------- scheduler 2 -----------"
->>>>>>> scheduler
     	# Acepta o rechaza segun criterios
         puts "========TERMINÓ DE REVISAR DESPACHOS CLIENTES========"
     end
