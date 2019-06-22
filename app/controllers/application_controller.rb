@@ -409,6 +409,7 @@ class ApplicationController < ActionController::Base
 		auth_hash = getHash('GET', '')
 		body = {}
 		resp = httpGetRequest(BaseURL_oc + 'obtener/' + id, auth_hash )
+		puts resp
 		return resp
 	end
 

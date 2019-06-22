@@ -52,7 +52,7 @@ class OrdersController < ApplicationController
     def sftp(renders = true)
         ## Clave produccion: zZvsd7L38kq4TwbC7
         ## Clave development: 9AmQHvLiEwzK37W
-        Net::SFTP.start('fierro.ing.puc.cl', 'grupo7', :password => '9AmQHvLiEwzK37W') do |sftp|
+        Net::SFTP.start('fierro.ing.puc.cl', 'grupo7_dev', :password => '9AmQHvLiEwzK37W') do |sftp|
             ocs = JSON.load File.new("public/ocs.json")
             sftp.dir.entries('/pedidos').each do |remote_file|
                 if !['.', '..'].include? remote_file.name and !ocs.has_key? remote_file.name
@@ -75,10 +75,12 @@ class OrdersController < ApplicationController
     def refreshSftp(renders=true)
         ocs = JSON.load File.new("public/ocs.json")
         ocs.each do |key, oc|
-            if oc['estado'] == 'aceptada' and oc['entrega'] < Time.zone.now
+            #HAY QUE CAMBIAR EL AND FALSE !!!!!!
+            if oc['estado'] == 'aceptada' and oc['entrega'] < Time.zone.now and false
                 oc['estado'] = 'vencida'
             elsif oc['estado'] != 'finalizada' and oc['estado'] != 'vencida'
                 resp = getOC_funcion(oc['id'])
+                
                 ocs[key]['estado'] = resp[0]['estado']
             end
         end

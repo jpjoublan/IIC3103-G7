@@ -9,7 +9,7 @@ require '././app/controllers/application_controller.rb'
 
 
 
-if defined?(::Rails::Server) and false
+if defined?(::Rails::Server) 
   scheduler = Rufus::Scheduler::singleton
   feedstock = [1009, 1006, 1014, 1015,1005, 1016, 1010, 1012, 1008, 1007, 1011, 1001, 1002, 1003, 1004]
 
@@ -127,7 +127,7 @@ if defined?(::Rails::Server) and false
 
     #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '60m' do
+    scheduler.every '15m' do
         #COMENZAMOS LA ITERACION DEL JOB
         puts '=====================COMENZANDO PRODUCCION========================='
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -140,9 +140,7 @@ if defined?(::Rails::Server) and false
             #MOMENTANEAMENTE a pedir = 5
             a_pedir = 5
             if a_pedir > 0
-                puts "DICCIONARIO"
-                puts dict
-                puts "DICCIONARIO"
+                
                 #si nosotros producimos el producto
                 if dict['produce'] == false
                     #PEDIR A OTRO GRUPO
@@ -153,21 +151,28 @@ if defined?(::Rails::Server) and false
                     grupos.each do |grupo|
                         
                         begin
-                            if grupo != "12"
-                                puts '=========================================================='
-                                print 'MANDANDO A PEDIR: ', sku
-                                puts ''
-                                print 'GRUPO: ', grupo
-                                puts ''
-                                print 'Cantidad: ', a_pedir
-                                puts ''
-                                resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
-                                puts 'RESPUESTA:'
+                            
+                            puts '=========================================================='
+                            print 'MANDANDO A PEDIR: ', sku
+                            puts ''
+                            print 'GRUPO: ', grupo
+                            puts ''
+                            print 'Cantidad: ', a_pedir
+                            puts ''
+                            resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
+                            puts 'RESPUESTA:'
+                            
+                            
+                            
+                            if resp['aceptado'] == true 
                                 puts resp
-                                puts 'end RESPUESTA'
+                                
                                 break
                             end
-                            
+                            if resp['aceptado'] == nil
+                                puts "------PROBLEMAS-------"
+                            end
+                            puts 'end RESPUESTA'
                         rescue
                         	puts 'GRUPO PENCA'
                         end
@@ -181,7 +186,7 @@ if defined?(::Rails::Server) and false
         puts '=====================FINALIZANDO PRODUCCION========================='
     end
 
-    scheduler.every '80m' do
+    scheduler.every '20m' do
         puts " -------- PEDIR A API -----------"
         
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
@@ -196,7 +201,7 @@ if defined?(::Rails::Server) and false
     end
 
 
-    scheduler.every '130m',first: :now do
+    scheduler.every '40m' do
         puts " -------- PEDIR A MINIMOS MAS PRODUCIDOS -----------"
         
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1101', 10)
@@ -229,7 +234,7 @@ if defined?(::Rails::Server) and false
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-    scheduler.every '60m' do
+    scheduler.every '4m', first: :now do
         puts " -------- scheduler 2 -----------"
     	# Actualizamos ordenes de compra
         OrdersController.new.sftp(renders = false)
@@ -244,10 +249,6 @@ if defined?(::Rails::Server) and false
     end
 
 
-	scheduler.every '60m' do
-        puts " -------- scheduler 2 -----------"
-    	# Acepta o rechaza segun criterios
-        puts "========TERMINÓ DE REVISAR DESPACHOS CLIENTES========"
-    end
+	
     
 end
