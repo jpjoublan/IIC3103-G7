@@ -1,268 +1,464 @@
 {
   "1561165886599-8402.xml": {
     "id": "5d0d803d4677900004d6475a",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10023",
     "qty": 2,
     "entrega": "2019-06-22T02:41:00.000Z"
   },
   "1561237819052-3555.xml": {
     "id": "5d0e993a2e530b00041141fc",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10021",
     "qty": 2,
     "entrega": "2019-06-22T22:40:00.000Z"
   },
   "1561165886599-5005.xml": {
     "id": "5d0d803d4677900004d6475b",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30005",
     "qty": 4,
     "entrega": "2019-06-22T02:41:00.000Z"
   },
   "1561176680208-4253.xml": {
     "id": "5d0daa670c061f0004b542b1",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10025",
     "qty": 1,
     "entrega": "2019-06-22T05:41:00.000Z"
   },
   "1561173065623-7871.xml": {
     "id": "5d0d9c48a15fe90004974ec0",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30008",
     "qty": 3,
     "entrega": "2019-06-22T04:41:00.000Z"
   },
   "1561219822308-2200.xml": {
     "id": "5d0e52ed9c6e1800040c98ca",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10009",
     "qty": 1,
     "entrega": "2019-06-22T17:40:00.000Z"
   },
   "1561187440812-5903.xml": {
     "id": "5d0dd47092c1190004ecc9c4",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10013",
     "qty": 1,
     "entrega": "2019-06-22T08:40:00.000Z"
   },
   "1561223477896-9746.xml": {
     "id": "5d0e61351d27a60004e312b5",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10001",
     "qty": 3,
     "entrega": "2019-06-22T18:41:00.000Z"
   },
   "1561155028763-1033.xml": {
     "id": "5d0d55d4ae2aef0004576cfd",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10023",
     "qty": 2,
     "entrega": "2019-06-21T23:40:00.000Z"
   },
   "1561201845797-6093.xml": {
     "id": "5d0e0cb5695b12000420eca4",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30001",
     "qty": 2,
     "entrega": "2019-06-22T12:40:00.000Z"
   },
   "1561227028034-1001.xml": {
     "id": "5d0e6f13d25aa900047e2e53",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10017",
     "qty": 3,
     "entrega": "2019-06-22T19:40:00.000Z"
   },
   "1561234222768-2269.xml": {
     "id": "5d0e8b2de509b50004bd1346",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10016",
     "qty": 4,
     "entrega": "2019-06-22T21:40:00.000Z"
   },
   "1561176680208-7997.xml": {
     "id": "5d0daa670c061f0004b542b0",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10014",
     "qty": 2,
     "entrega": "2019-06-22T05:41:00.000Z"
   },
   "1561216227913-2197.xml": {
     "id": "5d0e44e3fef03d0004d91b62",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10019",
     "qty": 3,
     "entrega": "2019-06-22T16:40:00.000Z"
   },
   "1561162285456-6812.xml": {
     "id": "5d0d722c8a49550004e83a91",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30005",
     "qty": 1,
     "entrega": "2019-06-22T01:41:00.000Z"
   },
   "1561241477047-3784.xml": {
     "id": "5d0ea784f26c4d00040d6370",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30005",
     "qty": 2,
     "entrega": "2019-06-22T23:41:00.000Z"
   },
   "1561234222767-6812.xml": {
     "id": "5d0e8b2de509b50004bd1347",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30002",
     "qty": 2,
     "entrega": "2019-06-22T21:40:00.000Z"
   },
   "1561183864730-5087.xml": {
     "id": "5d0dc67858bafb0004342bf5",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10004",
     "qty": 3,
     "entrega": "2019-06-22T07:41:00.000Z"
   },
   "1561162285457-8243.xml": {
     "id": "5d0d722c8a49550004e83a90",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30004",
     "qty": 2,
     "entrega": "2019-06-22T01:41:00.000Z"
   },
   "1561227028034-1048.xml": {
     "id": "5d0e6f13d25aa900047e2e54",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30007",
     "qty": 4,
     "entrega": "2019-06-22T19:40:00.000Z"
   },
   "1561155028765-6532.xml": {
     "id": "5d0d55d4ae2aef0004576cfc",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10020",
     "qty": 2,
     "entrega": "2019-06-21T23:40:00.000Z"
   },
   "1561212655040-3933.xml": {
     "id": "5d0e36ee993bdf000432bba2",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10008",
     "qty": 3,
     "entrega": "2019-06-22T15:40:00.000Z"
   },
   "1561173065623-9415.xml": {
     "id": "5d0d9c48a15fe90004974ec1",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30001",
     "qty": 4,
     "entrega": "2019-06-22T04:41:00.000Z"
   },
   "1561191053435-8692.xml": {
     "id": "5d0de28c0183550004aecc9c",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "20002",
     "qty": 2,
     "entrega": "2019-06-22T09:40:00.000Z"
   },
   "1561209046004-6101.xml": {
     "id": "5d0e28d5690e610004b72934",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30007",
     "qty": 2,
     "entrega": "2019-06-22T14:40:00.000Z"
   },
   "1561201845799-7141.xml": {
     "id": "5d0e0cb5695b12000420eca5",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30006",
     "qty": 3,
     "entrega": "2019-06-22T12:40:00.000Z"
   },
   "1561176680207-1925.xml": {
     "id": "5d0daa670c061f0004b542af",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "30004",
     "qty": 3,
     "entrega": "2019-06-22T05:41:00.000Z"
   },
   "1561227028035-4776.xml": {
     "id": "5d0e6f13d25aa900047e2e55",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "20004",
     "qty": 3,
     "entrega": "2019-06-22T19:40:00.000Z"
   },
   "1561234222769-1529.xml": {
     "id": "5d0e8b2de509b50004bd1348",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "20002",
     "qty": 1,
     "entrega": "2019-06-22T21:40:00.000Z"
   },
   "1561201845795-5186.xml": {
     "id": "5d0e0cb5695b12000420eca6",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10005",
     "qty": 1,
     "entrega": "2019-06-22T12:40:00.000Z"
   },
   "1561183864730-7610.xml": {
     "id": "5d0dc67858bafb0004342bf6",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10020",
     "qty": 2,
     "entrega": "2019-06-22T07:41:00.000Z"
   },
   "1561248658531-7772.xml": {
     "id": "5d0ec3911d3888000464e89f",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "20001",
     "qty": 4,
     "entrega": "2019-06-23T01:40:00.000Z"
   },
   "1561252226526-8199.xml": {
     "id": "5d0ed18104d4410004f3cd44",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10006",
     "qty": 2,
     "entrega": "2019-06-23T02:40:00.000Z"
   },
   "1561252226525-6188.xml": {
     "id": "5d0ed18104d4410004f3cd43",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "20001",
     "qty": 4,
     "entrega": "2019-06-23T02:40:00.000Z"
   },
   "1561248658533-7066.xml": {
     "id": "5d0ec3911d3888000464e8a0",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "20003",
     "qty": 2,
     "entrega": "2019-06-23T01:40:00.000Z"
   },
   "1561248658533-6397.xml": {
     "id": "5d0ec3911d3888000464e8a1",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10001",
     "qty": 2,
     "entrega": "2019-06-23T01:40:00.000Z"
   },
   "1561252226526-9468.xml": {
     "id": "5d0ed18104d4410004f3cd45",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "20004",
     "qty": 4,
     "entrega": "2019-06-23T02:40:00.000Z"
   },
   "1561255869084-5266.xml": {
     "id": "5d0edfbc6d862700042b8b20",
-    "estado": "aceptada",
+    "estado": "finalizada",
     "sku": "10023",
     "qty": 1,
     "entrega": "2019-06-23T03:41:00.000Z"
+  },
+  "1561259446334-6662.xml": {
+    "id": "5d0eedb587c45d0004495ac0",
+    "estado": "finalizada",
+    "sku": "10016",
+    "qty": 3,
+    "entrega": "2019-06-23T04:40:00.000Z"
+  },
+  "1561259446335-4981.xml": {
+    "id": "5d0eedb587c45d0004495ac1",
+    "estado": "finalizada",
+    "sku": "10023",
+    "qty": 1,
+    "entrega": "2019-06-23T04:40:00.000Z"
+  },
+  "1561259446334-2839.xml": {
+    "id": "5d0eedb587c45d0004495ac2",
+    "estado": "finalizada",
+    "sku": "30006",
+    "qty": 1,
+    "entrega": "2019-06-23T04:40:00.000Z"
+  },
+  "1561266633357-1832.xml": {
+    "id": "5d0f09c8a6f5b700047859f8",
+    "estado": "finalizada",
+    "sku": "10002",
+    "qty": 3,
+    "entrega": "2019-06-23T06:40:00.000Z"
+  },
+  "1561266633358-6826.xml": {
+    "id": "5d0f09c8a6f5b700047859f7",
+    "estado": "finalizada",
+    "sku": "20002",
+    "qty": 4,
+    "entrega": "2019-06-23T06:40:00.000Z"
+  },
+  "1561288233500-2192.xml": {
+    "id": "5d0f5e282c05760004cca03f",
+    "estado": "finalizada",
+    "sku": "10002",
+    "qty": 4,
+    "entrega": "2019-06-23T12:40:00.000Z"
+  },
+  "1561273876689-9003.xml": {
+    "id": "5d0f261355ed150004fa7998",
+    "estado": "finalizada",
+    "sku": "10022",
+    "qty": 4,
+    "entrega": "2019-06-23T08:41:00.000Z"
+  },
+  "1561270216482-6128.xml": {
+    "id": "5d0f17c7b556cc0004845ab3",
+    "estado": "finalizada",
+    "sku": "10004",
+    "qty": 4,
+    "entrega": "2019-06-23T07:40:00.000Z"
+  },
+  "1561299034813-8205.xml": {
+    "id": "5d0f885a3c841500042f602f",
+    "estado": "finalizada",
+    "sku": "10011",
+    "qty": 4,
+    "entrega": "2019-06-23T15:40:00.000Z"
+  },
+  "1561309848306-7296.xml": {
+    "id": "5d0fb297c2504d000422889f",
+    "estado": "finalizada",
+    "sku": "10004",
+    "qty": 3,
+    "entrega": "2019-06-23T18:40:00.000Z"
+  },
+  "1561306214786-3587.xml": {
+    "id": "5d0fa466fcaf490004d3becb",
+    "estado": "finalizada",
+    "sku": "10004",
+    "qty": 1,
+    "entrega": "2019-06-23T17:40:00.000Z"
+  },
+  "1561277430069-4838.xml": {
+    "id": "5d0f33f50f1789000413b90c",
+    "estado": "finalizada",
+    "sku": "30005",
+    "qty": 4,
+    "entrega": "2019-06-23T09:40:00.000Z"
+  },
+  "1561277430068-1180.xml": {
+    "id": "5d0f33f50f1789000413b90e",
+    "estado": "finalizada",
+    "sku": "20001",
+    "qty": 3,
+    "entrega": "2019-06-23T09:40:00.000Z"
+  },
+  "1561281035819-1551.xml": {
+    "id": "5d0f420ba4941800045cd271",
+    "estado": "finalizada",
+    "sku": "10001",
+    "qty": 4,
+    "entrega": "2019-06-23T10:40:00.000Z"
+  },
+  "1561306214786-8507.xml": {
+    "id": "5d0fa466fcaf490004d3becc",
+    "estado": "finalizada",
+    "sku": "10007",
+    "qty": 2,
+    "entrega": "2019-06-23T17:40:00.000Z"
+  },
+  "1561270216482-9590.xml": {
+    "id": "5d0f17c7b556cc0004845ab4",
+    "estado": "finalizada",
+    "sku": "10012",
+    "qty": 3,
+    "entrega": "2019-06-23T07:40:00.000Z"
+  },
+  "1561309848311-9190.xml": {
+    "id": "5d0fb297c2504d00042288a1",
+    "estado": "finalizada",
+    "sku": "30007",
+    "qty": 1,
+    "entrega": "2019-06-23T18:40:00.000Z"
+  },
+  "1561291862107-9608.xml": {
+    "id": "5d0f6c55fa9e0e00046a5fda",
+    "estado": "finalizada",
+    "sku": "10016",
+    "qty": 1,
+    "entrega": "2019-06-23T13:41:00.000Z"
+  },
+  "1561309848311-3123.xml": {
+    "id": "5d0fb297c2504d00042288a0",
+    "estado": "finalizada",
+    "sku": "30007",
+    "qty": 2,
+    "entrega": "2019-06-23T18:40:00.000Z"
+  },
+  "1561295443678-9101.xml": {
+    "id": "5d0f7a53d2aa69000489e7b2",
+    "estado": "finalizada",
+    "sku": "30008",
+    "qty": 4,
+    "entrega": "2019-06-23T14:40:00.000Z"
+  },
+  "1561273876691-9991.xml": {
+    "id": "5d0f261355ed150004fa7997",
+    "estado": "finalizada",
+    "sku": "30001",
+    "qty": 3,
+    "entrega": "2019-06-23T08:41:00.000Z"
+  },
+  "1561277430068-3653.xml": {
+    "id": "5d0f33f50f1789000413b90d",
+    "estado": "finalizada",
+    "sku": "10022",
+    "qty": 1,
+    "entrega": "2019-06-23T09:40:00.000Z"
+  },
+  "1561288233500-9842.xml": {
+    "id": "5d0f5e282c05760004cca040",
+    "estado": "finalizada",
+    "sku": "10009",
+    "qty": 3,
+    "entrega": "2019-06-23T12:40:00.000Z"
+  },
+  "1561273876692-9703.xml": {
+    "id": "5d0f261355ed150004fa7999",
+    "estado": "finalizada",
+    "sku": "10022",
+    "qty": 3,
+    "entrega": "2019-06-23T08:41:00.000Z"
+  },
+  "1561295443677-2387.xml": {
+    "id": "5d0f7a53d2aa69000489e7b1",
+    "estado": "finalizada",
+    "sku": "10019",
+    "qty": 3,
+    "entrega": "2019-06-23T14:40:00.000Z"
+  },
+  "1561302617508-8658.xml": {
+    "id": "5d0f9658ffee360004f954a4",
+    "estado": "finalizada",
+    "sku": "30004",
+    "qty": 4,
+    "entrega": "2019-06-23T16:40:00.000Z"
+  },
+  "1561302617508-5794.xml": {
+    "id": "5d0f9658ffee360004f954a3",
+    "estado": "finalizada",
+    "sku": "10009",
+    "qty": 1,
+    "entrega": "2019-06-23T16:40:00.000Z"
+  },
+  "1561295443677-1364.xml": {
+    "id": "5d0f7a53d2aa69000489e7b0",
+    "estado": "finalizada",
+    "sku": "10013",
+    "qty": 2,
+    "entrega": "2019-06-23T14:40:00.000Z"
   }
 }

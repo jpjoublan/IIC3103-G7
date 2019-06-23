@@ -100,7 +100,7 @@ class OrdersController < ApplicationController
         end
         resps = []
         if productos.length >= cantidad.to_i
-            prods.each do |prod|
+            productos.each do |prod|
                 auth_hash = getHash('DELETE', prod['_id'] + '11' + oc)
                 body = { 'productoId': prod['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
                 resps.push(httpDeleteRequest(BaseURL + 'stock', auth_hash, body))
@@ -118,7 +118,12 @@ class OrdersController < ApplicationController
                 cantidad = oc["cantidad"]
                 oc_id = oc['id']
                 # Despacha la orden si puede
-                resps.push(despacharOrden_funcion(sku, cantidad, oc_id))
+                puts 'Despachando'
+                puts sku
+                puts oc_id
+                des = despacharOrden_funcion(sku, oc_id, cantidad)
+                puts des
+                resps.push(des)
                 # Obtiene la orden desde la api para ver si se finalizó. Si es así, actualiza estado
                 resp = getOC_funcion(oc['id'])
                 if resp[0]['estado'] == 'finalizada'

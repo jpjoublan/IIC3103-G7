@@ -373,7 +373,7 @@ class ApplicationController < ActionController::Base
 		skus_with_stock.each do |prod|
 			productos_despacho = obtener_productos_funcion(bodega_despacho['_id'], prod['_id'], "100")
 			productos_despacho.each do |prod2|
-				moveStock_funcion(prod2['_id'], '5cc7b139a823b10004d8e6f3')
+				moveStock_funcion(prod2['_id'], '5cbd3ce444f67600049431da')
 			end
 		end
 	end

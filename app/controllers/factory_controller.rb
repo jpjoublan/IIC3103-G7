@@ -321,17 +321,17 @@ class FactoryController < ApplicationController
 	def cocinarOrden_funcion(sku, cantidad, oc, renders=true)
 		vaciarCocina()
 		resp = cocinar_funcion(sku, cantidad)
-		if resp.key?("disponible")
-			ocs = JSON.load File.new("public/ocs.json")
-			ocs.each do |file, orden|
-				if orden['id'] == oc
-					orden['estado'] = 'cocinando'
-					File.open("public/ocs.json","w") do |f|
-				  		f.write(JSON.pretty_generate(ocs))
-					end
-				end
-			end
-		end
+		# if resp.key?("disponible")
+			# ocs = JSON.load File.new("public/ocs.json")
+			# ocs.each do |file, orden|
+				# if orden['id'] == oc
+				# 	orden['estado'] = 'cocinando'
+				# 	File.open("public/ocs.json","w") do |f|
+				#   		f.write(JSON.pretty_generate(ocs))
+					# end
+				# end
+			# end
+		# end
 		print 'TRATANDO DE COCINAR: ', resp
 		puts ''
 		if renders
@@ -345,8 +345,14 @@ class FactoryController < ApplicationController
 		ocs.each do |key, oc|
 			if oc['estado'] == 'aceptada'
 				puts 'Cocinando', oc
-				cocinarOrden_funcion(oc['sku'], oc['qty'], oc['id'], false)
+				resp = cocinarOrden_funcion(oc['sku'], oc['qty'], oc['id'], false)
+				if resp[:cocinado] == true
+					oc['estado'] = 'cocinando'
+				end
 			end
+		end
+		File.open("public/ocs.json","w") do |f|
+			f.write(JSON.pretty_generate(ocs))
 		end
 	end
 

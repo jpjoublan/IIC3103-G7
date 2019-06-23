@@ -186,11 +186,23 @@ if defined?(::Rails::Server)
         puts '=====================FINALIZANDO PRODUCCION========================='
     end
 
-    scheduler.every '20m' do
+    scheduler.every '50m', first: :now do
         puts " -------- PEDIR A API -----------"
 
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1002', 10)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1004', 100)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1005', 100)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1008', 10)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1009', 3)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1010', 5)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1012', 7)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1014', 5)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1015', 4)
+
+
+
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 20)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1007', 8)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1011', 4)
@@ -201,9 +213,10 @@ if defined?(::Rails::Server)
     end
 
 
-    scheduler.every '40m' do
+    scheduler.every '40m', first: :now do
         puts " -------- PEDIR A MINIMOS MAS PRODUCIDOS -----------"
 
+        ApplicationController.new.vaciarDespacho()
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1101', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1105', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1106', 100)
@@ -234,7 +247,7 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-    scheduler.every '4m', first: :now do
+    scheduler.every '4m' do
         puts " -------- scheduler 2 -----------"
     	# Actualizamos ordenes de compra
 
@@ -248,8 +261,5 @@ if defined?(::Rails::Server)
         OrdersController.new.despacharTodo()
         puts "===============TERMINO DE REVISAR SFTP==============="
     end
-
-
-
 
 end
