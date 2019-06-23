@@ -334,9 +334,9 @@ class FactoryController < ApplicationController
 		print 'TRATANDO DE COCINAR: ', resp
 		puts ''
 		if renders
-			render json: resps
+			render json: resp
 		end
-		return resps
+		return resp
 	end
 
 	def cocinarTodo
