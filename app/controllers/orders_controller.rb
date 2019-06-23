@@ -113,7 +113,7 @@ class OrdersController < ApplicationController
         resps = []
         ocs = JSON.load File.new("public/ocs.json")
         ocs.each do |key, oc|
-            if oc["estado"] == "aceptada" #"cocinando"
+            if oc["estado"] == "cocinando"
                 sku = oc["sku"]
                 cantidad = oc["cantidad"]
                 oc_id = oc['id']
