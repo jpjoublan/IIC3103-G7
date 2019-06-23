@@ -151,7 +151,7 @@ class FactoryController < ApplicationController
 
 	def cocinar_funcion(sku, cantidad)
 		producidos = 0
-		resps = {'responses': []}
+		resps = {'responses': [], 'cocinado': false}
 		lote = Proporciones[sku][:lote]
 		if cantidad % lote != 0
 			resps[:data] = {'error': 'El tamaño del lote no es correcto', 'cantidad': cantidad, 'tamano_lote': lote}
@@ -162,6 +162,7 @@ class FactoryController < ApplicationController
 			body = {"sku": sku, "cantidad": lote}
 			moverMateriasPrimasCocina(sku)
 			resp = httpPutRequest(BaseURL + 'fabrica/fabricarSinPago'  , auth_hash, body)
+			resps[:cocinado] = resp.has_key? 'disponible'
 			resps[:responses].push(resp)
 			producidos += lote
 		end
