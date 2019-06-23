@@ -99,7 +99,7 @@ class OrdersController < ApplicationController
             productos += obtener_productos_funcion(almacen['_id'], sku, cantidad)
         end
         resps = []
-        if productos.length >= cantidad
+        if productos.length >= cantidad.to_i
             prods.each do |prod|
                 auth_hash = getHash('DELETE', prod['_id'] + '11' + oc)
                 body = { 'productoId': prod['_id'], 'oc': oc, 'direccion': '1', 'precio': '1' }
@@ -113,7 +113,7 @@ class OrdersController < ApplicationController
         resps = []
         ocs = JSON.load File.new("public/ocs.json")
         ocs.each do |key, oc|
-            if oc["estado"] == "cocinando"
+            if oc["estado"] == "aceptada" #"cocinando"
                 sku = oc["sku"]
                 cantidad = oc["cantidad"]
                 oc_id = oc['id']

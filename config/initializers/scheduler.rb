@@ -9,7 +9,7 @@ require '././app/controllers/application_controller.rb'
 
 
 
-if defined?(::Rails::Server) 
+if defined?(::Rails::Server)
   scheduler = Rufus::Scheduler::singleton
   feedstock = [1009, 1006, 1014, 1015,1005, 1016, 1010, 1012, 1008, 1007, 1011, 1001, 1002, 1003, 1004]
 
@@ -132,26 +132,26 @@ if defined?(::Rails::Server)
         puts '=====================COMENZANDO PRODUCCION========================='
         #BUSCAMOS LO QUE TENEMOS EN STOCK
         stock = FactoryController.new.all_inventories(renders = false)
-        
+
         #RECORREMOS CADA ELEMENTO CORRESPONDIENTE AL STOCK MINIMO
         products.each do |sku, dict|
             sku = sku.to_s
-      
+
             #MOMENTANEAMENTE a pedir = 5
             a_pedir = 5
             if a_pedir > 0
-                
+
                 #si nosotros producimos el producto
                 if dict['produce'] == false
                     #PEDIR A OTRO GRUPO
-                    
+
                     a_pedir = a_pedir.to_i
                     a_pedir = 5
                     grupos = dict['grupos_productores'].split(',')
                     grupos.each do |grupo|
-                        
+
                         begin
-                            
+
                             puts '=========================================================='
                             print 'MANDANDO A PEDIR: ', sku
                             puts ''
@@ -161,12 +161,12 @@ if defined?(::Rails::Server)
                             puts ''
                             resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
                             puts 'RESPUESTA:'
-                            
-                            
-                            
-                            if resp['aceptado'] == true 
+
+
+
+                            if resp['aceptado'] == true
                                 puts resp
-                                
+
                                 break
                             end
                             if resp['aceptado'] == nil
@@ -176,19 +176,19 @@ if defined?(::Rails::Server)
                         rescue
                         	puts 'GRUPO PENCA'
                         end
-                        
+
                     end
-                    
+
                 end
             end
-            
+
         end
         puts '=====================FINALIZANDO PRODUCCION========================='
     end
 
     scheduler.every '20m' do
         puts " -------- PEDIR A API -----------"
-        
+
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 20)
@@ -203,7 +203,7 @@ if defined?(::Rails::Server)
 
     scheduler.every '40m' do
         puts " -------- PEDIR A MINIMOS MAS PRODUCIDOS -----------"
-        
+
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1101', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1105', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1106', 100)
@@ -237,18 +237,19 @@ if defined?(::Rails::Server)
     scheduler.every '4m', first: :now do
         puts " -------- scheduler 2 -----------"
     	# Actualizamos ordenes de compra
+
         OrdersController.new.sftp(renders = false)
         OrdersController.new.refreshSftp(renders = false)
     	# Acepta o rechaza segun criterios
         FactoryController.new.orders_sftp()
         # Envia a cocinar lo que haya que cocinar (ordenes aceptadas)
         FactoryController.new.cocinarTodo()
-        # 
+        #
         OrdersController.new.despacharTodo()
         puts "===============TERMINO DE REVISAR SFTP==============="
     end
 
 
-	
-    
+
+
 end
