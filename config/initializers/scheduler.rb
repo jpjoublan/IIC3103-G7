@@ -186,12 +186,40 @@ if defined?(::Rails::Server)
         puts '=====================FINALIZANDO PRODUCCION========================='
     end
 
-    scheduler.every '50m', first: :now do
+    ##################  OPCION 1 ########################
+
+    # scheduler.every '50m' do
+    #     puts " -------- PEDIR A API -----------"
+    #
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1002', 10)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1004', 100)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1005', 100)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1008', 10)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1009', 3)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1010', 5)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1012', 7)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1014', 5)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1015', 4)
+    #
+    #
+    #
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
+    #     # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 20)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1007', 8)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1011', 4)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1013', 10)
+    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1016', 8)
+    #
+    #     puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
+    # end
+
+    ##################  OPCION 2 ########################
+
+    scheduler.every '50m' do
         puts " -------- PEDIR A API -----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1002', 10)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1004', 100)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1005', 100)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1008', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1009', 3)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1010', 5)
@@ -212,8 +240,22 @@ if defined?(::Rails::Server)
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
 
+    scheduler.every '120m' do
+        puts " -------- PEDIR A API -----------"
 
-    scheduler.every '40m', first: :now do
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1004', 100)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1005', 100)
+
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
+
+
+        puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
+    end
+
+
+    ##################  OPCION 1 ########################
+
+    scheduler.every '40m' do
         puts " -------- PEDIR A MINIMOS MAS PRODUCIDOS -----------"
 
         ApplicationController.new.vaciarDespacho()
@@ -245,19 +287,18 @@ if defined?(::Rails::Server)
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
 
+
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-    scheduler.every '4m' do
+    scheduler.every '4m', first: :now do
         puts " -------- scheduler 2 -----------"
     	# Actualizamos ordenes de compra
-
         OrdersController.new.sftp(renders = false)
         OrdersController.new.refreshSftp(renders = false)
     	# Acepta o rechaza segun criterios
         FactoryController.new.orders_sftp()
         # Envia a cocinar lo que haya que cocinar (ordenes aceptadas)
         FactoryController.new.cocinarTodo()
-        #
         OrdersController.new.despacharTodo()
         puts "===============TERMINO DE REVISAR SFTP==============="
     end
