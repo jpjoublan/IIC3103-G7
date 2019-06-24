@@ -216,7 +216,7 @@ if defined?(::Rails::Server)
 
     ##################  OPCION 2 ########################
 
-    scheduler.every '50m' do
+    scheduler.every '30m', first: :now do
         puts " -------- PEDIR A API -----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1002', 10)
@@ -230,7 +230,7 @@ if defined?(::Rails::Server)
 
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
-        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 15)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1007', 16)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1011', 4)
@@ -240,7 +240,7 @@ if defined?(::Rails::Server)
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
 
-    scheduler.every '120m' do
+    scheduler.every '120m', first: :now do
         puts " -------- PEDIR A API -----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1004', 100)
@@ -290,7 +290,7 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-    scheduler.every '4m', first: :now do
+    scheduler.every '4m' do
         puts " -------- scheduler 2 -----------"
     	# Actualizamos ordenes de compra
         OrdersController.new.sftp(renders = false)

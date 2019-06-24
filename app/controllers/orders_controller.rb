@@ -78,7 +78,8 @@ class OrdersController < ApplicationController
             #HAY QUE CAMBIAR EL AND FALSE !!!!!!
             if oc['estado'] == 'aceptada' and oc['entrega'] < Time.zone.now
                 oc['estado'] = 'vencida'
-            elsif oc['estado'] != 'finalizada' and oc['estado'] != 'vencida'
+            ##### Esto es lo que saca las cocinadas
+            elsif oc['estado'] != 'finalizada' and oc['estado'] != 'vencida' and oc['estado'] != 'cocinando'
                 resp = getOC_funcion(oc['id'])
                 ocs[key]['estado'] = resp[0]['estado']
             end
@@ -121,9 +122,8 @@ class OrdersController < ApplicationController
                 puts 'Despachando'
                 puts sku
                 puts oc_id
-                des = despacharOrden_funcion(sku, oc_id, cantidad)
-                puts des
-                resps.push(des)
+                resps.push(despacharOrden_funcion(sku, oc_id, cantidad))
+                puts(resps)
                 # Obtiene la orden desde la api para ver si se finalizó. Si es así, actualiza estado
                 resp = getOC_funcion(oc['id'])
                 if resp[0]['estado'] == 'finalizada'
