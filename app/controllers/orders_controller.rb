@@ -76,7 +76,7 @@ class OrdersController < ApplicationController
         ocs = JSON.load File.new("public/ocs.json")
         ocs.each do |key, oc|
             #HAY QUE CAMBIAR EL AND FALSE !!!!!!
-            if oc['estado'] == 'aceptada' and oc['entrega'] < Time.zone.now and false
+            if oc['estado'] == 'aceptada' and oc['entrega'] < Time.zone.now
                 oc['estado'] = 'vencida'
             elsif oc['estado'] != 'finalizada' and oc['estado'] != 'vencida'
                 resp = getOC_funcion(oc['id'])
