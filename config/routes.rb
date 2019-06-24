@@ -26,4 +26,5 @@ Rails.application.routes.draw do
 	get 'sftptest', to: 'orders#sftp'
 	get '/testingscheduler', to: 'welcome#testsch'
 	get 'despachar2', to: 'factory#despacharOrden'
+	get '/monitorear', to: 'storages#monitorearBodegas'
 end

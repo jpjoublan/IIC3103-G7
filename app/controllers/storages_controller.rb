@@ -42,6 +42,48 @@ class StoragesController < ApplicationController
         render json: ret
         return ret
     end
-    
+   
+    def monitorearBodegas
+        bodegas = almacenes()
+        bodega_recepcion = bodegas.detect {|b| b['recepcion']}
+        skus_recepcion = skusWithStock_funcion(bodega_recepcion['_id'])
+        bodega_pulmon = bodegas.detect {|b| b['pulmon']}
+        skus_pulmon = skusWithStock_funcion(bodega_recepcion['_id'])
+        bodegas_auxiliares = []
+        bodegas.each do |b|
+            if !b['pulmon'] and !b['recepcion'] and !b['cocina'] and !b['despacho']
+                b['trasladados'] = 0
+                bodegas_auxiliares.push(b)
+            end
+        end
+        b1 = bodegas_auxiliares[0]
+        b2 = bodegas_auxiliares[1]
+        # HASTA ESTA LINEA ESTÁ TESTEADO Y VA BIEN. SE CAYÓ LA API DEL PROFE, ASIQUE SIGO CUANDO VUELVA.
+        skus_pulmon.each do |prod|
+            productos = obtener_productos_funcion(bodega_pulmon['_id'], prod['_id'], 200)
+            productos.each do |pr|
+                if b1['totalSpace'] > b1['usedSpace'] + b1['trasladados']
+                    moveStock_funcion(pr['_id'], b1['_id'])
+                    b1['trasladados'] += 1
+                elsif b2['totalSpace'] > b2['usedSpace'] + b2['trasladados']
+                    moveStock_funcion(pr['_id'], b2['_id'])
+                    b2['trasladados'] += 1
+                end
+            end
+        end
+        skus_recepcion.each do |prod|
+            productos = obtener_productos_funcion(bodega_recepcion['_id'], prod['_id'], 200)
+            productos.each do |pr|
+                if b1['totalSpace'] > b1['usedSpace'] + b1['trasladados']
+                    moveStock_funcion(pr['_id'], b1['_id'])
+                    b1['trasladados'] += 1
+                elsif b2['totalSpace'] > b2['usedSpace'] + b2['trasladados']
+                    moveStock_funcion(pr['_id'], b2['_id'])
+                    b2['trasladados'] += 1
+                end
+            end
+        end
+        render json: bodegas_auxiliares
+    end
 
 end
