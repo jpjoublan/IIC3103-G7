@@ -219,18 +219,17 @@ if defined?(::Rails::Server)
     scheduler.every '30m', first: :now do
         puts " -------- PEDIR A API -----------"
 
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1002', 10)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1008', 10)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1009', 3)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1010', 5)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1012', 7)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1014', 5)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1015', 4)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1002', 10)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1008', 10)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1009', 3)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1010', 5)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1012', 7)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1014', 5)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1015', 4)
 
 
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 15)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1007', 16)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1011', 4)
@@ -240,11 +239,11 @@ if defined?(::Rails::Server)
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
 
-    scheduler.every '120m', first: :now do
+    scheduler.every '100m', first: :now do
         puts " -------- PEDIR A API -----------"
 
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1004', 100)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1005', 100)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1004', 100)
+        # puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1005', 100)
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
 
