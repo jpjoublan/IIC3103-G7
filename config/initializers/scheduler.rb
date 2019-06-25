@@ -127,7 +127,7 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '12m' do
+    scheduler.every '12m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         puts '=====================COMENZANDO PRODUCCION========================='
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -151,6 +151,9 @@ if defined?(::Rails::Server)
                     grupos.each do |grupo|
 
                         begin
+                            if sku == '1012' || sku = '1005' || sku = '1014'
+                                a_pedir = 2
+                            end
 
                             puts '=========================================================='
                             print 'MANDANDO A PEDIR: ', sku
@@ -217,21 +220,28 @@ if defined?(::Rails::Server)
     ##################  OPCION 2 ########################
 
     scheduler.every '30m' do
-        puts " -------- PEDIR A API -----------"
+        puts " -------- PEDIR A API 30 min-----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 10)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 8)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1007', 16)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1008', 10)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1011', 4)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1013', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1016', 8)
 
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
 
-    # scheduler.every '100m' do
-    #     puts " -------- PEDIR A API -----------"
+    scheduler.every '50m' do
+        puts " -------- PEDIR A API 70 min -----------"
+
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1011', 4)
+
+        puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
+    end
+
+    # scheduler.every '150m' do
+    #     puts " -------- PEDIR A API 150 min -----------"
     #
     #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
     #
