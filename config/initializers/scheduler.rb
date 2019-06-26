@@ -127,7 +127,7 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '12m', first: :now do
+    scheduler.every '12m' do
         #COMENZAMOS LA ITERACION DEL JOB
         puts '=====================COMENZANDO PRODUCCION========================='
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -151,19 +151,23 @@ if defined?(::Rails::Server)
                     grupos.each do |grupo|
 
                         begin
-                            if sku == '1012' || sku = '1005' || sku = '1014'
+                            if  sku == '1005'
                                 a_pedir = 2
+                            elsif sku == '1012'
+                                a_pedir = 1
                             end
 
-                            puts '=========================================================='
-                            print 'MANDANDO A PEDIR: ', sku
-                            puts ''
-                            print 'GRUPO: ', grupo
-                            puts ''
-                            print 'Cantidad: ', a_pedir
-                            puts ''
-                            resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
-                            puts 'RESPUESTA:'
+                            if sku != '1004'
+                                puts '=========================================================='
+                                print 'MANDANDO A PEDIR: ', sku
+                                puts ''
+                                print 'GRUPO: ', grupo
+                                puts ''
+                                print 'Cantidad: ', a_pedir
+                                puts ''
+                                resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
+                                puts 'RESPUESTA:'
+                            end
 
 
 
@@ -219,12 +223,12 @@ if defined?(::Rails::Server)
 
     ##################  OPCION 2 ########################
 
-    scheduler.every '30m' do
+    scheduler.every '30m', first: :now do
         puts " -------- PEDIR A API 30 min-----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 8)
-        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1007', 16)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1006', 5)
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1007', 24)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1008', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1013', 10)
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1016', 8)
@@ -283,21 +287,21 @@ if defined?(::Rails::Server)
 
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
-
+    
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
-    # scheduler.every '4m' do
-    #     puts " -------- scheduler 2 -----------"
-    # 	# Actualizamos ordenes de compra
-    #     OrdersController.new.sftp(renders = false)
-    #     OrdersController.new.refreshSftp(renders = false)
-    # 	# Acepta o rechaza segun criterios
-    #     FactoryController.new.orders_sftp()
-    #     # Envia a cocinar lo que haya que cocinar (ordenes aceptadas)
-    #     FactoryController.new.cocinarTodo()
-    #     OrdersController.new.despacharTodo()
-    #     puts "===============TERMINO DE REVISAR SFTP==============="
-    # end
+    scheduler.every '5m' do
+        puts " -------- scheduler 2 -----------"
+    	# Actualizamos ordenes de compra
+        OrdersController.new.sftp(renders = false)
+        OrdersController.new.refreshSftp(renders = false)
+    	# Acepta o rechaza segun criterios
+        FactoryController.new.orders_sftp()
+        # Envia a cocinar lo que haya que cocinar (ordenes aceptadas)
+        FactoryController.new.cocinarTodo()
+        OrdersController.new.despacharTodo()
+        puts "===============TERMINO DE REVISAR SFTP==============="
+    end
 
 end

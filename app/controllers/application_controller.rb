@@ -339,41 +339,41 @@ class ApplicationController < ActionController::Base
 			# stock_grupo = [{'sku'=> sku, 'total'=> 5 }]
 			stock_grupo.each do |product|
 			if product["sku"] == sku
-				if grupo == '8'
-					if product["cantidad"] >= cantidad_int
-						# resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
-						resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
-						id = resp['_id']
-						body = {'sku': sku, 'cantidad': cantidad_int, 'almacenId': bodega_recepcion['_id'], 'oc': id}
-						ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
-						return ret
-					elsif product["cantidad"] < cantidad_int and product["total"] > 0
-						# resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
-						resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
-						id = resp['_id']
-						body = {'sku': sku, 'cantidad': product["total"], 'almacenId': bodega_recepcion['_id'], 'oc': id}
-						ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
-						return ret
-					end
-				else
-					puts 'PIDIENDO'
-					if product["total"] >= cantidad_int
-						# resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
-						resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
-						id = resp['_id']
-						body = {'sku': sku, 'cantidad': cantidad_int, 'almacenId': bodega_recepcion['_id'], 'oc': id}
-						puts resp
-						ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
-						return ret
-					elsif product["total"] < cantidad_int and product["total"] > 0
-						# resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
-						resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
-						id = resp['_id']
-						puts resp
-						body = {'sku': sku, 'cantidad': product["total"], 'almacenId': bodega_recepcion['_id'], 'oc': id}
-						ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
-						return ret
-					end
+				# if grupo == '8'
+				# 	if product["cantidad"] >= cantidad_int
+				# 		# resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
+				# 		resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
+				# 		id = resp['_id']
+				# 		body = {'sku': sku, 'cantidad': cantidad_int, 'almacenId': bodega_recepcion['_id'], 'oc': id}
+				# 		ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
+				# 		return ret
+				# 	elsif product["cantidad"] < cantidad_int and product["total"] > 0
+				# 		# resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
+				# 		resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
+				# 		id = resp['_id']
+				# 		body = {'sku': sku, 'cantidad': product["total"], 'almacenId': bodega_recepcion['_id'], 'oc': id}
+				# 		ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
+				# 		return ret
+				# 	end
+				# else
+				puts 'PIDIENDO'
+				if product["total"] >= cantidad_int
+					# resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
+					resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, cantidad, '1', 'b2b') ## Cambiar a produccion
+					id = resp['_id']
+					body = {'sku': sku, 'cantidad': cantidad_int, 'almacenId': bodega_recepcion['_id'], 'oc': id}
+					puts resp
+					ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
+					return ret
+				elsif product["total"] < cantidad_int and product["total"] > 0
+					# resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
+					resp = createOC_funcion(id_grupos['7'][:produccion], id_grupos[grupo][:produccion], sku, fecha, product["total"].to_s, '1', 'b2b') ## Cambiar a produccion
+					id = resp['_id']
+					puts resp
+					body = {'sku': sku, 'cantidad': product["total"], 'almacenId': bodega_recepcion['_id'], 'oc': id}
+					ret = httpPostRequest(GroupsURL % [grupo] + 'orders', '', body)
+					return ret
+
 				end
 
 			end
