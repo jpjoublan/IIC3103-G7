@@ -223,7 +223,7 @@ if defined?(::Rails::Server)
 
     ##################  OPCION 2 ########################
 
-    scheduler.every '30m', first: :now do
+    scheduler.every '30m' do
         puts " -------- PEDIR A API 30 min-----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
