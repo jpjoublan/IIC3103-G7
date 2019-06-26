@@ -223,7 +223,7 @@ if defined?(::Rails::Server)
 
     ##################  OPCION 2 ########################
 
-    scheduler.every '30m' do
+    scheduler.every '30m', first: :now do
         puts " -------- PEDIR A API 30 min-----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1001', 10)
@@ -236,7 +236,7 @@ if defined?(::Rails::Server)
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
 
-    scheduler.every '50m' do
+    scheduler.every '50m', first: :now do
         puts " -------- PEDIR A API 70 min -----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1011', 4)
@@ -255,7 +255,7 @@ if defined?(::Rails::Server)
 
     ##################  OPCION 1 ########################
 
-    scheduler.every '40m' do
+    scheduler.every '40m', first: :now do
         puts " -------- PEDIR A MINIMOS MAS PRODUCIDOS -----------"
 
         ApplicationController.new.vaciarDespacho()
