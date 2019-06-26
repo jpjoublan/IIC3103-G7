@@ -127,7 +127,7 @@ if defined?(::Rails::Server)
 
     #SCHEDULER PARA CUBRIR EL STOCK MINIMO, PEDIR EN CASO QUE FALTE.
     order_rate = 1.3
-    scheduler.every '12m' do
+    scheduler.every '12m', first: :now do
         #COMENZAMOS LA ITERACION DEL JOB
         puts '=====================COMENZANDO PRODUCCION========================='
         #BUSCAMOS LO QUE TENEMOS EN STOCK
@@ -157,17 +157,17 @@ if defined?(::Rails::Server)
                                 a_pedir = 1
                             end
 
-                            if sku != '1004'
-                                puts '=========================================================='
-                                print 'MANDANDO A PEDIR: ', sku
-                                puts ''
-                                print 'GRUPO: ', grupo
-                                puts ''
-                                print 'Cantidad: ', a_pedir
-                                puts ''
-                                resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
-                                puts 'RESPUESTA:'
-                            end
+
+                            puts '=========================================================='
+                            print 'MANDANDO A PEDIR: ', sku
+                            puts ''
+                            print 'GRUPO: ', grupo
+                            puts ''
+                            print 'Cantidad: ', a_pedir
+                            puts ''
+                            resp = ApplicationController.new.pedirProductoGrupo(grupo, sku, a_pedir.to_s, bodega_recepcion_id)
+                            puts 'RESPUESTA:'
+
 
 
 
@@ -244,7 +244,7 @@ if defined?(::Rails::Server)
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
 
-    scheduler.every '240m' do
+    scheduler.every '120m' do
         puts " -------- PEDIR A API 150 min -----------"
 
         puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
@@ -255,7 +255,7 @@ if defined?(::Rails::Server)
 
     ##################  OPCION 1 ########################
 
-    scheduler.every '40m', first: :now do
+    scheduler.every '40m' do
         puts " -------- PEDIR A MINIMOS MAS PRODUCIDOS -----------"
 
         ApplicationController.new.vaciarDespacho()
@@ -287,7 +287,6 @@ if defined?(::Rails::Server)
 
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
-
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
