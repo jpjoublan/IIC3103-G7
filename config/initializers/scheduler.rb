@@ -244,13 +244,13 @@ if defined?(::Rails::Server)
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
 
-    # scheduler.every '150m' do
-    #     puts " -------- PEDIR A API 150 min -----------"
-    #
-    #     puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
-    #
-    #     puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
-    # end
+    scheduler.every '240m' do
+        puts " -------- PEDIR A API 150 min -----------"
+
+        puts 'RESPUESTA: ', FactoryController.new.produce_funcion('1003', 100)
+
+        puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
+    end
 
 
     ##################  OPCION 1 ########################
@@ -287,7 +287,7 @@ if defined?(::Rails::Server)
 
         puts " --------      EEEENNNNNNNDDDDDDD       scheduler 4 -----------"
     end
-    
+
 
     #SCHEDULER PARA REVISAR LAS ORDENES DE COMPRA DE CLIENTE QUE LLEGAN.
 
